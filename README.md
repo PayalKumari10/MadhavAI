@@ -1,97 +1,211 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# MADHAV AI - Farmer Decision Support Platform
 
-# Getting Started
+An AI-powered mobile application designed to provide Indian farmers with actionable, step-by-step guidance for farming decisions. The platform integrates weather data, soil health, market prices, government schemes, and agricultural best practices to deliver personalized recommendations through voice and regional languages.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## 🌾 Features
 
-## Step 1: Start Metro
+- **Offline-First Architecture**: Core functionality works without internet connectivity
+- **AI-Powered Recommendations**: Crop, fertilizer, and seed recommendations using AWS Bedrock
+- **Weather Intelligence**: 7-day forecasts with farming advice and severe weather alerts
+- **Market Intelligence**: Real-time mandi prices and selling guidance
+- **Government Schemes Navigator**: Discover and apply for eligible schemes
+- **Soil Health Insights**: Interpret soil test results and get improvement recommendations
+- **Training & Learning**: Short practical lessons in regional languages
+- **Voice Interface**: Complete voice navigation for low-literacy users
+- **Multilingual Support**: 10+ Indian regional languages
+- **Smart Alerts**: Timely reminders for farming activities
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## 🚀 Technology Stack
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- **Mobile**: React Native 0.84.1 with TypeScript
+- **Backend**: AWS Lambda (Node.js/TypeScript)
+- **Database**: DynamoDB (cloud) + SQLite (local)
+- **AI/ML**: AWS Bedrock
+- **Storage**: Amazon S3
+- **Testing**: Jest + fast-check (property-based testing)
+- **Code Quality**: ESLint + Prettier
 
-```sh
-# Using npm
+## 📋 Prerequisites
+
+- Node.js >= 22.11.0
+- npm or yarn
+- React Native development environment
+- Android Studio (for Android development)
+- Xcode (for iOS development, macOS only)
+
+## 🛠️ Installation
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd MadhavAI
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Install iOS dependencies (macOS only):
+```bash
+cd ios && pod install && cd ..
+```
+
+## 🏃 Running the Application
+
+### Start Metro Bundler
+```bash
 npm start
-
-# OR using Yarn
-yarn start
 ```
 
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
+### Run on Android
+```bash
 npm run android
-
-# OR using Yarn
-yarn android
 ```
 
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
+### Run on iOS (macOS only)
+```bash
 npm run ios
-
-# OR using Yarn
-yarn ios
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## 🧪 Testing
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+### Run all tests
+```bash
+npm test
+```
 
-## Step 3: Modify your app
+### Run tests in watch mode
+```bash
+npm run test:watch
+```
 
-Now that you have successfully run the app, let's make changes!
+### Run tests with coverage
+```bash
+npm run test:coverage
+```
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+### Run property-based tests
+Property-based tests use fast-check library and are included in the test suite. They validate correctness properties across randomized inputs.
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+## 🔍 Code Quality
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+### Lint code
+```bash
+npm run lint
+```
 
-## Congratulations! :tada:
+### Fix linting issues
+```bash
+npm run lint:fix
+```
 
-You've successfully run and modified your React Native App. :partying_face:
+### Format code
+```bash
+npm run format
+```
 
-### Now what?
+### Check formatting
+```bash
+npm run format:check
+```
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+### Type check
+```bash
+npm run type-check
+```
 
-# Troubleshooting
+## 📁 Project Structure
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+```
+MadhavAI/
+├── src/
+│   ├── components/      # Reusable UI components
+│   ├── screens/         # Screen-level components
+│   ├── services/        # Business logic and API services
+│   ├── hooks/           # Custom React hooks
+│   ├── store/           # State management
+│   ├── config/          # Configuration files
+│   ├── types/           # TypeScript type definitions
+│   └── utils/           # Utility functions
+├── android/             # Android native code
+├── ios/                 # iOS native code
+├── __tests__/           # Test files
+└── .kiro/specs/         # Specification documents
+```
 
-# Learn More
+## 🎯 Development Workflow
 
-To learn more about React Native, take a look at the following resources:
+This project follows a spec-driven development approach. Implementation tasks are defined in `.kiro/specs/farmer-decision-support-platform/tasks.md`.
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+### Current Status
+✅ Task 1: Project setup and infrastructure foundation - COMPLETE
+
+### Next Steps
+- Task 2: Authentication module implementation
+- Task 3: User profile module implementation
+- Task 4: Offline sync module implementation
+
+## 🌍 Supported Languages
+
+- Hindi (हिन्दी)
+- Tamil (தமிழ்)
+- Telugu (తెలుగు)
+- Kannada (ಕನ್ನಡ)
+- Marathi (मराठी)
+- Bengali (বাংলা)
+- Gujarati (ગુજરાતી)
+- Punjabi (ਪੰਜਾਬੀ)
+- Malayalam (മലയാളം)
+- Odia (ଓଡ଼ିଆ)
+- English
+
+## 📊 Architecture Principles
+
+1. **Offline-First**: All core features work without internet
+2. **Modular**: Clean separation of concerns
+3. **Type-Safe**: Strict TypeScript configuration
+4. **Testable**: Property-based testing for correctness
+5. **Scalable**: Designed for 10M+ users
+6. **Accessible**: Voice interface and regional language support
+
+## 🔐 Security
+
+- AES-256 encryption for local data
+- TLS 1.3 for network communications
+- OTP-based authentication
+- Secure session management
+- Data privacy compliance
+
+## 📈 Performance Targets
+
+- Dashboard load: < 2 seconds (offline)
+- API response: < 3 seconds
+- Recommendations: < 5 seconds
+- App size: < 50 MB
+- Battery usage: < 5% per hour active use
+- Minimum device: Android 8.0, 2 GB RAM
+
+## 🤝 Contributing
+
+1. Follow the coding standards (ESLint + Prettier)
+2. Write tests for new features
+3. Maintain 80%+ code coverage
+4. Update documentation
+5. Follow the spec-driven development workflow
+
+## 📝 License
+
+[License information to be added]
+
+## 👥 Team
+
+[Team information to be added]
+
+## 📞 Support
+
+[Support information to be added]
+
+---
+
+Built with ❤️ for Indian farmers

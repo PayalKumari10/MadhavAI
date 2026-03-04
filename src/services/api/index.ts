@@ -4,3 +4,4 @@
  */
 
 export { authAPI } from './authApi';
+export { profileAPI } from './profileApi';

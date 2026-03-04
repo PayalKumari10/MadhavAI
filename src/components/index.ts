@@ -4,3 +4,4 @@
  */
 
 export { OfflineModeIndicator } from './OfflineModeIndicator';
+export { WeatherDisplay } from './WeatherDisplay';

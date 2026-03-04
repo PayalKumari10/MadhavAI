@@ -5,3 +5,4 @@
 
 export { authAPI } from './authApi';
 export { profileAPI } from './profileApi';
+export { weatherAPI } from './weatherApi';

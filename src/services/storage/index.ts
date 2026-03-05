@@ -4,3 +4,4 @@
  */
 
 export { encryptedStorage } from './EncryptedStorage';
+export { databaseService, DatabaseService } from './DatabaseService';

@@ -79,3 +79,4 @@ export * from './soil.types';
 export * from './recommendation.types';
 export * from './sync.types';
 export * from './scheme.types';
+export * from './training.types';

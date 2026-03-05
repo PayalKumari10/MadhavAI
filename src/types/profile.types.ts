@@ -2,7 +2,31 @@
  * User Profile related type definitions
  */
 
-import { Location, UserProfile } from './index';
+// Location interface (used by UserProfile)
+export interface Location {
+  state: string;
+  district: string;
+  village: string;
+  pincode: string;
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
+}
+
+// UserProfile interface
+export interface UserProfile {
+  userId: string;
+  mobileNumber: string;
+  name: string;
+  location: Location;
+  farmSize: number; // in acres
+  primaryCrops: string[];
+  soilType: string;
+  languagePreference: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export interface ProfileCreateData {
   mobileNumber: string;
@@ -30,24 +54,3 @@ export interface FarmData {
   irrigationType?: string;
   waterSource?: string;
 }
-
-export interface AlertPreferences {
-  enableSMS: boolean;
-  enablePushNotifications: boolean;
-  quietHours: {
-    start: string; // HH:mm format
-    end: string; // HH:mm format
-  };
-  alertTypes: {
-    sowing: boolean;
-    fertilizer: boolean;
-    irrigation: boolean;
-    pestControl: boolean;
-    harvest: boolean;
-    weather: boolean;
-    scheme: boolean;
-    marketPrice: boolean;
-  };
-}
-
-export type { UserProfile, Location };

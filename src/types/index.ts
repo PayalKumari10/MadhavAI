@@ -80,3 +80,4 @@ export * from './recommendation.types';
 export * from './sync.types';
 export * from './scheme.types';
 export * from './training.types';
+export * from './alert.types';

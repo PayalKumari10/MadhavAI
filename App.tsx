@@ -10,6 +10,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { logger } from './src/utils/logger';
 import DashboardScreen from './src/screens/DashboardScreen';
+import WeatherScreen from './src/screens/WeatherScreen';
+import MarketScreen from './src/screens/MarketScreen';
+import SoilHealthScreen from './src/screens/SoilHealthScreen';
+import SchemesScreen from './src/screens/SchemesScreen';
+import TrainingScreen from './src/screens/TrainingScreen';
+import AlertsScreen from './src/screens/AlertsScreen';
+import RecommendationsScreen from './src/screens/RecommendationsScreen';
 import PlaceholderScreen from './src/screens/PlaceholderScreen';
 import { DashboardService } from './src/services/dashboard/DashboardService';
 import { DashboardAggregator } from './src/services/dashboard/DashboardAggregator';
@@ -147,45 +154,38 @@ function App(): React.JSX.Element {
           />
           <Stack.Screen 
             name="Weather" 
-            component={PlaceholderScreen}
-            initialParams={{ title: 'Weather Forecast' }}
-            options={{ title: 'Weather' }}
+            component={WeatherScreen}
+            options={{ title: 'Weather Forecast' }}
           />
           <Stack.Screen 
             name="Market" 
-            component={PlaceholderScreen}
-            initialParams={{ title: 'Market Prices' }}
+            component={MarketScreen}
             options={{ title: 'Market Prices' }}
           />
           <Stack.Screen 
             name="Schemes" 
-            component={PlaceholderScreen}
-            initialParams={{ title: 'Government Schemes' }}
-            options={{ title: 'Schemes' }}
+            component={SchemesScreen}
+            options={{ title: 'Government Schemes' }}
           />
           <Stack.Screen 
             name="Training" 
-            component={PlaceholderScreen}
-            initialParams={{ title: 'Training & Learning' }}
-            options={{ title: 'Training' }}
+            component={TrainingScreen}
+            options={{ title: 'Training & Learning' }}
           />
           <Stack.Screen 
             name="Recommendations" 
-            component={PlaceholderScreen}
-            initialParams={{ title: 'Recommendations' }}
+            component={RecommendationsScreen}
             options={{ title: 'Recommendations' }}
           />
           <Stack.Screen 
             name="SoilHealth" 
-            component={PlaceholderScreen}
-            initialParams={{ title: 'Soil Health' }}
+            component={SoilHealthScreen}
             options={{ title: 'Soil Health' }}
           />
           <Stack.Screen 
             name="Alerts" 
-            component={PlaceholderScreen}
-            initialParams={{ title: 'Alerts & Reminders' }}
-            options={{ title: 'Alerts' }}
+            component={AlertsScreen}
+            options={{ title: 'Alerts & Reminders' }}
           />
           <Stack.Screen 
             name="CropPlanner" 

@@ -93,7 +93,8 @@ class SoilApi {
       logger.info(`Found ${response.data.length} soil health records`);
       return response.data;
     } catch (error) {
-      logger.error(`Failed to fetch soil health records for user: ${userId}`, error);
+      // API not available is expected when no backend is running - log as info, not error
+      logger.info(`API not available for user ${userId}, using local storage only`);
       throw error;
     }
   }

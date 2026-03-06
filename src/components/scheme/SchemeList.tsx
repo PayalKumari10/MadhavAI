@@ -148,13 +148,26 @@ export const SchemeList: React.FC<SchemeListProps> = ({
     <View style={styles.container}>
       {/* Search Bar */}
       <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search schemes..."
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          accessibilityLabel="Search schemes"
-        />
+        <View style={styles.searchInputContainer}>
+          <Text style={styles.searchIcon}>🔍</Text>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search schemes..."
+            placeholderTextColor="#999"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            accessibilityLabel="Search schemes"
+          />
+          {searchQuery.length > 0 && (
+            <TouchableOpacity
+              style={styles.clearButton}
+              onPress={() => setSearchQuery('')}
+              accessibilityLabel="Clear search"
+            >
+              <Text style={styles.clearIcon}>✕</Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
 
       {/* Category Filter */}
@@ -230,12 +243,35 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#E0E0E0',
   },
-  searchInput: {
-    height: 48,
+  searchInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#F5F5F5',
-    borderRadius: 8,
-    paddingHorizontal: 16,
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+  searchIcon: {
+    fontSize: 20,
+    marginRight: 8,
+    color: '#666',
+  },
+  searchInput: {
+    flex: 1,
     fontSize: 16,
+    color: '#333',
+    padding: 0,
+  },
+  clearButton: {
+    padding: 4,
+    marginLeft: 8,
+  },
+  clearIcon: {
+    fontSize: 18,
+    color: '#999',
+    fontWeight: 'bold',
   },
   categoryContainer: {
     backgroundColor: '#FFF',

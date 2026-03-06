@@ -17,6 +17,8 @@ import { soilApi } from '../services/api/soilApi';
 import { soilAnalyzer } from '../services/soil/SoilAnalyzer';
 import { improvementAdvisor } from '../services/soil/ImprovementAdvisor';
 import { cropMatcher } from '../services/soil/CropMatcher';
+import { soilHealthStorage } from '../services/soil/SoilHealthStorage';
+import { config } from '../config/env';
 
 interface SoilHealthDisplayProps {
   userId: string;
@@ -49,12 +51,42 @@ export const SoilHealthDisplay: React.FC<SoilHealthDisplayProps> = ({
     try {
       setLoading(true);
       setError(null);
-      const records = await soilApi.getSoilHealthByUser(userId);
-      setSoilRecords(records);
-      if (records.length > 0) {
-        setSelectedRecord(records[0]);
+      
+      // Get records from local storage
+      const localRecords = await soilHealthStorage.getUserSoilHealthRecords(userId);
+      
+      // Only try API if ENABLE_API is true
+      let apiRecords: SoilHealthData[] = [];
+      if (config.ENABLE_API) {
+        try {
+          apiRecords = await soilApi.getSoilHealthByUser(userId);
+        } catch (apiError) {
+          // API error - silently continue with local data
+          console.log('API not available, using local data only');
+        }
+      }
+      
+      // Combine local and API records
+      const allRecords = [...localRecords, ...apiRecords];
+      
+      if (allRecords.length === 0) {
+        // No records found - show empty state
+        setSoilRecords([]);
+        setSelectedRecord(null);
+      } else {
+        // Remove duplicates based on ID
+        const uniqueRecords = Array.from(
+          new Map(allRecords.map(record => [record.id, record])).values()
+        );
+        
+        // Sort by test date (most recent first)
+        uniqueRecords.sort((a, b) => b.testDate.getTime() - a.testDate.getTime());
+        
+        setSoilRecords(uniqueRecords);
+        setSelectedRecord(uniqueRecords[0]);
       }
     } catch (err) {
+      console.error('Error loading soil records:', err);
       setError('Failed to load soil health records');
     } finally {
       setLoading(false);

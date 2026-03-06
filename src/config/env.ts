@@ -9,6 +9,7 @@ interface EnvConfig {
   API_BASE_URL: string;
   API_TIMEOUT: number;
   ENABLE_LOGGING: boolean;
+  ENABLE_API: boolean; // Set to false for local-only mode, true when backend is ready
   STORAGE_LIMIT_MB: number;
   SYNC_INTERVAL_MS: number;
   MAX_RETRY_ATTEMPTS: number;
@@ -21,6 +22,7 @@ const configs: Record<Environment, EnvConfig> = {
     API_BASE_URL: 'http://localhost:3000/api',
     API_TIMEOUT: 30000,
     ENABLE_LOGGING: true,
+    ENABLE_API: false, // Set to true when backend is available
     STORAGE_LIMIT_MB: 500,
     SYNC_INTERVAL_MS: 60000, // 1 minute for dev
     MAX_RETRY_ATTEMPTS: 3,
@@ -29,6 +31,7 @@ const configs: Record<Environment, EnvConfig> = {
     API_BASE_URL: 'https://staging-api.madhavai.com/api',
     API_TIMEOUT: 30000,
     ENABLE_LOGGING: true,
+    ENABLE_API: true, // API available in staging
     STORAGE_LIMIT_MB: 500,
     SYNC_INTERVAL_MS: 300000, // 5 minutes
     MAX_RETRY_ATTEMPTS: 5,
@@ -37,6 +40,7 @@ const configs: Record<Environment, EnvConfig> = {
     API_BASE_URL: 'https://api.madhavai.com/api',
     API_TIMEOUT: 30000,
     ENABLE_LOGGING: false,
+    ENABLE_API: true, // API available in production
     STORAGE_LIMIT_MB: 500,
     SYNC_INTERVAL_MS: 360000, // 6 minutes
     MAX_RETRY_ATTEMPTS: 5,

@@ -10,9 +10,12 @@ import { SoilHealthData } from '../../types/soil.types';
 import { WeatherForecast } from '../../types/weather.types';
 import { MarketData } from '../../types/market.types';
 import { profileAPI } from '../api/profileApi';
+import { profileManager } from '../profile/ProfileManager';
 import { soilApi } from '../api/soilApi';
+import { soilHealthStorage } from '../soil/SoilHealthStorage';
 import { weatherAPI } from '../api/weatherApi';
 import { marketAPI } from '../api/marketApi';
+import { config } from '../../config/env';
 
 /**
  * Data aggregator for collecting all required data sources
@@ -52,10 +55,49 @@ export class DataAggregator {
    */
   private async getUserProfile(userId: string): Promise<UserProfile> {
     try {
-      return await profileAPI.getProfile(userId);
+      // Try local storage first
+      const localProfile = await profileManager.getProfile();
+      if (localProfile) {
+        return localProfile;
+      }
+
+      // Only try API if enabled
+      if (config.ENABLE_API) {
+        return await profileAPI.getProfile(userId);
+      }
+
+      // Return default profile if no data available
+      return this.getDefaultProfile(userId);
     } catch (error) {
-      throw new Error(`Failed to fetch user profile: ${error}`);
+      // Return default profile on error
+      return this.getDefaultProfile(userId);
     }
+  }
+
+  /**
+   * Get default profile for demo purposes
+   */
+  private getDefaultProfile(userId: string): UserProfile {
+    return {
+      userId: userId,
+      mobileNumber: '9876543210',
+      name: 'Demo Farmer',
+      farmSize: 5,
+      primaryCrops: ['wheat', 'rice'],
+      soilType: 'loamy',
+      location: {
+        state: 'Maharashtra',
+        district: 'Pune',
+        village: 'Demo Village',
+        coordinates: {
+          latitude: 18.5204,
+          longitude: 73.8567,
+        },
+      },
+      languagePreference: 'en',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
   }
 
   /**
@@ -63,7 +105,26 @@ export class DataAggregator {
    */
   private async getSoilData(userId: string): Promise<SoilHealthData[]> {
     try {
-      return await soilApi.getSoilHealthByUser(userId);
+      // Try local storage first
+      const localRecords = await soilHealthStorage.getUserSoilHealthRecords(userId);
+      
+      // Only try API if enabled
+      if (config.ENABLE_API) {
+        try {
+          const apiRecords = await soilApi.getSoilHealthByUser(userId);
+          // Combine and deduplicate
+          const allRecords = [...localRecords, ...apiRecords];
+          const uniqueRecords = Array.from(
+            new Map(allRecords.map(record => [record.id, record])).values()
+          );
+          return uniqueRecords;
+        } catch (apiError) {
+          // API failed, use local records
+          return localRecords;
+        }
+      }
+      
+      return localRecords;
     } catch (error) {
       // Soil data is optional, return empty array if not available
       return [];
@@ -75,14 +136,22 @@ export class DataAggregator {
    */
   private async getWeatherData(userId: string): Promise<WeatherForecast | null> {
     try {
-      const profile = await profileAPI.getProfile(userId);
+      // Get profile (from local or default)
+      const profile = await this.getUserProfile(userId);
       if (!profile.location) {
         return null;
       }
-      return await weatherAPI.getForecast(
-        profile.location.coordinates.latitude,
-        profile.location.coordinates.longitude
-      );
+
+      // Only try API if enabled
+      if (config.ENABLE_API) {
+        return await weatherAPI.getForecast(
+          profile.location.coordinates.latitude,
+          profile.location.coordinates.longitude
+        );
+      }
+
+      // Return null if API not enabled
+      return null;
     } catch (error) {
       // Weather data is optional
       return null;
@@ -94,8 +163,14 @@ export class DataAggregator {
    */
   private async getMarketData(userId: string): Promise<MarketData | null> {
     try {
-      const profile = await profileAPI.getProfile(userId);
+      // Get profile (from local or default)
+      const profile = await this.getUserProfile(userId);
       if (!profile.location || !profile.primaryCrops || profile.primaryCrops.length === 0) {
+        return null;
+      }
+
+      // Only try API if enabled
+      if (!config.ENABLE_API) {
         return null;
       }
       

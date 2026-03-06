@@ -233,51 +233,65 @@ export class DashboardAggregator {
    * Requirement: 14.6
    */
   private generateQuickActions(_profile: UserProfile): QuickAction[] {
-    return [
-      {
-        id: 'weather',
-        type: 'navigation',
-        title: 'Weather Forecast',
-        icon: 'weather-partly-cloudy',
-        route: 'Weather',
-      },
-      {
-        id: 'schemes',
-        type: 'navigation',
-        title: 'Government Schemes',
-        icon: 'file-document',
-        route: 'Schemes',
-      },
-      {
-        id: 'market',
-        type: 'navigation',
-        title: 'Market Prices',
-        icon: 'currency-inr',
-        route: 'Market',
-      },
-      {
-        id: 'training',
-        type: 'navigation',
-        title: 'Training',
-        icon: 'school',
-        route: 'Training',
-      },
-      {
-        id: 'recommendations',
-        type: 'navigation',
-        title: 'Recommendations',
-        icon: 'lightbulb',
-        route: 'Recommendations',
-      },
-      {
-        id: 'soil',
-        type: 'navigation',
-        title: 'Soil Health',
-        icon: 'terrain',
-        route: 'SoilHealth',
-      },
-    ];
-  }
+      return [
+        {
+          id: 'weather',
+          type: 'navigation',
+          title: 'Weather Forecast',
+          icon: 'weather-partly-cloudy',
+          route: 'Weather',
+        },
+        {
+          id: 'schemes',
+          type: 'navigation',
+          title: 'Government Schemes',
+          icon: 'file-document',
+          route: 'Schemes',
+        },
+        {
+          id: 'market',
+          type: 'navigation',
+          title: 'Market Prices',
+          icon: 'currency-inr',
+          route: 'Market',
+        },
+        {
+          id: 'training',
+          type: 'navigation',
+          title: 'Training',
+          icon: 'school',
+          route: 'Training',
+        },
+        {
+          id: 'recommendations',
+          type: 'navigation',
+          title: 'Recommendations',
+          icon: 'lightbulb',
+          route: 'Recommendations',
+        },
+        {
+          id: 'soil',
+          type: 'navigation',
+          title: 'Soil Health',
+          icon: 'terrain',
+          route: 'SoilHealth',
+        },
+        {
+          id: 'alerts',
+          type: 'navigation',
+          title: 'Alerts & Reminders',
+          icon: 'calendar-check',
+          route: 'Alerts',
+        },
+        {
+          id: 'cropplanner',
+          type: 'navigation',
+          title: 'Crop Planner',
+          icon: 'seed',
+          route: 'CropPlanner',
+        },
+      ];
+    }
 
   /**
    * Get personalized insights based on current season and crop stage

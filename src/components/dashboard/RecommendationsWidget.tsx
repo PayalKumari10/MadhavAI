@@ -55,7 +55,7 @@ const RecommendationsWidget: React.FC<RecommendationsWidgetProps> = ({
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => navigation.navigate('Recommendations')}
+      onPress={() => navigation && navigation.navigate && navigation.navigate('Recommendations')}
       activeOpacity={0.7}>
       <View style={styles.header}>
         <Text style={styles.icon}>💡</Text>

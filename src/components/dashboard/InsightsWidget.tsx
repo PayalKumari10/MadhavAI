@@ -52,7 +52,7 @@ const InsightsWidget: React.FC<InsightsWidgetProps> = ({
         styles.insightItem,
         {borderLeftColor: getPriorityColor(item.priority)},
       ]}
-      onPress={() => item.actionUrl && navigation.navigate(item.actionUrl)}
+      onPress={() => item.actionUrl && navigation && navigation.navigate && navigation.navigate(item.actionUrl)}
       activeOpacity={item.actionable ? 0.7 : 1}
       disabled={!item.actionable}>
       <Text style={styles.insightIcon}>{getTypeIcon(item.type)}</Text>

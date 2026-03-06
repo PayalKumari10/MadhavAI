@@ -18,7 +18,9 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({weather, navigation}) => {
   const {translate} = useTranslation();
 
   const navigateToWeather = () => {
-    navigation.navigate('Weather');
+    if (navigation && navigation.navigate) {
+      navigation.navigate('Weather');
+    }
   };
 
   return (

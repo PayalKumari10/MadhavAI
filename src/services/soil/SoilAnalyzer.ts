@@ -355,7 +355,7 @@ class SoilAnalyzer {
 
     crops.forEach((crop) => {
       let score = 0;
-      let reasons: string[] = [];
+      const reasons: string[] = [];
 
       // Check pH suitability
       const pH = soilData.parameters.pH;

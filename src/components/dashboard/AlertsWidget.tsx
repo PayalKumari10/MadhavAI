@@ -18,7 +18,9 @@ const AlertsWidget: React.FC<AlertsWidgetProps> = ({alerts, navigation}) => {
   const {translate} = useTranslation();
 
   const navigateToAlerts = () => {
-    navigation.navigate('Alerts');
+    if (navigation && navigation.navigate) {
+      navigation.navigate('Alerts');
+    }
   };
 
   const getPriorityColor = (priority: string): string => {

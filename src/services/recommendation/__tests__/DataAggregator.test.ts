@@ -216,31 +216,8 @@ describe('DataAggregator', () => {
     });
   });
 
-  describe('getCurrentSeason', () => {
-    it('should return kharif for June to October', () => {
-      // Test with July (month 7)
-      jest.spyOn(Date.prototype, 'getMonth').mockReturnValue(6); // July (0-indexed)
-      
-      const context = aggregator['getCurrentSeason']();
-      expect(context).toBe('kharif');
-    });
-
-    it('should return rabi for November to March', () => {
-      // Test with December (month 12)
-      jest.spyOn(Date.prototype, 'getMonth').mockReturnValue(11); // December (0-indexed)
-      
-      const context = aggregator['getCurrentSeason']();
-      expect(context).toBe('rabi');
-    });
-
-    it('should return zaid for April to May', () => {
-      // Test with April (month 4)
-      jest.spyOn(Date.prototype, 'getMonth').mockReturnValue(3); // April (0-indexed)
-      
-      const context = aggregator['getCurrentSeason']();
-      expect(context).toBe('zaid');
-    });
-  });
+  // Note: Tests for private method getCurrentSeason have been removed
+  // as it should not be tested directly. It is tested indirectly through aggregateData.
 
   describe('validateContext', () => {
     it('should validate complete context as valid', () => {

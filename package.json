@@ -17,12 +17,15 @@
   },
   "dependencies": {
     "@react-native/new-app-screen": "0.84.1",
+    "@react-navigation/native": "^6.1.18",
+    "@react-navigation/native-stack": "^6.11.0",
     "aws-lambda": "^1.0.7",
     "axios": "^1.13.6",
     "react": "19.2.3",
     "react-native": "0.84.1",
     "react-native-encrypted-storage": "^4.0.3",
-    "react-native-safe-area-context": "^5.5.2"
+    "react-native-safe-area-context": "^5.7.0",
+    "react-native-screens": "^4.24.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

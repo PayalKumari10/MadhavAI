@@ -21,7 +21,9 @@ const CropStatusWidget: React.FC<CropStatusWidgetProps> = ({
   const {translate} = useTranslation();
 
   const navigateToCropPlanner = () => {
-    navigation.navigate('CropPlanner');
+    if (navigation && navigation.navigate) {
+      navigation.navigate('CropPlanner');
+    }
   };
 
   const getHealthColor = (health: string): string => {

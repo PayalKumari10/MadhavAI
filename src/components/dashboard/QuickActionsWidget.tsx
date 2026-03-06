@@ -20,10 +20,16 @@ const QuickActionsWidget: React.FC<QuickActionsWidgetProps> = ({
 }) => {
   const {translate} = useTranslation();
 
+  const handlePress = (route: string) => {
+    if (navigation && navigation.navigate) {
+      navigation.navigate(route);
+    }
+  };
+
   const renderAction = ({item}: {item: QuickAction}) => (
     <TouchableOpacity
       style={styles.actionCard}
-      onPress={() => navigation.navigate(item.route)}
+      onPress={() => handlePress(item.route)}
       activeOpacity={0.7}>
       <View style={styles.iconContainer}>
         <Text style={styles.actionIcon}>{getIconEmoji(item.icon)}</Text>

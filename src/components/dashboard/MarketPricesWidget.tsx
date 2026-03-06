@@ -33,7 +33,7 @@ const MarketPricesWidget: React.FC<MarketPricesWidgetProps> = ({
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => navigation.navigate('Market')}
+      onPress={() => navigation && navigation.navigate && navigation.navigate('Market')}
       activeOpacity={0.7}>
       <View style={styles.header}>
         <Text style={styles.icon}>💰</Text>

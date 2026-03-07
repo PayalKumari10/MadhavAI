@@ -9,6 +9,8 @@ import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { logger } from './src/utils/logger';
+import LoginScreen from './src/screens/LoginScreen';
+import RegistrationScreen from './src/screens/RegistrationScreen';
 import DashboardScreen from './src/screens/DashboardScreen';
 import WeatherScreen from './src/screens/WeatherScreen';
 import MarketScreen from './src/screens/MarketScreen';
@@ -17,6 +19,7 @@ import SchemesScreen from './src/screens/SchemesScreen';
 import TrainingScreen from './src/screens/TrainingScreen';
 import AlertsScreen from './src/screens/AlertsScreen';
 import RecommendationsScreen from './src/screens/RecommendationsScreen';
+import SettingsScreen from './src/screens/SettingsScreen';
 import PlaceholderScreen from './src/screens/PlaceholderScreen';
 import { DashboardService } from './src/services/dashboard/DashboardService';
 import { DashboardAggregator } from './src/services/dashboard/DashboardAggregator';
@@ -28,6 +31,7 @@ import { profileManager } from './src/services/profile/ProfileManager';
 import { DatabaseService } from './src/services/storage/DatabaseService';
 import { initializeTranslationServices } from './src/hooks/useTranslation';
 import uiTranslations from './src/services/translation/translations/ui.translations';
+import { encryptedStorage } from './src/services/storage/EncryptedStorage';
 
 // Initialize services
 const db = new DatabaseService();
@@ -63,60 +67,102 @@ const languagePreferenceManager = {
 // Initialize translation hook
 initializeTranslationServices(translationService, languagePreferenceManager);
 
-// Mock user ID for demo purposes
-const DEMO_USER_ID = 'demo-user-001';
-
 // Create navigation stack
 const Stack = createNativeStackNavigator();
 
 function DashboardWrapper({ navigation }: any) {
+  const [userId, setUserId] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    // Get userId from stored session
+    const getUserId = async () => {
+      const storedUserId = await encryptedStorage.getItem<string>('current_user_id');
+      setUserId(storedUserId);
+    };
+    getUserId();
+  }, []);
+
+  if (!userId) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
   return (
     <DashboardScreen
-      userId={DEMO_USER_ID}
+      userId={userId}
       dashboardService={dashboardService}
       navigation={navigation}
     />
   );
 }
 
+function LoginWrapper({ navigation }: any) {
+  const handleLoginSuccess = async (userId: string, token: string) => {
+    // Store session info
+    await encryptedStorage.setItem('auth_token', token);
+    await encryptedStorage.setItem('current_user_id', userId);
+
+    // Check if user has profile
+    const hasProfile = await profileManager.hasProfile();
+
+    if (hasProfile) {
+      // Navigate to dashboard
+      navigation.replace('Dashboard');
+    } else {
+      // Navigate to registration - extract mobile number from userId
+      const mobileNumber = userId.replace('user_', '');
+      navigation.replace('Registration', { mobileNumber });
+    }
+  };
+
+  return <LoginScreen onLoginSuccess={handleLoginSuccess} />;
+}
+
+function RegistrationWrapper({ navigation, route }: any) {
+  const { mobileNumber } = route.params;
+
+  const handleRegistrationComplete = () => {
+    navigation.replace('Dashboard');
+  };
+
+  return (
+    <RegistrationScreen
+      mobileNumber={mobileNumber}
+      onRegistrationComplete={handleRegistrationComplete}
+    />
+  );
+}
+
 function App(): React.JSX.Element {
   const [isInitialized, setIsInitialized] = React.useState(false);
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
 
   React.useEffect(() => {
     const initializeApp = async () => {
       try {
         logger.info('Application started');
         
-        // Check if profile exists, if not create a demo profile
-        const hasProfile = await profileManager.hasProfile();
+        // Check if user is authenticated
+        const authToken = await encryptedStorage.getItem<string>('auth_token');
+        const userId = await encryptedStorage.getItem<string>('current_user_id');
         
-        if (!hasProfile) {
-          logger.info('Creating demo profile...');
-          await profileManager.createProfile({
-            mobileNumber: '+919876543210',
-            name: 'Demo Farmer',
-            location: {
-              state: 'Maharashtra',
-              district: 'Pune',
-              village: 'Demo Village',
-              pincode: '411001',
-              coordinates: {
-                latitude: 18.5204,
-                longitude: 73.8567,
-              },
-            },
-            farmSize: 5.0,
-            primaryCrops: ['wheat', 'rice', 'cotton'],
-            soilType: 'loamy',
-            languagePreference: 'en',
-          });
-          logger.info('Demo profile created successfully');
+        if (authToken && userId) {
+          // User is authenticated
+          setIsAuthenticated(true);
+          logger.info('User is authenticated');
+        } else {
+          // User needs to login
+          setIsAuthenticated(false);
+          logger.info('User needs to login');
         }
         
         setIsInitialized(true);
       } catch (error) {
         logger.error('Failed to initialize app', error);
-        setIsInitialized(true); // Still show UI even if initialization fails
+        setIsInitialized(true);
       }
     };
 
@@ -137,7 +183,7 @@ function App(): React.JSX.Element {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Dashboard"
+          initialRouteName={isAuthenticated ? 'Dashboard' : 'Login'}
           screenOptions={{
             headerStyle: {
               backgroundColor: '#4CAF50',
@@ -147,6 +193,16 @@ function App(): React.JSX.Element {
               fontWeight: 'bold',
             },
           }}>
+          <Stack.Screen 
+            name="Login" 
+            component={LoginWrapper}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen 
+            name="Registration" 
+            component={RegistrationWrapper}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen 
             name="Dashboard" 
             component={DashboardWrapper}
@@ -186,6 +242,11 @@ function App(): React.JSX.Element {
             name="Alerts" 
             component={AlertsScreen}
             options={{ title: 'Alerts & Reminders' }}
+          />
+          <Stack.Screen 
+            name="Settings" 
+            component={SettingsScreen}
+            options={{ title: 'Settings' }}
           />
           <Stack.Screen 
             name="CropPlanner" 

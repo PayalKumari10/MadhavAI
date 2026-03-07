@@ -1,29 +1,142 @@
 /**
  * Settings Screen
- * User settings including language preference
+ * User settings including language preference, profile info, and logout
  */
 
-import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, ScrollView} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert} from 'react-native';
 import {useTranslation} from '../hooks/useTranslation';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import {getLanguageNativeName} from '../utils/languageMapper';
+import {authenticationManager} from '../services/auth/AuthenticationManager';
+import {profileManager} from '../services/profile/ProfileManager';
+import {encryptedStorage} from '../services/storage/EncryptedStorage';
+import {logger} from '../utils/logger';
 
-const SettingsScreen: React.FC = () => {
+interface SettingsScreenProps {
+  navigation: any;
+}
+
+const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
   const {t, language} = useTranslation();
   const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(false);
+  const [userProfile, setUserProfile] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    loadUserProfile();
+  }, []);
+
+  const loadUserProfile = async () => {
+    try {
+      const profile = await profileManager.getProfile();
+      setUserProfile(profile);
+    } catch (error) {
+      logger.error('Failed to load user profile', error);
+    }
+  };
+
+  const handleLogout = () => {
+    Alert.alert(
+      'Logout',
+      'Are you sure you want to logout?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Logout',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              setLoading(true);
+              
+              // Get auth token
+              const authToken = await encryptedStorage.getItem<string>('auth_token');
+              
+              if (authToken) {
+                // Logout from authentication manager
+                await authenticationManager.logout(authToken);
+              }
+              
+              // Clear stored credentials
+              await encryptedStorage.removeItem('auth_token');
+              await encryptedStorage.removeItem('current_user_id');
+              
+              // Clear user profile (single-user mode)
+              await profileManager.deleteProfile();
+              
+              logger.info('User logged out successfully');
+              
+              // Navigate to login screen
+              navigation.reset({
+                index: 0,
+                routes: [{name: 'Login'}],
+              });
+            } catch (error) {
+              logger.error('Logout failed', error);
+              Alert.alert('Error', 'Failed to logout. Please try again.');
+            } finally {
+              setLoading(false);
+            }
+          },
+        },
+      ],
+    );
+  };
+
+  const handleEditProfile = () => {
+    Alert.alert('Coming Soon', 'Profile editing will be available in the next update.');
+  };
+
+  const handleAbout = () => {
+    Alert.alert(
+      'About MADHAV AI',
+      'AI-Powered Farmer Decision Support Platform\n\nVersion 1.0.0\n\nHelping farmers make better decisions with AI-powered recommendations, weather forecasts, market prices, and more.',
+      [{text: 'OK'}],
+    );
+  };
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>{t('ui.profile.title')}</Text>
+      {/* Profile Section */}
+      {userProfile && (
+        <View style={styles.profileSection}>
+          <View style={styles.profileIcon}>
+            <Text style={styles.profileIconText}>
+              {userProfile.name?.charAt(0).toUpperCase() || '👤'}
+            </Text>
+          </View>
+          <Text style={styles.profileName}>{userProfile.name || 'User'}</Text>
+          <Text style={styles.profilePhone}>{userProfile.mobileNumber || ''}</Text>
+          <Text style={styles.profileLocation}>
+            {userProfile.location?.village}, {userProfile.location?.district}
+          </Text>
+        </View>
+      )}
 
-      {/* Language Setting */}
+      {/* Account Settings */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>{t('ui.profile.language')}</Text>
+        <Text style={styles.sectionTitle}>ACCOUNT</Text>
+        
+        <TouchableOpacity
+          style={styles.settingItem}
+          onPress={handleEditProfile}>
+          <View style={styles.settingLeft}>
+            <Text style={styles.settingIcon}>👤</Text>
+            <Text style={styles.settingLabel}>Edit Profile</Text>
+          </View>
+          <Text style={styles.arrow}>›</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity
           style={styles.settingItem}
           onPress={() => setShowLanguageSwitcher(true)}>
-          <Text style={styles.settingLabel}>{t('ui.profile.language')}</Text>
+          <View style={styles.settingLeft}>
+            <Text style={styles.settingIcon}>🌐</Text>
+            <Text style={styles.settingLabel}>{t('ui.profile.language')}</Text>
+          </View>
           <View style={styles.settingValue}>
             <Text style={styles.currentLanguage}>
               {getLanguageNativeName(language)}
@@ -33,10 +146,93 @@ const SettingsScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Other Settings */}
+      {/* App Settings */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>{t('ui.common.settings')}</Text>
-        {/* Add more settings here */}
+        <Text style={styles.sectionTitle}>APP SETTINGS</Text>
+        
+        <TouchableOpacity
+          style={styles.settingItem}
+          onPress={() => Alert.alert('Coming Soon', 'Notification settings will be available soon.')}>
+          <View style={styles.settingLeft}>
+            <Text style={styles.settingIcon}>🔔</Text>
+            <Text style={styles.settingLabel}>Notifications</Text>
+          </View>
+          <Text style={styles.arrow}>›</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.settingItem}
+          onPress={() => Alert.alert('Coming Soon', 'Data sync settings will be available soon.')}>
+          <View style={styles.settingLeft}>
+            <Text style={styles.settingIcon}>🔄</Text>
+            <Text style={styles.settingLabel}>Data Sync</Text>
+          </View>
+          <Text style={styles.arrow}>›</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.settingItem}
+          onPress={() => Alert.alert('Coming Soon', 'Storage management will be available soon.')}>
+          <View style={styles.settingLeft}>
+            <Text style={styles.settingIcon}>💾</Text>
+            <Text style={styles.settingLabel}>Storage</Text>
+          </View>
+          <Text style={styles.arrow}>›</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Support */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>SUPPORT</Text>
+        
+        <TouchableOpacity
+          style={styles.settingItem}
+          onPress={() => Alert.alert('Help', 'For help, please contact support@madhavai.com')}>
+          <View style={styles.settingLeft}>
+            <Text style={styles.settingIcon}>❓</Text>
+            <Text style={styles.settingLabel}>Help & Support</Text>
+          </View>
+          <Text style={styles.arrow}>›</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.settingItem}
+          onPress={handleAbout}>
+          <View style={styles.settingLeft}>
+            <Text style={styles.settingIcon}>ℹ️</Text>
+            <Text style={styles.settingLabel}>About</Text>
+          </View>
+          <Text style={styles.arrow}>›</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.settingItem}
+          onPress={() => Alert.alert('Privacy Policy', 'Privacy policy will be displayed here.')}>
+          <View style={styles.settingLeft}>
+            <Text style={styles.settingIcon}>🔒</Text>
+            <Text style={styles.settingLabel}>Privacy Policy</Text>
+          </View>
+          <Text style={styles.arrow}>›</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Logout Button */}
+      <View style={styles.section}>
+        <TouchableOpacity
+          style={styles.logoutButton}
+          onPress={handleLogout}
+          disabled={loading}>
+          <Text style={styles.logoutIcon}>🚪</Text>
+          <Text style={styles.logoutText}>
+            {loading ? 'Logging out...' : 'Logout'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Version Info */}
+      <View style={styles.versionContainer}>
+        <Text style={styles.versionText}>MADHAV AI v1.0.0</Text>
+        <Text style={styles.versionSubtext}>Farmer Decision Support Platform</Text>
       </View>
 
       {/* Language Switcher Modal */}
@@ -53,23 +249,53 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
-  title: {
+  profileSection: {
+    backgroundColor: '#4CAF50',
+    padding: 32,
+    alignItems: 'center',
+  },
+  profileIcon: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  profileIconText: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#4CAF50',
+  },
+  profileName: {
     fontSize: 24,
     fontWeight: 'bold',
-    padding: 20,
-    backgroundColor: 'white',
+    color: '#fff',
+    marginBottom: 4,
+  },
+  profilePhone: {
+    fontSize: 16,
+    color: '#fff',
+    opacity: 0.9,
+    marginBottom: 4,
+  },
+  profileLocation: {
+    fontSize: 14,
+    color: '#fff',
+    opacity: 0.8,
   },
   section: {
     marginTop: 20,
     backgroundColor: 'white',
   },
   sectionTitle: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '600',
     color: '#666',
     padding: 16,
     paddingBottom: 8,
-    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   settingItem: {
     flexDirection: 'row',
@@ -77,10 +303,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: '#f0f0f0',
+  },
+  settingLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  settingIcon: {
+    fontSize: 24,
+    marginRight: 12,
   },
   settingLabel: {
     fontSize: 16,
+    color: '#333',
   },
   settingValue: {
     flexDirection: 'row',
@@ -93,7 +329,37 @@ const styles = StyleSheet.create({
   },
   arrow: {
     fontSize: 24,
+    color: '#ccc',
+  },
+  logoutButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 16,
+    backgroundColor: '#fff',
+  },
+  logoutIcon: {
+    fontSize: 24,
+    marginRight: 12,
+  },
+  logoutText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#F44336',
+  },
+  versionContainer: {
+    padding: 32,
+    alignItems: 'center',
+  },
+  versionText: {
+    fontSize: 14,
     color: '#999',
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  versionSubtext: {
+    fontSize: 12,
+    color: '#bbb',
   },
 });
 

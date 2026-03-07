@@ -178,13 +178,20 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({
         <Text style={styles.headerTitle}>
           {translate('dashboard.title')}
         </Text>
-        {voiceSupported && (
+        <View style={styles.headerButtons}>
+          {voiceSupported && (
+            <TouchableOpacity
+              style={styles.voiceButton}
+              onPress={speakDashboardSummary}>
+              <Text style={styles.voiceButtonText}>🔊</Text>
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
-            style={styles.voiceButton}
-            onPress={speakDashboardSummary}>
-            <Text style={styles.voiceButtonText}>🔊</Text>
+            style={styles.settingsButton}
+            onPress={() => navigation.navigate('Settings')}>
+            <Text style={styles.settingsButtonText}>⚙️</Text>
           </TouchableOpacity>
-        )}
+        </View>
       </View>
 
       {dashboardData && (
@@ -283,12 +290,25 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#FFFFFF',
   },
+  headerButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
   voiceButton: {
     padding: 8,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderRadius: 20,
   },
   voiceButtonText: {
+    fontSize: 24,
+  },
+  settingsButton: {
+    padding: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: 20,
+  },
+  settingsButtonText: {
     fontSize: 24,
   },
   loadingText: {

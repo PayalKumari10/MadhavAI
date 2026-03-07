@@ -16,6 +16,7 @@ import {
   TextInput,
 } from 'react-native';
 import { Scheme, SchemeCategory } from '../../types/scheme.types';
+import { schemeService } from '../../services/scheme/SchemeService';
 
 interface SchemeListProps {
   onSchemeSelect: (scheme: Scheme) => void;
@@ -53,12 +54,14 @@ export const SchemeList: React.FC<SchemeListProps> = ({
   const loadSchemes = async () => {
     try {
       setLoading(true);
-      // In a real app, this would call the API
-      // For now, using mock data
-      const mockSchemes: Scheme[] = [];
-      setSchemes(mockSchemes);
+      // Fetch schemes from the service
+      const fetchedSchemes = await schemeService.getAllSchemes();
+      console.log('Loaded schemes:', fetchedSchemes.length);
+      setSchemes(fetchedSchemes);
     } catch (error) {
       console.error('Error loading schemes:', error);
+      // Set empty array on error
+      setSchemes([]);
     } finally {
       setLoading(false);
     }

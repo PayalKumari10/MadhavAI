@@ -22,13 +22,16 @@ class OTPService {
     const array = new Uint32Array(1);
     // Check if crypto API is available (works in both browser and React Native)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (typeof (globalThis as any).crypto !== 'undefined' && (globalThis as any).crypto.getRandomValues) {
+    if (
+      typeof (globalThis as any).crypto !== 'undefined' &&
+      (globalThis as any).crypto.getRandomValues
+    ) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (globalThis as any).crypto.getRandomValues(array);
       const otp = (array[0] % 900000) + 100000; // Ensures 6-digit number
       return otp.toString();
     }
-    
+
     // Fallback for environments without crypto (should not happen in production)
     logger.warn('Crypto API not available, using Math.random fallback');
     return Math.floor(100000 + Math.random() * 900000).toString();
@@ -166,7 +169,9 @@ class OTPService {
     const attemptsRemaining = MAX_ATTEMPTS - otpRecord.attempts;
     const isLocked = attemptsRemaining === 0;
 
-    logger.warn(`Invalid OTP attempt for ${mobileNumber}. Attempts remaining: ${attemptsRemaining}`);
+    logger.warn(
+      `Invalid OTP attempt for ${mobileNumber}. Attempts remaining: ${attemptsRemaining}`
+    );
 
     return {
       isValid: false,
@@ -205,7 +210,7 @@ class OTPService {
   private async sendSMS(mobileNumber: string, otp: string): Promise<void> {
     // Mock SMS sending - In production, integrate with actual SMS gateway
     logger.info(`[SMS Gateway] Sending OTP ${otp} to ${mobileNumber}`);
-    
+
     // Simulate network delay
     await new Promise<void>((resolve) => setTimeout(() => resolve(), 100));
 

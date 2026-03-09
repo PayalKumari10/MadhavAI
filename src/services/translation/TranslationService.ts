@@ -9,7 +9,7 @@ import {
   TranslationKey,
   TranslationCategory,
 } from '../../types/translation.types';
-import {SUPPORTED_LANGUAGES} from '../../config/constants';
+import { SUPPORTED_LANGUAGES } from '../../config/constants';
 import TranslationStorage from './TranslationStorage.ts';
 
 class TranslationService {
@@ -58,9 +58,9 @@ class TranslationService {
   /**
    * Get translation for a key
    */
-  translate(key: TranslationKey, params?: {[key: string]: string | number}): string {
+  translate(key: TranslationKey, params?: { [key: string]: string | number }): string {
     const translation = this.getTranslation(key, this.currentLanguage);
-    
+
     if (!translation) {
       // Try fallback language
       const fallbackTranslation = this.getTranslation(key, this.fallbackLanguage);
@@ -77,9 +77,13 @@ class TranslationService {
   /**
    * Get translation for a specific language
    */
-  translateFor(key: TranslationKey, language: LanguageCode, params?: {[key: string]: string | number}): string {
+  translateFor(
+    key: TranslationKey,
+    language: LanguageCode,
+    params?: { [key: string]: string | number }
+  ): string {
     const translation = this.getTranslation(key, language);
-    
+
     if (!translation) {
       return key;
     }
@@ -128,7 +132,7 @@ class TranslationService {
   /**
    * Interpolate parameters into translation string
    */
-  private interpolate(text: string, params?: {[key: string]: string | number}): string {
+  private interpolate(text: string, params?: { [key: string]: string | number }): string {
     if (!params) {
       return text;
     }
@@ -172,21 +176,21 @@ class TranslationService {
    * Check if language is supported
    */
   isLanguageSupported(language: string): language is LanguageCode {
-    return SUPPORTED_LANGUAGES.some(lang => lang.code === language);
+    return SUPPORTED_LANGUAGES.some((lang) => lang.code === language);
   }
 
   /**
    * Get language info
    */
   getLanguageInfo(code: LanguageCode) {
-    return SUPPORTED_LANGUAGES.find(lang => lang.code === code);
+    return SUPPORTED_LANGUAGES.find((lang) => lang.code === code);
   }
 
   /**
    * Preload translations for multiple languages
    */
   async preloadLanguages(languages: LanguageCode[]): Promise<void> {
-    const loadPromises = languages.map(lang => {
+    const loadPromises = languages.map((lang) => {
       if (!this.translations.has(lang)) {
         return this.loadTranslations(lang);
       }
@@ -224,7 +228,7 @@ class TranslationService {
   getStatistics() {
     const loadedLanguages = Array.from(this.translations.keys());
     const totalCategories = Object.values(TranslationCategory).length;
-    
+
     return {
       currentLanguage: this.currentLanguage,
       loadedLanguages,

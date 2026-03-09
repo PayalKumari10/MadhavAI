@@ -130,9 +130,7 @@ export class FeedbackCollector {
    * Get feedback within a date range
    */
   async getFeedbackByDateRange(startDate: Date, endDate: Date): Promise<FeedbackData[]> {
-    return this.feedbackStore.filter(
-      (f) => f.timestamp >= startDate && f.timestamp <= endDate
-    );
+    return this.feedbackStore.filter((f) => f.timestamp >= startDate && f.timestamp <= endDate);
   }
 
   /**

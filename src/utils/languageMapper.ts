@@ -3,14 +3,14 @@
  * Maps between different language code formats
  */
 
-import {LanguageCode} from '../types/translation.types';
-import {SupportedLanguage} from '../types/voice.types';
+import { LanguageCode } from '../types/translation.types';
+import { SupportedLanguage } from '../types/voice.types';
 
 /**
  * Map language code to voice code
  */
 export function languageToVoiceCode(language: LanguageCode): SupportedLanguage {
-  const mapping: {[key in LanguageCode]: SupportedLanguage} = {
+  const mapping: { [key in LanguageCode]: SupportedLanguage } = {
     hi: 'hi-IN',
     ta: 'ta-IN',
     te: 'te-IN',
@@ -31,7 +31,7 @@ export function languageToVoiceCode(language: LanguageCode): SupportedLanguage {
  * Map voice code to language code
  */
 export function voiceToLanguageCode(voiceCode: SupportedLanguage): LanguageCode {
-  const mapping: {[key in SupportedLanguage]: LanguageCode} = {
+  const mapping: { [key in SupportedLanguage]: LanguageCode } = {
     'hi-IN': 'hi',
     'ta-IN': 'ta',
     'te-IN': 'te',
@@ -51,7 +51,7 @@ export function voiceToLanguageCode(voiceCode: SupportedLanguage): LanguageCode 
  * Get language name in native script
  */
 export function getLanguageNativeName(language: LanguageCode): string {
-  const names: {[key in LanguageCode]: string} = {
+  const names: { [key in LanguageCode]: string } = {
     hi: 'हिन्दी',
     ta: 'தமிழ்',
     te: 'తెలుగు',
@@ -72,7 +72,7 @@ export function getLanguageNativeName(language: LanguageCode): string {
  * Get language name in English
  */
 export function getLanguageEnglishName(language: LanguageCode): string {
-  const names: {[key in LanguageCode]: string} = {
+  const names: { [key in LanguageCode]: string } = {
     hi: 'Hindi',
     ta: 'Tamil',
     te: 'Telugu',

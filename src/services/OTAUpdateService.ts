@@ -1,6 +1,6 @@
 /**
  * Over-The-Air (OTA) Update Service
- * 
+ *
  * Handles content updates without requiring app store approval.
  * This service manages:
  * - Training content updates
@@ -61,7 +61,7 @@ export class OTAUpdateService {
     try {
       const currentVersion = await this.getCurrentAppVersion();
       const deviceInfo = await this.getDeviceInfo();
-      
+
       const response = await axios.get(`${this.API_BASE_URL}/ota/updates`, {
         params: {
           appVersion: currentVersion,
@@ -72,11 +72,11 @@ export class OTAUpdateService {
       });
 
       const updates: OTAUpdate[] = response.data.updates || [];
-      
+
       // Filter out already installed updates
       const status = await this.getUpdateStatus();
       const pendingUpdates = updates.filter(
-        update => !status.installedUpdates.includes(update.id)
+        (update) => !status.installedUpdates.includes(update.id)
       );
 
       // Update status
@@ -144,7 +144,7 @@ export class OTAUpdateService {
    */
   async installPendingUpdates(): Promise<void> {
     const updates = await this.checkForUpdates();
-    
+
     // Sort by priority (critical first)
     const sortedUpdates = updates.sort((a, b) => {
       const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
@@ -162,7 +162,7 @@ export class OTAUpdateService {
   async hasCriticalUpdates(): Promise<boolean> {
     const status = await this.getUpdateStatus();
     return status.pendingUpdates.some(
-      update => update.priority === 'critical' && update.mandatory
+      (update) => update.priority === 'critical' && update.mandatory
     );
   }
 
@@ -172,7 +172,7 @@ export class OTAUpdateService {
   async forceCriticalUpdates(): Promise<void> {
     const status = await this.getUpdateStatus();
     const criticalUpdates = status.pendingUpdates.filter(
-      update => update.priority === 'critical' && update.mandatory
+      (update) => update.priority === 'critical' && update.mandatory
     );
 
     for (const update of criticalUpdates) {
@@ -193,12 +193,12 @@ export class OTAUpdateService {
     // Schedule periodic checks
     setInterval(async () => {
       const updates = await this.checkForUpdates();
-      
+
       // Auto-install non-mandatory updates in background
       const autoInstallUpdates = updates.filter(
-        update => !update.mandatory && update.priority !== 'critical'
+        (update) => !update.mandatory && update.priority !== 'critical'
       );
-      
+
       for (const update of autoInstallUpdates) {
         await this.installUpdate(update);
       }
@@ -305,7 +305,7 @@ export class OTAUpdateService {
     const status = await this.getUpdateStatus();
     status.installedUpdates.push(updateId);
     status.lastUpdateTime = new Date();
-    status.pendingUpdates = status.pendingUpdates.filter(u => u.id !== updateId);
+    status.pendingUpdates = status.pendingUpdates.filter((u) => u.id !== updateId);
     await this.updateStatus(status);
   }
 

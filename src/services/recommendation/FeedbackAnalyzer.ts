@@ -231,15 +231,27 @@ export class FeedbackAnalyzer {
 
     // Acceptance rate insights
     if (acceptanceRate > 0.7) {
-      insights.push(`High acceptance rate (${(acceptanceRate * 100).toFixed(1)}%) indicates ${type} recommendations are well-received.`);
+      insights.push(
+        `High acceptance rate (${(acceptanceRate * 100).toFixed(
+          1
+        )}%) indicates ${type} recommendations are well-received.`
+      );
     } else if (acceptanceRate < 0.4) {
-      insights.push(`Low acceptance rate (${(acceptanceRate * 100).toFixed(1)}%) suggests ${type} recommendations need improvement.`);
+      insights.push(
+        `Low acceptance rate (${(acceptanceRate * 100).toFixed(
+          1
+        )}%) suggests ${type} recommendations need improvement.`
+      );
     }
 
     // Modification insights
     if (modificationRate > 0.3) {
-      insights.push(`High modification rate (${(modificationRate * 100).toFixed(1)}%) indicates users prefer to customize recommendations.`);
-      
+      insights.push(
+        `High modification rate (${(modificationRate * 100).toFixed(
+          1
+        )}%) indicates users prefer to customize recommendations.`
+      );
+
       if (modifications.length > 0) {
         const topMod = modifications[0];
         insights.push(`Most commonly modified field: ${topMod.field} (${topMod.frequency} times).`);
@@ -248,17 +260,23 @@ export class FeedbackAnalyzer {
 
     // Rejection insights
     if (rejectionRate > 0.3) {
-      insights.push(`High rejection rate (${(rejectionRate * 100).toFixed(1)}%) requires investigation.`);
-      
+      insights.push(
+        `High rejection rate (${(rejectionRate * 100).toFixed(1)}%) requires investigation.`
+      );
+
       if (rejections.length > 0) {
         const topReason = rejections[0];
-        insights.push(`Most common rejection reason: ${topReason.reason} (${topReason.frequency} times).`);
+        insights.push(
+          `Most common rejection reason: ${topReason.reason} (${topReason.frequency} times).`
+        );
       }
     }
 
     // General insights
     if (insights.length === 0) {
-      insights.push(`${type} recommendations show balanced user feedback with room for optimization.`);
+      insights.push(
+        `${type} recommendations show balanced user feedback with room for optimization.`
+      );
     }
 
     return insights;
@@ -283,8 +301,7 @@ export class FeedbackAnalyzer {
     const total = recFeedback.length;
 
     // Performance score: accepted = 100 points, modified = 70 points, rejected = 0 points
-    const performanceScore =
-      ((acceptanceCount * 100 + modificationCount * 70) / total);
+    const performanceScore = (acceptanceCount * 100 + modificationCount * 70) / total;
 
     return {
       recommendationId,
@@ -315,9 +332,7 @@ export class FeedbackAnalyzer {
     const firstHalf = feedbackData.filter(
       (f) => f.timestamp >= periodStart && f.timestamp < midPoint
     );
-    const secondHalf = feedbackData.filter(
-      (f) => f.timestamp >= midPoint && f.timestamp <= now
-    );
+    const secondHalf = feedbackData.filter((f) => f.timestamp >= midPoint && f.timestamp <= now);
 
     const firstHalfAcceptance =
       firstHalf.length > 0
@@ -328,7 +343,7 @@ export class FeedbackAnalyzer {
         ? secondHalf.filter((f) => f.action === 'accepted').length / secondHalf.length
         : 0;
 
-    const trendPercentage = ((secondHalfAcceptance - firstHalfAcceptance) * 100);
+    const trendPercentage = (secondHalfAcceptance - firstHalfAcceptance) * 100;
 
     let trend: 'improving' | 'declining' | 'stable';
     if (trendPercentage > 5) {
@@ -349,10 +364,7 @@ export class FeedbackAnalyzer {
   /**
    * Create empty analysis result
    */
-  private createEmptyAnalysis(
-    type: RecommendationType,
-    context: any = {}
-  ): FeedbackAnalysis {
+  private createEmptyAnalysis(type: RecommendationType, context: any = {}): FeedbackAnalysis {
     return {
       recommendationType: type,
       context,

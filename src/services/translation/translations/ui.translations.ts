@@ -17,7 +17,7 @@ export const uiTranslations = {
     'dashboard.next_activity': 'Next activity',
     'dashboard.view_more': 'View More',
     'dashboard.market_prices': 'Market Prices',
-    
+
     // Features
     'features.weather': 'Weather',
     'features.schemes': 'Schemes',
@@ -25,7 +25,7 @@ export const uiTranslations = {
     'features.training': 'Training',
     'features.recommendations': 'Recommendations',
     'features.soil': 'Soil Health',
-    
+
     // Common
     'common.retry': 'Retry',
     'common.back': 'Back',
@@ -45,7 +45,7 @@ export const uiTranslations = {
     'dashboard.next_activity': 'अगली गतिविधि',
     'dashboard.view_more': 'और देखें',
     'dashboard.market_prices': 'बाजार मूल्य',
-    
+
     // Features
     'features.weather': 'मौसम',
     'features.schemes': 'योजनाएं',
@@ -53,7 +53,7 @@ export const uiTranslations = {
     'features.training': 'प्रशिक्षण',
     'features.recommendations': 'सिफारिशें',
     'features.soil': 'मिट्टी स्वास्थ्य',
-    
+
     // Common
     'common.retry': 'पुनः प्रयास करें',
     'common.back': 'वापस',

@@ -108,7 +108,7 @@ export class DataAggregator {
     try {
       // Try local storage first
       const localRecords = await soilHealthStorage.getUserSoilHealthRecords(userId);
-      
+
       // Only try API if enabled
       if (config.ENABLE_API) {
         try {
@@ -116,7 +116,7 @@ export class DataAggregator {
           // Combine and deduplicate
           const allRecords = [...localRecords, ...apiRecords];
           const uniqueRecords = Array.from(
-            new Map(allRecords.map(record => [record.id, record])).values()
+            new Map(allRecords.map((record) => [record.id, record])).values()
           );
           return uniqueRecords;
         } catch {
@@ -124,7 +124,7 @@ export class DataAggregator {
           return localRecords;
         }
       }
-      
+
       return localRecords;
     } catch {
       // Soil data is optional, return empty array if not available
@@ -174,7 +174,7 @@ export class DataAggregator {
       if (!config.ENABLE_API) {
         return null;
       }
-      
+
       // Get market data for the first crop
       const cropName = profile.primaryCrops[0];
       const [prices, mandis, trend] = await Promise.all([

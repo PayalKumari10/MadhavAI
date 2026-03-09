@@ -26,10 +26,7 @@ describe('MarketService', () => {
 
   describe('getPrices', () => {
     it('should fetch market prices for location', async () => {
-      const prices = await marketService.getPrices(
-        testLocation.latitude,
-        testLocation.longitude
-      );
+      const prices = await marketService.getPrices(testLocation.latitude, testLocation.longitude);
 
       expect(prices).toBeDefined();
       expect(Array.isArray(prices)).toBe(true);
@@ -106,14 +103,9 @@ describe('MarketService', () => {
         timestamp: new Date().toISOString(),
       };
 
-      (encryptedStorage.getItem as jest.Mock).mockResolvedValue(
-        JSON.stringify(mockCachedData)
-      );
+      (encryptedStorage.getItem as jest.Mock).mockResolvedValue(JSON.stringify(mockCachedData));
 
-      const prices = await marketService.getPrices(
-        testLocation.latitude,
-        testLocation.longitude
-      );
+      const prices = await marketService.getPrices(testLocation.latitude, testLocation.longitude);
 
       expect(prices).toBeDefined();
       expect(prices.length).toBeGreaterThan(0);
@@ -134,14 +126,9 @@ describe('MarketService', () => {
         timestamp: expiredDate.toISOString(),
       };
 
-      (encryptedStorage.getItem as jest.Mock).mockResolvedValue(
-        JSON.stringify(mockCachedData)
-      );
+      (encryptedStorage.getItem as jest.Mock).mockResolvedValue(JSON.stringify(mockCachedData));
 
-      const prices = await marketService.getPrices(
-        testLocation.latitude,
-        testLocation.longitude
-      );
+      const prices = await marketService.getPrices(testLocation.latitude, testLocation.longitude);
 
       expect(prices).toBeDefined();
       // Should have fetched fresh data and cached it

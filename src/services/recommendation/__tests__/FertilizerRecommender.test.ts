@@ -159,11 +159,7 @@ describe('FertilizerRecommender', () => {
         soilData: mockSoilDataLowPhosphorus,
       };
 
-      const recommendations = await recommender.generateRecommendations(
-        context,
-        'Rice',
-        'sowing'
-      );
+      const recommendations = await recommender.generateRecommendations(context, 'Rice', 'sowing');
 
       const phosphorusRec = recommendations.find((r) => r.nutrient.includes('Phosphorus'));
       expect(phosphorusRec).toBeDefined();
@@ -195,7 +191,7 @@ describe('FertilizerRecommender', () => {
       const rec = recommendations[0];
       expect(rec.alternatives).toBeDefined();
       expect(rec.alternatives.length).toBeGreaterThan(0);
-      
+
       rec.alternatives.forEach((alt) => {
         expect(alt.name).toBeDefined();
         expect(alt.type).toBeDefined();
@@ -276,7 +272,7 @@ describe('FertilizerRecommender', () => {
 
       // Should recommend NPK for maintenance even with high nutrients
       expect(recommendations.length).toBeGreaterThan(0);
-      
+
       // NPK recommendation should be present
       const npkRec = recommendations.find((r) => r.nutrient.includes('NPK'));
       expect(npkRec).toBeDefined();
@@ -305,7 +301,7 @@ describe('FertilizerRecommender', () => {
       // Should have phosphorus recommendation
       const phosphorusRec = recommendations.find((r) => r.nutrient.includes('Phosphorus'));
       expect(phosphorusRec).toBeDefined();
-      
+
       // If nitrogen is also recommended (shouldn't be), it should have warning
       const nitrogenRec = recommendations.find((r) => r.nutrient.includes('Nitrogen'));
       if (nitrogenRec) {
@@ -334,11 +330,7 @@ describe('FertilizerRecommender', () => {
         soilData: mockSoilDataLowPhosphorus,
       };
 
-      const recommendations = await recommender.generateRecommendations(
-        context,
-        'Rice',
-        'sowing'
-      );
+      const recommendations = await recommender.generateRecommendations(context, 'Rice', 'sowing');
 
       const phosphorusRec = recommendations.find((r) => r.nutrient.includes('Phosphorus'));
       if (phosphorusRec) {

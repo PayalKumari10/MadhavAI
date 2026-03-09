@@ -17,7 +17,7 @@ export default function MarketScreen() {
     try {
       setLoading(true);
       const profile = await profileManager.getProfile();
-      
+
       if (profile?.location?.coordinates && profile?.primaryCrops?.length > 0) {
         setMarketData({
           latitude: profile.location.coordinates.latitude,

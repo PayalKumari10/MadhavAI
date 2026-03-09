@@ -136,14 +136,8 @@ describe('TrainingService', () => {
 
       const result = await trainingService.markLessonComplete('user1', 'lesson1');
 
-      expect(mockProgressTracker.markLessonComplete).toHaveBeenCalledWith(
-        'user1',
-        'lesson1'
-      );
-      expect(mockContentManager.getRelatedLessons).toHaveBeenCalledWith(
-        'lesson1',
-        'hi'
-      );
+      expect(mockProgressTracker.markLessonComplete).toHaveBeenCalledWith('user1', 'lesson1');
+      expect(mockContentManager.getRelatedLessons).toHaveBeenCalledWith('lesson1', 'hi');
       expect(result.relatedLessons).toEqual(mockRelatedLessons);
     });
   });

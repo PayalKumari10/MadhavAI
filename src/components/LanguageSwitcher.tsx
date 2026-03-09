@@ -3,19 +3,19 @@
  * Allows users to change their language preference
  */
 
-import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, Modal, StyleSheet, FlatList} from 'react-native';
-import {LanguageCode} from '../types/translation.types';
-import {SUPPORTED_LANGUAGES} from '../config/constants';
-import {useTranslation} from '../hooks/useTranslation';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, Modal, StyleSheet, FlatList } from 'react-native';
+import { LanguageCode } from '../types/translation.types';
+import { SUPPORTED_LANGUAGES } from '../config/constants';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface LanguageSwitcherProps {
   visible: boolean;
   onClose: () => void;
 }
 
-const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({visible, onClose}) => {
-  const {language: currentLanguage, setLanguage} = useTranslation();
+const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ visible, onClose }) => {
+  const { language: currentLanguage, setLanguage } = useTranslation();
   const [isChanging, setIsChanging] = useState(false);
 
   const handleLanguageSelect = async (languageCode: LanguageCode) => {
@@ -31,41 +31,33 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({visible, onClose}) =
   };
 
   return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="slide"
-      onRequestClose={onClose}>
+    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <View style={styles.overlay}>
         <View style={styles.container}>
           <Text style={styles.title}>Select Language / भाषा चुनें</Text>
-          
+
           <FlatList
             data={SUPPORTED_LANGUAGES}
-            keyExtractor={item => item.code}
-            renderItem={({item}) => (
+            keyExtractor={(item) => item.code}
+            renderItem={({ item }) => (
               <TouchableOpacity
                 style={[
                   styles.languageItem,
                   currentLanguage === item.code && styles.selectedLanguage,
                 ]}
                 onPress={() => handleLanguageSelect(item.code as LanguageCode)}
-                disabled={isChanging}>
+                disabled={isChanging}
+              >
                 <View style={styles.languageInfo}>
                   <Text style={styles.languageName}>{item.name}</Text>
                   <Text style={styles.nativeName}>{item.nativeName}</Text>
                 </View>
-                {currentLanguage === item.code && (
-                  <Text style={styles.checkmark}>✓</Text>
-                )}
+                {currentLanguage === item.code && <Text style={styles.checkmark}>✓</Text>}
               </TouchableOpacity>
             )}
           />
 
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={onClose}
-            disabled={isChanging}>
+          <TouchableOpacity style={styles.closeButton} onPress={onClose} disabled={isChanging}>
             <Text style={styles.closeButtonText}>Close / बंद करें</Text>
           </TouchableOpacity>
         </View>

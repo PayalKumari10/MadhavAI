@@ -85,8 +85,8 @@ export const ALERT_SCHEMA = `
  * Initialize alert tables in the database
  */
 export async function initializeAlertSchema(db: any): Promise<void> {
-  const statements = ALERT_SCHEMA.split(';').filter(s => s.trim());
-  
+  const statements = ALERT_SCHEMA.split(';').filter((s) => s.trim());
+
   for (const statement of statements) {
     if (statement.trim()) {
       await db.execute(statement);

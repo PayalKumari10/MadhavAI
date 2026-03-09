@@ -11,15 +11,15 @@ import {
   RecommendationSummary,
   Insight,
 } from '../../types/dashboard.types';
-import {weatherService} from '../weather';
-import {AlertScheduler} from '../alert/AlertScheduler';
-import {marketService} from '../market/MarketService';
-import {profileManager} from '../profile';
-import {DatabaseService} from '../storage/DatabaseService';
-import {UserProfile} from '../../types/profile.types';
-import {DailyForecast} from '../../types/weather.types';
-import {Alert} from '../../types/alert.types';
-import {MarketPrice} from '../../types/market.types';
+import { weatherService } from '../weather';
+import { AlertScheduler } from '../alert/AlertScheduler';
+import { marketService } from '../market/MarketService';
+import { profileManager } from '../profile';
+import { DatabaseService } from '../storage/DatabaseService';
+import { UserProfile } from '../../types/profile.types';
+import { DailyForecast } from '../../types/weather.types';
+import { Alert } from '../../types/alert.types';
+import { MarketPrice } from '../../types/market.types';
 
 /**
  * Aggregates data from all modules for dashboard display
@@ -36,7 +36,7 @@ export class DashboardAggregator {
     alertScheduler: AlertScheduler,
     marketSvc: typeof marketService,
     profileMgr: typeof profileManager,
-    db: DatabaseService,
+    db: DatabaseService
   ) {
     this.weatherService = weatherSvc;
     this.alertScheduler = alertScheduler;
@@ -59,21 +59,15 @@ export class DashboardAggregator {
       }
 
       // Collect data from all modules in parallel for performance
-      const [
-        weather,
-        upcomingAlerts,
-        cropStatus,
-        marketPrices,
-        recommendations,
-        insights,
-      ] = await Promise.all([
-        this.getWeatherData(profile),
-        this.getUpcomingAlerts(profile.userId),
-        this.getCropStatus(profile.userId),
-        this.getMarketPrices(profile),
-        this.getRecommendations(profile.userId),
-        this.getPersonalizedInsights(profile.userId, profile),
-      ]);
+      const [weather, upcomingAlerts, cropStatus, marketPrices, recommendations, insights] =
+        await Promise.all([
+          this.getWeatherData(profile),
+          this.getUpcomingAlerts(profile.userId),
+          this.getCropStatus(profile.userId),
+          this.getMarketPrices(profile),
+          this.getRecommendations(profile.userId),
+          this.getPersonalizedInsights(profile.userId, profile),
+        ]);
 
       // Generate quick actions based on user's crops and activities
       const quickActions = this.generateQuickActions(profile);
@@ -98,9 +92,7 @@ export class DashboardAggregator {
    * Get current weather conditions
    * Requirement: 14.1
    */
-  private async getWeatherData(
-    profile: UserProfile,
-  ): Promise<DailyForecast> {
+  private async getWeatherData(profile: UserProfile): Promise<DailyForecast> {
     try {
       const forecast = await this.weatherService.getForecast(
         profile.location.coordinates.latitude,
@@ -145,9 +137,7 @@ export class DashboardAggregator {
     try {
       const alerts = await this.alertScheduler.getUpcomingAlerts(userId, 7);
       // Filter only pending/scheduled alerts
-      return alerts.filter(
-        alert => alert.status === 'scheduled' || alert.status === 'sent',
-      );
+      return alerts.filter((alert) => alert.status === 'scheduled' || alert.status === 'sent');
     } catch (error) {
       console.error('Error fetching alerts:', error);
       return [];
@@ -163,7 +153,7 @@ export class DashboardAggregator {
       // Query crop plans from database
       const cropPlans = await this.db.query(
         'SELECT * FROM crop_plans WHERE userId = ? AND status = ?',
-        [userId, 'active'],
+        [userId, 'active']
       );
 
       return cropPlans.map((plan: any) => ({
@@ -192,7 +182,7 @@ export class DashboardAggregator {
         profile.primaryCrops,
         50 // 50 km radius
       );
-      
+
       // Get the most recent price for each crop
       return prices.slice(0, 5);
     } catch (error) {
@@ -205,14 +195,12 @@ export class DashboardAggregator {
    * Get recent recommendations
    * Requirement: 14.5
    */
-  private async getRecommendations(
-    userId: string,
-  ): Promise<RecommendationSummary[]> {
+  private async getRecommendations(userId: string): Promise<RecommendationSummary[]> {
     try {
       // Query recent recommendations from database
       const recommendations = await this.db.query(
         'SELECT * FROM recommendations WHERE userId = ? ORDER BY createdAt DESC LIMIT 5',
-        [userId],
+        [userId]
       );
 
       return recommendations.map((rec: any) => ({
@@ -233,74 +221,71 @@ export class DashboardAggregator {
    * Requirement: 14.6
    */
   private generateQuickActions(_profile: UserProfile): QuickAction[] {
-      return [
-        {
-          id: 'weather',
-          type: 'navigation',
-          title: 'Weather Forecast',
-          icon: 'weather-partly-cloudy',
-          route: 'Weather',
-        },
-        {
-          id: 'schemes',
-          type: 'navigation',
-          title: 'Government Schemes',
-          icon: 'file-document',
-          route: 'Schemes',
-        },
-        {
-          id: 'market',
-          type: 'navigation',
-          title: 'Market Prices',
-          icon: 'currency-inr',
-          route: 'Market',
-        },
-        {
-          id: 'training',
-          type: 'navigation',
-          title: 'Training',
-          icon: 'school',
-          route: 'Training',
-        },
-        {
-          id: 'recommendations',
-          type: 'navigation',
-          title: 'Recommendations',
-          icon: 'lightbulb',
-          route: 'Recommendations',
-        },
-        {
-          id: 'soil',
-          type: 'navigation',
-          title: 'Soil Health',
-          icon: 'terrain',
-          route: 'SoilHealth',
-        },
-        {
-          id: 'alerts',
-          type: 'navigation',
-          title: 'Alerts & Reminders',
-          icon: 'calendar-check',
-          route: 'Alerts',
-        },
-        {
-          id: 'cropplanner',
-          type: 'navigation',
-          title: 'Crop Planner',
-          icon: 'seed',
-          route: 'CropPlanner',
-        },
-      ];
-    }
+    return [
+      {
+        id: 'weather',
+        type: 'navigation',
+        title: 'Weather Forecast',
+        icon: 'weather-partly-cloudy',
+        route: 'Weather',
+      },
+      {
+        id: 'schemes',
+        type: 'navigation',
+        title: 'Government Schemes',
+        icon: 'file-document',
+        route: 'Schemes',
+      },
+      {
+        id: 'market',
+        type: 'navigation',
+        title: 'Market Prices',
+        icon: 'currency-inr',
+        route: 'Market',
+      },
+      {
+        id: 'training',
+        type: 'navigation',
+        title: 'Training',
+        icon: 'school',
+        route: 'Training',
+      },
+      {
+        id: 'recommendations',
+        type: 'navigation',
+        title: 'Recommendations',
+        icon: 'lightbulb',
+        route: 'Recommendations',
+      },
+      {
+        id: 'soil',
+        type: 'navigation',
+        title: 'Soil Health',
+        icon: 'terrain',
+        route: 'SoilHealth',
+      },
+      {
+        id: 'alerts',
+        type: 'navigation',
+        title: 'Alerts & Reminders',
+        icon: 'calendar-check',
+        route: 'Alerts',
+      },
+      {
+        id: 'cropplanner',
+        type: 'navigation',
+        title: 'Crop Planner',
+        icon: 'seed',
+        route: 'CropPlanner',
+      },
+    ];
+  }
 
   /**
    * Get personalized insights based on current season and crop stage
    * Requirement: 14.7
    */
-  private async getPersonalizedInsights(
-    userId: string,
-    _profile: UserProfile,
-  ): Promise<Insight[]> {
+  private async getPersonalizedInsights(userId: string, _profile: UserProfile): Promise<Insight[]> {
     const insights: Insight[] = [];
 
     try {
@@ -311,7 +296,7 @@ export class DashboardAggregator {
       // Get crop plans
       const cropPlans = await this.db.query(
         'SELECT * FROM crop_plans WHERE userId = ? AND status = ?',
-        [userId, 'active'],
+        [userId, 'active']
       );
 
       // Generate season-based insights

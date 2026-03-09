@@ -146,8 +146,8 @@ class VoiceCommandHandler {
   private findMatchingCommand(transcript: string): VoiceCommand | null {
     // Sort commands by keyword length (longer keywords first for better matching)
     const sortedCommands = Array.from(this.commands.values()).sort((a, b) => {
-      const maxLengthA = Math.max(...a.keywords.map(k => k.length));
-      const maxLengthB = Math.max(...b.keywords.map(k => k.length));
+      const maxLengthA = Math.max(...a.keywords.map((k) => k.length));
+      const maxLengthB = Math.max(...b.keywords.map((k) => k.length));
       return maxLengthB - maxLengthA;
     });
 
@@ -229,9 +229,7 @@ class VoiceCommandHandler {
       understood: true,
       action: VoiceCommandType.MARKET_PRICES,
       parameters: params,
-      response: params.crop
-        ? `Showing market prices for ${params.crop}`
-        : 'Opening market prices',
+      response: params.crop ? `Showing market prices for ${params.crop}` : 'Opening market prices',
     };
   }
 

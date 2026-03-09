@@ -1,6 +1,6 @@
 /**
  * Update Manager Component
- * 
+ *
  * Handles app updates including:
  * - OTA content updates
  * - Critical security updates
@@ -31,7 +31,7 @@ export const UpdateManager: React.FC<UpdateManagerProps> = ({ onUpdateComplete }
 
   useEffect(() => {
     checkForUpdates();
-    
+
     // Start automatic update checks
     OTAUpdateService.startAutoUpdateCheck();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -41,9 +41,9 @@ export const UpdateManager: React.FC<UpdateManagerProps> = ({ onUpdateComplete }
     try {
       const updates = await OTAUpdateService.checkForUpdates();
       const hasCritical = await OTAUpdateService.hasCriticalUpdates();
-      
+
       setIsCritical(hasCritical);
-      
+
       if (hasCritical) {
         // Force critical updates immediately
         setShowUpdateModal(true);
@@ -61,14 +61,15 @@ export const UpdateManager: React.FC<UpdateManagerProps> = ({ onUpdateComplete }
     setIsUpdating(true);
     try {
       await OTAUpdateService.forceCriticalUpdates();
-      Alert.alert(
-        'Update Complete',
-        'Critical updates have been installed successfully.',
-        [{ text: 'OK', onPress: () => {
-          setShowUpdateModal(false);
-          onUpdateComplete?.();
-        }}]
-      );
+      Alert.alert('Update Complete', 'Critical updates have been installed successfully.', [
+        {
+          text: 'OK',
+          onPress: () => {
+            setShowUpdateModal(false);
+            onUpdateComplete?.();
+          },
+        },
+      ]);
     } catch (error) {
       console.error('Failed to install critical updates:', error);
       Alert.alert(
@@ -85,14 +86,15 @@ export const UpdateManager: React.FC<UpdateManagerProps> = ({ onUpdateComplete }
     setIsUpdating(true);
     try {
       await OTAUpdateService.installPendingUpdates();
-      Alert.alert(
-        'Update Complete',
-        'Updates have been installed successfully.',
-        [{ text: 'OK', onPress: () => {
-          setShowUpdateModal(false);
-          onUpdateComplete?.();
-        }}]
-      );
+      Alert.alert('Update Complete', 'Updates have been installed successfully.', [
+        {
+          text: 'OK',
+          onPress: () => {
+            setShowUpdateModal(false);
+            onUpdateComplete?.();
+          },
+        },
+      ]);
     } catch (error) {
       console.error('Failed to install updates:', error);
       Alert.alert(
@@ -128,16 +130,16 @@ export const UpdateManager: React.FC<UpdateManagerProps> = ({ onUpdateComplete }
             <>
               <Text style={styles.title}>⚠️ Critical Update Required</Text>
               <Text style={styles.message}>
-                A critical security update is required to continue using MadhavAI.
-                This update will be installed automatically.
+                A critical security update is required to continue using MadhavAI. This update will
+                be installed automatically.
               </Text>
             </>
           ) : (
             <>
               <Text style={styles.title}>🎉 Update Available</Text>
               <Text style={styles.message}>
-                New content and improvements are available. Update now to get the
-                latest features and bug fixes.
+                New content and improvements are available. Update now to get the latest features
+                and bug fixes.
               </Text>
             </>
           )}

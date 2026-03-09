@@ -18,11 +18,7 @@ export class DownloadManager {
   /**
    * Download lesson content for offline viewing
    */
-  async downloadLesson(
-    lessonId: string,
-    videoUrl: string,
-    audioUrl: string
-  ): Promise<void> {
+  async downloadLesson(lessonId: string, videoUrl: string, audioUrl: string): Promise<void> {
     // Check if already downloaded
     const isAvailable = await this.contentManager.isAvailableOffline(lessonId);
     if (isAvailable) {
@@ -120,9 +116,7 @@ export class DownloadManager {
    * Get all active downloads
    */
   getActiveDownloads(): DownloadProgress[] {
-    return Array.from(this.activeDownloads.values()).filter(
-      (d) => d.status === 'downloading'
-    );
+    return Array.from(this.activeDownloads.values()).filter((d) => d.status === 'downloading');
   }
 
   /**

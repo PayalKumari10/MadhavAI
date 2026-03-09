@@ -107,9 +107,7 @@ export const S3_STRUCTURE = {
 /**
  * Initialize local database tables
  */
-export async function initializeTrainingTables(
-  db: any
-): Promise<void> {
+export async function initializeTrainingTables(db: any): Promise<void> {
   await db.execute(TRAINING_TABLES.sqlite.training_content);
   await db.execute(TRAINING_TABLES.sqlite.content_metadata);
   await db.execute(TRAINING_TABLES.sqlite.learning_progress);

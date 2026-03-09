@@ -4,7 +4,7 @@
 
 import TranslationService from '../TranslationService';
 import TranslationStorage from '../TranslationStorage';
-import {TranslationCategory} from '../../../types/translation.types';
+import { TranslationCategory } from '../../../types/translation.types';
 
 // Mock TranslationStorage
 jest.mock('../TranslationStorage');
@@ -83,7 +83,7 @@ describe('TranslationService', () => {
     });
 
     it('should interpolate parameters', () => {
-      const result = translationService.translate('ui.dashboard.welcome', {name: 'राज'});
+      const result = translationService.translate('ui.dashboard.welcome', { name: 'राज' });
       expect(result).toBe('स्वागत है राज');
     });
 
@@ -106,9 +106,9 @@ describe('TranslationService', () => {
     it('should throw error for unsupported language', async () => {
       await translationService.initialize('hi');
 
-      await expect(
-        translationService.setLanguage('xx' as any)
-      ).rejects.toThrow('Language xx is not supported');
+      await expect(translationService.setLanguage('xx' as any)).rejects.toThrow(
+        'Language xx is not supported'
+      );
     });
 
     it('should check if language is supported', () => {
@@ -120,9 +120,9 @@ describe('TranslationService', () => {
     it('should get supported languages', () => {
       const languages = translationService.getSupportedLanguages();
       expect(languages).toHaveLength(11); // 10 regional + English
-      expect(languages.map(l => l.code)).toContain('hi');
-      expect(languages.map(l => l.code)).toContain('ta');
-      expect(languages.map(l => l.code)).toContain('en');
+      expect(languages.map((l) => l.code)).toContain('hi');
+      expect(languages.map((l) => l.code)).toContain('ta');
+      expect(languages.map((l) => l.code)).toContain('en');
     });
   });
 
@@ -132,7 +132,7 @@ describe('TranslationService', () => {
 
       await translationService.initialize('hi');
       const callCountBefore = mockStorage.getTranslations.mock.calls.length;
-      
+
       await translationService.preloadLanguages(['ta', 'te', 'kn']);
 
       const callCountAfter = mockStorage.getTranslations.mock.calls.length;

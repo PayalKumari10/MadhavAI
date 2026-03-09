@@ -5,7 +5,18 @@
 /**
  * Supported language codes (ISO 639-1)
  */
-export type LanguageCode = 'hi' | 'ta' | 'te' | 'kn' | 'mr' | 'bn' | 'gu' | 'pa' | 'ml' | 'or' | 'en';
+export type LanguageCode =
+  | 'hi'
+  | 'ta'
+  | 'te'
+  | 'kn'
+  | 'mr'
+  | 'bn'
+  | 'gu'
+  | 'pa'
+  | 'ml'
+  | 'or'
+  | 'en';
 
 /**
  * Language information

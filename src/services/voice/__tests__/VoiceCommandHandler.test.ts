@@ -3,7 +3,7 @@
  */
 
 import VoiceCommandHandler from '../VoiceCommandHandler';
-import {VoiceCommandType} from '../../../types/voice.types';
+import { VoiceCommandType } from '../../../types/voice.types';
 
 describe('VoiceCommandHandler', () => {
   let handler: VoiceCommandHandler;

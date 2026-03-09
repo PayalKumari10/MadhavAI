@@ -4,13 +4,7 @@
  */
 
 import React from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { Alert, AlertPriority } from '../../types/alert.types';
 
 interface AlertListProps {
@@ -19,11 +13,7 @@ interface AlertListProps {
   onMarkAsRead?: (alertId: string) => void;
 }
 
-export const AlertList: React.FC<AlertListProps> = ({
-  alerts,
-  onAlertPress,
-  onMarkAsRead,
-}) => {
+export const AlertList: React.FC<AlertListProps> = ({ alerts, onAlertPress, onMarkAsRead }) => {
   const getPriorityColor = (priority: AlertPriority): string => {
     switch (priority) {
       case 'critical':
@@ -72,9 +62,7 @@ export const AlertList: React.FC<AlertListProps> = ({
       >
         <View style={styles.alertHeader}>
           <View style={[styles.priorityBadge, { backgroundColor: priorityColor }]}>
-            <Text style={styles.priorityText}>
-              {getPriorityLabel(item.priority)}
-            </Text>
+            <Text style={styles.priorityText}>{getPriorityLabel(item.priority)}</Text>
           </View>
           <Text style={styles.timeText}>{formatDate(item.scheduledTime)}</Text>
         </View>
@@ -91,10 +79,7 @@ export const AlertList: React.FC<AlertListProps> = ({
         )}
 
         {isUnread && onMarkAsRead && (
-          <TouchableOpacity
-            style={styles.markReadButton}
-            onPress={() => onMarkAsRead(item.id)}
-          >
+          <TouchableOpacity style={styles.markReadButton} onPress={() => onMarkAsRead(item.id)}>
             <Text style={styles.markReadText}>Mark as Read</Text>
           </TouchableOpacity>
         )}

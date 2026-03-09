@@ -148,12 +148,12 @@ describe('DataAggregator', () => {
   beforeEach(() => {
     aggregator = new DataAggregator();
     jest.clearAllMocks();
-    
+
     // Mock profileManager to return the mock profile
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { profileManager } = require('../../profile/ProfileManager');
     profileManager.getProfile.mockResolvedValue(mockProfile);
-    
+
     // Mock soilHealthStorage
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { soilHealthStorage } = require('../../soil/SoilHealthStorage');
@@ -166,11 +166,11 @@ describe('DataAggregator', () => {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { config } = require('../../../config/env');
       config.ENABLE_API = true;
-      
+
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { soilHealthStorage } = require('../../soil/SoilHealthStorage');
       soilHealthStorage.getUserSoilHealthRecords.mockResolvedValue([mockSoilData]);
-      
+
       (profileAPI.getProfile as jest.Mock).mockResolvedValue(mockProfile);
       (soilApi.getSoilHealthByUser as jest.Mock).mockResolvedValue([mockSoilData]);
       (weatherAPI.getForecast as jest.Mock).mockResolvedValue(mockWeatherForecast);
@@ -186,7 +186,7 @@ describe('DataAggregator', () => {
       expect(context.marketData).toBeDefined();
       expect(context.currentSeason).toBeDefined();
       expect(context.timestamp).toBeInstanceOf(Date);
-      
+
       // Reset config
       config.ENABLE_API = false;
     });
@@ -236,12 +236,12 @@ describe('DataAggregator', () => {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { profileManager } = require('../../profile/ProfileManager');
       profileManager.getProfile.mockResolvedValue(null);
-      
+
       (profileAPI.getProfile as jest.Mock).mockRejectedValue(new Error('Profile not found'));
 
       // DataAggregator now returns default profile instead of throwing error
       const context = await aggregator.aggregateData('user-001');
-      
+
       expect(context.userProfile).toBeDefined();
       expect(context.userProfile.name).toBe('Demo Farmer');
     });
@@ -250,7 +250,7 @@ describe('DataAggregator', () => {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { soilHealthStorage } = require('../../soil/SoilHealthStorage');
       soilHealthStorage.getUserSoilHealthRecords.mockResolvedValue([mockSoilData]);
-      
+
       (profileAPI.getProfile as jest.Mock).mockResolvedValue(mockProfile);
       (soilApi.getSoilHealthByUser as jest.Mock).mockResolvedValue([mockSoilData]);
       (weatherAPI.getForecast as jest.Mock).mockResolvedValue(mockWeatherForecast);

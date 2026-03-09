@@ -4,7 +4,7 @@
  * Ensures voice interface works offline
  */
 
-import {SupportedLanguage, VoiceCommandResult} from '../../types/voice.types';
+import { SupportedLanguage, VoiceCommandResult } from '../../types/voice.types';
 import VoiceService from './VoiceService';
 import TextToSpeech from './TextToSpeech';
 import VoiceNavigation from './VoiceNavigation';

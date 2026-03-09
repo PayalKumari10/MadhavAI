@@ -35,11 +35,7 @@ describe('AuthenticationManager', () => {
       const otp = otpService.getOTPForTesting(testMobileNumber)!;
 
       // Verify OTP
-      const result = await authenticationManager.verifyOTP(
-        testMobileNumber,
-        otp,
-        testDeviceId
-      );
+      const result = await authenticationManager.verifyOTP(testMobileNumber, otp, testDeviceId);
 
       expect(result.success).toBe(true);
       expect(result.authToken).toBeDefined();
@@ -70,11 +66,7 @@ describe('AuthenticationManager', () => {
       // In real scenario, we would wait for expiration or mock Date
       otpService.clearOTP(testMobileNumber);
 
-      const result = await authenticationManager.verifyOTP(
-        testMobileNumber,
-        otp,
-        testDeviceId
-      );
+      const result = await authenticationManager.verifyOTP(testMobileNumber, otp, testDeviceId);
 
       expect(result.success).toBe(false);
     });
@@ -84,10 +76,10 @@ describe('AuthenticationManager', () => {
 
       // Attempt 1
       await authenticationManager.verifyOTP(testMobileNumber, '000000', testDeviceId);
-      
+
       // Attempt 2
       await authenticationManager.verifyOTP(testMobileNumber, '000000', testDeviceId);
-      
+
       // Attempt 3
       const result = await authenticationManager.verifyOTP(
         testMobileNumber,

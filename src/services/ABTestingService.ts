@@ -1,6 +1,6 @@
 /**
  * A/B Testing Service
- * 
+ *
  * Enables testing of new features and recommendation algorithms
  * with a subset of users before full rollout.
  */
@@ -134,7 +134,7 @@ export class ABTestingService {
       return null;
     }
 
-    const variant = test.variants.find(v => v.id === variantId);
+    const variant = test.variants.find((v) => v.id === variantId);
     return variant?.config || null;
   }
 
@@ -174,11 +174,7 @@ export class ABTestingService {
     recommendationType: string,
     accepted: boolean
   ): Promise<void> {
-    await this.trackMetric(
-      testId,
-      `${recommendationType}_acceptance`,
-      accepted ? 1 : 0
-    );
+    await this.trackMetric(testId, `${recommendationType}_acceptance`, accepted ? 1 : 0);
   }
 
   /**

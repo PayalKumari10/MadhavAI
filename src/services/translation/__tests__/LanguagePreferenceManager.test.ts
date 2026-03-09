@@ -3,7 +3,7 @@
  */
 
 import LanguagePreferenceManager from '../LanguagePreferenceManager';
-import {LanguageCode} from '../../../types/translation.types';
+import { LanguageCode } from '../../../types/translation.types';
 
 describe('LanguagePreferenceManager', () => {
   let preferenceManager: LanguagePreferenceManager;
@@ -64,9 +64,7 @@ describe('LanguagePreferenceManager', () => {
       mockStorage.setItem.mockResolvedValue(undefined);
       mockProfileManager.updateProfile.mockRejectedValue(new Error('Profile update failed'));
 
-      await expect(
-        preferenceManager.setLanguagePreference('user123', 'ta')
-      ).resolves.not.toThrow();
+      await expect(preferenceManager.setLanguagePreference('user123', 'ta')).resolves.not.toThrow();
 
       expect(mockStorage.setItem).toHaveBeenCalled();
     });

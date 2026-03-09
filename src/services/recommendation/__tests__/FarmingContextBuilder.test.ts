@@ -145,7 +145,7 @@ describe('FarmingContextBuilder', () => {
     });
   });
 
-  // Note: Tests for private methods (categorizeFarmSize, assessSoilHealth, assessWeatherRisk, 
+  // Note: Tests for private methods (categorizeFarmSize, assessSoilHealth, assessWeatherRisk,
   // assessMarketOpportunity, calculateReadiness) have been removed as they should not be tested directly.
   // These are tested indirectly through the public buildContext method.
 
@@ -213,9 +213,7 @@ describe('FarmingContextBuilder', () => {
       const enhancedContext = await builder.buildContext('user-001');
       const recommendations = builder.getMissingDataRecommendations(enhancedContext);
 
-      expect(recommendations).toContain(
-        'Add your farm location for weather and market insights'
-      );
+      expect(recommendations).toContain('Add your farm location for weather and market insights');
     });
 
     it('should recommend completing farm profile when missing', async () => {
@@ -234,9 +232,7 @@ describe('FarmingContextBuilder', () => {
       const enhancedContext = await builder.buildContext('user-001');
       const recommendations = builder.getMissingDataRecommendations(enhancedContext);
 
-      expect(recommendations).toContain(
-        'Complete your farm profile with size and current crops'
-      );
+      expect(recommendations).toContain('Complete your farm profile with size and current crops');
     });
   });
 });

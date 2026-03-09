@@ -18,10 +18,7 @@ export class ProgressTracker {
   /**
    * Mark a lesson as completed
    */
-  async markLessonComplete(
-    userId: string,
-    lessonId: string
-  ): Promise<void> {
+  async markLessonComplete(userId: string, lessonId: string): Promise<void> {
     const now = new Date().toISOString();
 
     // Insert completion record
@@ -39,10 +36,7 @@ export class ProgressTracker {
   /**
    * Check if a lesson is completed
    */
-  async isLessonComplete(
-    userId: string,
-    lessonId: string
-  ): Promise<boolean> {
+  async isLessonComplete(userId: string, lessonId: string): Promise<boolean> {
     const query = `
       SELECT COUNT(*) as count FROM ${this.PROGRESS_TABLE}
       WHERE userId = ? AND lessonId = ?
@@ -79,9 +73,7 @@ export class ProgressTracker {
       WHERE p.userId = ?
       GROUP BY c.category
     `;
-    const categoryResults = await this.databaseService.query(categoryQuery, [
-      userId,
-    ]);
+    const categoryResults = await this.databaseService.query(categoryQuery, [userId]);
     const categories: { [key: string]: number } = {};
     categoryResults.forEach((row: any) => {
       categories[row.category] = row.count;
@@ -92,9 +84,7 @@ export class ProgressTracker {
       SELECT lastAccessedAt FROM ${this.SUMMARY_TABLE}
       WHERE userId = ?
     `;
-    const summaryResult = await this.databaseService.query(summaryQuery, [
-      userId,
-    ]);
+    const summaryResult = await this.databaseService.query(summaryQuery, [userId]);
     const lastAccessedAt = summaryResult[0]?.lastAccessedAt
       ? new Date(summaryResult[0].lastAccessedAt)
       : new Date();
@@ -111,10 +101,7 @@ export class ProgressTracker {
   /**
    * Get completed lessons for a specific category
    */
-  async getCompletedLessonsByCategory(
-    userId: string,
-    category: string
-  ): Promise<string[]> {
+  async getCompletedLessonsByCategory(userId: string, category: string): Promise<string[]> {
     const query = `
       SELECT p.lessonId
       FROM ${this.PROGRESS_TABLE} p
@@ -128,20 +115,14 @@ export class ProgressTracker {
   /**
    * Get completion percentage for a category
    */
-  async getCategoryProgress(
-    userId: string,
-    category: string
-  ): Promise<number> {
+  async getCategoryProgress(userId: string, category: string): Promise<number> {
     const completedQuery = `
       SELECT COUNT(*) as count
       FROM ${this.PROGRESS_TABLE} p
       JOIN training_content c ON p.lessonId = c.id
       WHERE p.userId = ? AND c.category = ?
     `;
-    const completedResult = await this.databaseService.query(completedQuery, [
-      userId,
-      category,
-    ]);
+    const completedResult = await this.databaseService.query(completedQuery, [userId, category]);
     const completed = completedResult[0]?.count || 0;
 
     const totalQuery = `
@@ -178,14 +159,12 @@ export class ProgressTracker {
    * Reset progress for a user (for testing or user request)
    */
   async resetProgress(userId: string): Promise<void> {
-    await this.databaseService.execute(
-      `DELETE FROM ${this.PROGRESS_TABLE} WHERE userId = ?`,
-      [userId]
-    );
-    await this.databaseService.execute(
-      `DELETE FROM ${this.SUMMARY_TABLE} WHERE userId = ?`,
-      [userId]
-    );
+    await this.databaseService.execute(`DELETE FROM ${this.PROGRESS_TABLE} WHERE userId = ?`, [
+      userId,
+    ]);
+    await this.databaseService.execute(`DELETE FROM ${this.SUMMARY_TABLE} WHERE userId = ?`, [
+      userId,
+    ]);
   }
 
   /**

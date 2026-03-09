@@ -3,9 +3,9 @@
  * Manages user language preferences and persistence
  */
 
-import {LanguageCode, LanguagePreferenceUpdate} from '../../types/translation.types';
-import {encryptedStorage} from '../storage/EncryptedStorage';
-import {profileManager} from '../profile/ProfileManager';
+import { LanguageCode, LanguagePreferenceUpdate } from '../../types/translation.types';
+import { encryptedStorage } from '../storage/EncryptedStorage';
+import { profileManager } from '../profile/ProfileManager';
 
 class LanguagePreferenceManager {
   private storage: typeof encryptedStorage;
@@ -35,10 +35,7 @@ class LanguagePreferenceManager {
   /**
    * Set user language preference
    */
-  async setLanguagePreference(
-    userId: string,
-    language: LanguageCode
-  ): Promise<void> {
+  async setLanguagePreference(userId: string, language: LanguageCode): Promise<void> {
     // Update in-memory state
     this.currentLanguage = language;
 
@@ -128,15 +125,16 @@ class LanguagePreferenceManager {
     try {
       // Store in user-specific history array
       const historyKey = `language_history_${update.userId}`;
-      const existingHistory = await this.storage.getItem<LanguagePreferenceUpdate[]>(historyKey) || [];
-      
+      const existingHistory =
+        (await this.storage.getItem<LanguagePreferenceUpdate[]>(historyKey)) || [];
+
       existingHistory.push(update);
-      
+
       // Keep only last 50 entries
       if (existingHistory.length > 50) {
         existingHistory.shift();
       }
-      
+
       await this.storage.setItem(historyKey, existingHistory);
     } catch (error) {
       console.error('Failed to log preference change:', error);
@@ -152,16 +150,18 @@ class LanguagePreferenceManager {
       // Store history in a single key as an array
       const historyKey = `language_history_${userId}`;
       const historyData = await this.storage.getItem<LanguagePreferenceUpdate[]>(historyKey);
-      
+
       if (!historyData) {
         return [];
       }
 
       // Convert timestamp strings back to Date objects
-      return historyData.map(update => ({
-        ...update,
-        timestamp: new Date(update.timestamp),
-      })).sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+      return historyData
+        .map((update) => ({
+          ...update,
+          timestamp: new Date(update.timestamp),
+        }))
+        .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
     } catch (error) {
       console.error('Failed to get preference history:', error);
       return [];

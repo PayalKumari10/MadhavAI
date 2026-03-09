@@ -200,12 +200,12 @@ describe('ExplainabilityEngine', () => {
         mockContext
       );
 
-      const positiveFactors = explanation.factors.filter(f => f.impact === 'positive');
+      const positiveFactors = explanation.factors.filter((f) => f.impact === 'positive');
       expect(positiveFactors.length).toBeGreaterThan(0);
-      
+
       // Should have season, soil, weather, and market as positive
-      expect(positiveFactors.some(f => f.name === 'Season')).toBe(true);
-      expect(positiveFactors.some(f => f.name === 'Soil Condition')).toBe(true);
+      expect(positiveFactors.some((f) => f.name === 'Season')).toBe(true);
+      expect(positiveFactors.some((f) => f.name === 'Soil Condition')).toBe(true);
     });
 
     it('should use simple language without jargon', () => {
@@ -219,7 +219,7 @@ describe('ExplainabilityEngine', () => {
       expect(explanation.reasoning).not.toContain('NPK');
       expect(explanation.reasoning).not.toContain('quintals');
       expect(explanation.reasoning).not.toContain('hectare');
-      
+
       // Should contain simple guidance
       expect(explanation.reasoning).toContain('recommend');
       expect(explanation.summary).toBeDefined();
@@ -240,7 +240,7 @@ describe('ExplainabilityEngine', () => {
         poorSoilContext
       );
 
-      const soilFactor = explanation.factors.find(f => f.name === 'Soil Condition');
+      const soilFactor = explanation.factors.find((f) => f.name === 'Soil Condition');
       expect(soilFactor).toBeDefined();
       expect(soilFactor?.impact).toBe('negative');
       expect(soilFactor?.description).toContain('poor');
@@ -261,7 +261,7 @@ describe('ExplainabilityEngine', () => {
         highRiskContext
       );
 
-      const weatherFactor = explanation.factors.find(f => f.name === 'Weather');
+      const weatherFactor = explanation.factors.find((f) => f.name === 'Weather');
       expect(weatherFactor).toBeDefined();
       expect(weatherFactor?.impact).toBe('negative');
       expect(weatherFactor?.description).toContain('monitoring');
@@ -287,11 +287,11 @@ describe('ExplainabilityEngine', () => {
         lowNitrogenContext
       );
 
-      expect(explanation.factors.some(f => 
-        f.name === 'Nitrogen Level' && f.impact === 'negative'
-      )).toBe(true);
-      
-      const nitrogenFactor = explanation.factors.find(f => f.name === 'Nitrogen Level');
+      expect(
+        explanation.factors.some((f) => f.name === 'Nitrogen Level' && f.impact === 'negative')
+      ).toBe(true);
+
+      const nitrogenFactor = explanation.factors.find((f) => f.name === 'Nitrogen Level');
       expect(nitrogenFactor?.description).toContain('low nitrogen');
       expect(nitrogenFactor?.description).toContain('leaf growth');
     });
@@ -314,7 +314,7 @@ describe('ExplainabilityEngine', () => {
         lowPhosphorusContext
       );
 
-      const phosphorusFactor = explanation.factors.find(f => f.name === 'Phosphorus Level');
+      const phosphorusFactor = explanation.factors.find((f) => f.name === 'Phosphorus Level');
       expect(phosphorusFactor).toBeDefined();
       expect(phosphorusFactor?.impact).toBe('negative');
       expect(phosphorusFactor?.description).toContain('roots');
@@ -338,7 +338,7 @@ describe('ExplainabilityEngine', () => {
         lowPotassiumContext
       );
 
-      const potassiumFactor = explanation.factors.find(f => f.name === 'Potassium Level');
+      const potassiumFactor = explanation.factors.find((f) => f.name === 'Potassium Level');
       expect(potassiumFactor).toBeDefined();
       expect(potassiumFactor?.impact).toBe('negative');
       expect(potassiumFactor?.description).toContain('disease resistance');
@@ -362,7 +362,7 @@ describe('ExplainabilityEngine', () => {
         highNitrogenContext
       );
 
-      const nitrogenFactor = explanation.factors.find(f => f.name === 'Nitrogen Level');
+      const nitrogenFactor = explanation.factors.find((f) => f.name === 'Nitrogen Level');
       expect(nitrogenFactor).toBeDefined();
       expect(nitrogenFactor?.impact).toBe('positive');
       expect(nitrogenFactor?.description).toContain('carefully');
@@ -374,11 +374,7 @@ describe('ExplainabilityEngine', () => {
         soilData: null,
       };
 
-      const explanation = engine.generateFertilizerExplanation(
-        'NPK',
-        'NPK',
-        noSoilContext
-      );
+      const explanation = engine.generateFertilizerExplanation('NPK', 'NPK', noSoilContext);
 
       expect(explanation.factors.length).toBeGreaterThan(0);
       expect(explanation.factors[0].name).toBe('General Recommendation');
@@ -402,7 +398,7 @@ describe('ExplainabilityEngine', () => {
         lowOrganicContext
       );
 
-      const organicFactor = explanation.factors.find(f => f.name === 'Soil Health');
+      const organicFactor = explanation.factors.find((f) => f.name === 'Soil Health');
       expect(organicFactor).toBeDefined();
       expect(organicFactor?.description).toContain('organic matter');
       expect(organicFactor?.description).toContain('compost');
@@ -411,11 +407,7 @@ describe('ExplainabilityEngine', () => {
 
   describe('generateSeedExplanation', () => {
     it('should generate explanation for seed recommendation', () => {
-      const explanation = engine.generateSeedExplanation(
-        'BPT 5204',
-        'Rice',
-        mockContext
-      );
+      const explanation = engine.generateSeedExplanation('BPT 5204', 'Rice', mockContext);
 
       expect(explanation.summary).toContain('BPT 5204');
       expect(explanation.factors.length).toBeGreaterThan(0);
@@ -423,26 +415,18 @@ describe('ExplainabilityEngine', () => {
     });
 
     it('should include season timing factor', () => {
-      const explanation = engine.generateSeedExplanation(
-        'HD 2967',
-        'Wheat',
-        mockContext
-      );
+      const explanation = engine.generateSeedExplanation('HD 2967', 'Wheat', mockContext);
 
-      const seasonFactor = explanation.factors.find(f => f.name === 'Planting Season');
+      const seasonFactor = explanation.factors.find((f) => f.name === 'Planting Season');
       expect(seasonFactor).toBeDefined();
       expect(seasonFactor?.impact).toBe('positive');
       expect(seasonFactor?.description).toContain('season');
     });
 
     it('should include disease resistance factor', () => {
-      const explanation = engine.generateSeedExplanation(
-        'Bt Cotton',
-        'Cotton',
-        mockContext
-      );
+      const explanation = engine.generateSeedExplanation('Bt Cotton', 'Cotton', mockContext);
 
-      const diseaseFactor = explanation.factors.find(f => f.name === 'Disease Protection');
+      const diseaseFactor = explanation.factors.find((f) => f.name === 'Disease Protection');
       expect(diseaseFactor).toBeDefined();
       expect(diseaseFactor?.impact).toBe('positive');
     });
@@ -461,12 +445,9 @@ describe('ExplainabilityEngine', () => {
         },
       };
 
-      const explanation = engine.generateSoilExplanation(
-        'Lime Application',
-        acidicSoilContext
-      );
+      const explanation = engine.generateSoilExplanation('Lime Application', acidicSoilContext);
 
-      const phFactor = explanation.factors.find(f => f.name === 'Soil Acidity');
+      const phFactor = explanation.factors.find((f) => f.name === 'Soil Acidity');
       expect(phFactor).toBeDefined();
       expect(phFactor?.impact).toBe('negative');
       expect(phFactor?.description).toContain('acidic');
@@ -490,7 +471,7 @@ describe('ExplainabilityEngine', () => {
         alkalineSoilContext
       );
 
-      const phFactor = explanation.factors.find(f => f.name === 'Soil Alkalinity');
+      const phFactor = explanation.factors.find((f) => f.name === 'Soil Alkalinity');
       expect(phFactor).toBeDefined();
       expect(phFactor?.impact).toBe('negative');
       expect(phFactor?.description).toContain('alkaline');
@@ -515,7 +496,7 @@ describe('ExplainabilityEngine', () => {
         deficientSoilContext
       );
 
-      const nutrientFactor = explanation.factors.find(f => f.name === 'Nutrient Levels');
+      const nutrientFactor = explanation.factors.find((f) => f.name === 'Nutrient Levels');
       expect(nutrientFactor).toBeDefined();
       expect(nutrientFactor?.impact).toBe('negative');
       expect(nutrientFactor?.description).toContain('nitrogen');
@@ -538,15 +519,12 @@ describe('ExplainabilityEngine', () => {
         },
       };
 
-      const explanation = engine.generateSoilExplanation(
-        'Maintenance',
-        goodSoilContext
-      );
+      const explanation = engine.generateSoilExplanation('Maintenance', goodSoilContext);
 
-      const phFactor = explanation.factors.find(f => f.name === 'Soil pH');
+      const phFactor = explanation.factors.find((f) => f.name === 'Soil pH');
       expect(phFactor?.impact).toBe('positive');
-      
-      const nutrientFactor = explanation.factors.find(f => f.name === 'Nutrient Levels');
+
+      const nutrientFactor = explanation.factors.find((f) => f.name === 'Nutrient Levels');
       expect(nutrientFactor?.impact).toBe('positive');
     });
   });
@@ -586,12 +564,9 @@ describe('ExplainabilityEngine', () => {
         },
       };
 
-      const explanation = engine.generateWeatherExplanation(
-        'Delay field work',
-        heavyRainContext
-      );
+      const explanation = engine.generateWeatherExplanation('Delay field work', heavyRainContext);
 
-      const rainFactor = explanation.factors.find(f => f.name === 'Heavy Rain Expected');
+      const rainFactor = explanation.factors.find((f) => f.name === 'Heavy Rain Expected');
       expect(rainFactor).toBeDefined();
       expect(rainFactor?.impact).toBe('negative');
       expect(rainFactor?.description).toContain('Delay');
@@ -636,7 +611,7 @@ describe('ExplainabilityEngine', () => {
         hotWeatherContext
       );
 
-      const tempFactor = explanation.factors.find(f => f.name === 'High Temperature');
+      const tempFactor = explanation.factors.find((f) => f.name === 'High Temperature');
       expect(tempFactor).toBeDefined();
       expect(tempFactor?.impact).toBe('negative');
       expect(tempFactor?.description).toContain('irrigation');
@@ -676,12 +651,9 @@ describe('ExplainabilityEngine', () => {
         },
       };
 
-      const explanation = engine.generateWeatherExplanation(
-        'Protect crops',
-        coldWeatherContext
-      );
+      const explanation = engine.generateWeatherExplanation('Protect crops', coldWeatherContext);
 
-      const tempFactor = explanation.factors.find(f => f.name === 'Low Temperature');
+      const tempFactor = explanation.factors.find((f) => f.name === 'Low Temperature');
       expect(tempFactor).toBeDefined();
       expect(tempFactor?.impact).toBe('negative');
       expect(tempFactor?.description).toContain('Protect');
@@ -726,7 +698,7 @@ describe('ExplainabilityEngine', () => {
         humidWeatherContext
       );
 
-      const humidityFactor = explanation.factors.find(f => f.name === 'High Humidity');
+      const humidityFactor = explanation.factors.find((f) => f.name === 'High Humidity');
       expect(humidityFactor).toBeDefined();
       expect(humidityFactor?.impact).toBe('negative');
       expect(humidityFactor?.description).toContain('disease');
@@ -766,24 +738,18 @@ describe('ExplainabilityEngine', () => {
         },
       };
 
-      const explanation = engine.generateWeatherExplanation(
-        'Avoid spraying',
-        windyWeatherContext
-      );
+      const explanation = engine.generateWeatherExplanation('Avoid spraying', windyWeatherContext);
 
-      const windFactor = explanation.factors.find(f => f.name === 'Strong Wind');
+      const windFactor = explanation.factors.find((f) => f.name === 'Strong Wind');
       expect(windFactor).toBeDefined();
       expect(windFactor?.impact).toBe('negative');
       expect(windFactor?.description).toContain('spraying');
     });
 
     it('should recognize good weather', () => {
-      const explanation = engine.generateWeatherExplanation(
-        'Good for field work',
-        mockContext
-      );
+      const explanation = engine.generateWeatherExplanation('Good for field work', mockContext);
 
-      const weatherFactor = explanation.factors.find(f => f.name === 'Dry Weather');
+      const weatherFactor = explanation.factors.find((f) => f.name === 'Dry Weather');
       expect(weatherFactor).toBeDefined();
       expect(weatherFactor?.impact).toBe('positive');
     });
@@ -869,9 +835,9 @@ describe('ExplainabilityEngine', () => {
       );
 
       // Season and soil should have higher weights
-      const seasonFactor = explanation.factors.find(f => f.name === 'Season');
-      const soilFactor = explanation.factors.find(f => f.name === 'Soil Condition');
-      const farmSizeFactor = explanation.factors.find(f => f.name === 'Farm Size');
+      const seasonFactor = explanation.factors.find((f) => f.name === 'Season');
+      const soilFactor = explanation.factors.find((f) => f.name === 'Soil Condition');
+      const farmSizeFactor = explanation.factors.find((f) => f.name === 'Farm Size');
 
       expect(seasonFactor?.weight).toBeGreaterThan(farmSizeFactor?.weight || 0);
       expect(soilFactor?.weight).toBeGreaterThan(farmSizeFactor?.weight || 0);
@@ -892,17 +858,13 @@ describe('ExplainabilityEngine', () => {
         mockContext
       );
 
-      const seedExplanation = engine.generateSeedExplanation(
-        'BPT 5204',
-        'Rice',
-        mockContext
-      );
+      const seedExplanation = engine.generateSeedExplanation('BPT 5204', 'Rice', mockContext);
 
       // Check for absence of technical terms (use word boundaries to avoid false positives)
       const jargonTerms = ['quintals', 'hectare', 'NPK ratio', '\\bEC\\b', '\\bppm\\b'];
-      
-      [cropExplanation, fertilizerExplanation, seedExplanation].forEach(exp => {
-        jargonTerms.forEach(term => {
+
+      [cropExplanation, fertilizerExplanation, seedExplanation].forEach((exp) => {
+        jargonTerms.forEach((term) => {
           const regex = new RegExp(term, 'i');
           expect(exp.reasoning).not.toMatch(regex);
         });
@@ -918,7 +880,7 @@ describe('ExplainabilityEngine', () => {
 
       // Should contain simple, actionable language
       const friendlyTerms = ['good', 'suitable', 'recommend', 'your farm', 'best'];
-      const hasFriendlyLanguage = friendlyTerms.some(term =>
+      const hasFriendlyLanguage = friendlyTerms.some((term) =>
         explanation.reasoning.toLowerCase().includes(term)
       );
 

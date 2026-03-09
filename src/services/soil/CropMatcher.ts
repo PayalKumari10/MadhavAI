@@ -149,7 +149,9 @@ class CropMatcher {
     // Sort by suitability score (highest first)
     matches.sort((a, b) => b.suitabilityScore - a.suitabilityScore);
 
-    logger.info(`Found ${matches.length} crop matches, top match: ${matches[0].crop} (${matches[0].suitabilityScore}%)`);
+    logger.info(
+      `Found ${matches.length} crop matches, top match: ${matches[0].crop} (${matches[0].suitabilityScore}%)`
+    );
 
     return matches;
   }
@@ -231,7 +233,9 @@ class CropMatcher {
       recommendations.push('Increase organic matter with compost or manure');
     }
 
-    const explanation = `${cropInfo.crop} is ${this.getSuitabilityLabel(score)} because ${explanationParts.join(', ')}`;
+    const explanation = `${cropInfo.crop} is ${this.getSuitabilityLabel(
+      score
+    )} because ${explanationParts.join(', ')}`;
 
     return {
       crop: cropInfo.crop,

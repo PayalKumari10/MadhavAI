@@ -3,22 +3,22 @@
  * User settings including language preference, profile info, and logout
  */
 
-import React, {useState, useEffect} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert} from 'react-native';
-import {useTranslation} from '../hooks/useTranslation';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
+import { useTranslation } from '../hooks/useTranslation';
 import LanguageSwitcher from '../components/LanguageSwitcher';
-import {getLanguageNativeName} from '../utils/languageMapper';
-import {authenticationManager} from '../services/auth/AuthenticationManager';
-import {profileManager} from '../services/profile/ProfileManager';
-import {encryptedStorage} from '../services/storage/EncryptedStorage';
-import {logger} from '../utils/logger';
+import { getLanguageNativeName } from '../utils/languageMapper';
+import { authenticationManager } from '../services/auth/AuthenticationManager';
+import { profileManager } from '../services/profile/ProfileManager';
+import { encryptedStorage } from '../services/storage/EncryptedStorage';
+import { logger } from '../utils/logger';
 
 interface SettingsScreenProps {
   navigation: any;
 }
 
-const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
-  const {t, language} = useTranslation();
+const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
+  const { t, language } = useTranslation();
   const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(false);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [loading, setLoading] = useState(false);
@@ -37,53 +37,49 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
   };
 
   const handleLogout = () => {
-    Alert.alert(
-      'Logout',
-      'Are you sure you want to logout?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Logout',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              setLoading(true);
-              
-              // Get auth token
-              const authToken = await encryptedStorage.getItem<string>('auth_token');
-              
-              if (authToken) {
-                // Logout from authentication manager
-                await authenticationManager.logout(authToken);
-              }
-              
-              // Clear stored credentials
-              await encryptedStorage.removeItem('auth_token');
-              await encryptedStorage.removeItem('current_user_id');
-              
-              // Clear user profile (single-user mode)
-              await profileManager.deleteProfile();
-              
-              logger.info('User logged out successfully');
-              
-              // Navigate to login screen
-              navigation.reset({
-                index: 0,
-                routes: [{name: 'Login'}],
-              });
-            } catch (error) {
-              logger.error('Logout failed', error);
-              Alert.alert('Error', 'Failed to logout. Please try again.');
-            } finally {
-              setLoading(false);
+    Alert.alert('Logout', 'Are you sure you want to logout?', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Logout',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            setLoading(true);
+
+            // Get auth token
+            const authToken = await encryptedStorage.getItem<string>('auth_token');
+
+            if (authToken) {
+              // Logout from authentication manager
+              await authenticationManager.logout(authToken);
             }
-          },
+
+            // Clear stored credentials
+            await encryptedStorage.removeItem('auth_token');
+            await encryptedStorage.removeItem('current_user_id');
+
+            // Clear user profile (single-user mode)
+            await profileManager.deleteProfile();
+
+            logger.info('User logged out successfully');
+
+            // Navigate to login screen
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'Login' }],
+            });
+          } catch (error) {
+            logger.error('Logout failed', error);
+            Alert.alert('Error', 'Failed to logout. Please try again.');
+          } finally {
+            setLoading(false);
+          }
         },
-      ],
-    );
+      },
+    ]);
   };
 
   const handleEditProfile = () => {
@@ -94,7 +90,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
     Alert.alert(
       'About MADHAV AI',
       'AI-Powered Farmer Decision Support Platform\n\nVersion 1.0.0\n\nHelping farmers make better decisions with AI-powered recommendations, weather forecasts, market prices, and more.',
-      [{text: 'OK'}],
+      [{ text: 'OK' }]
     );
   };
 
@@ -119,10 +115,8 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
       {/* Account Settings */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>ACCOUNT</Text>
-        
-        <TouchableOpacity
-          style={styles.settingItem}
-          onPress={handleEditProfile}>
+
+        <TouchableOpacity style={styles.settingItem} onPress={handleEditProfile}>
           <View style={styles.settingLeft}>
             <Text style={styles.settingIcon}>👤</Text>
             <Text style={styles.settingLabel}>Edit Profile</Text>
@@ -130,17 +124,13 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
           <Text style={styles.arrow}>›</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.settingItem}
-          onPress={() => setShowLanguageSwitcher(true)}>
+        <TouchableOpacity style={styles.settingItem} onPress={() => setShowLanguageSwitcher(true)}>
           <View style={styles.settingLeft}>
             <Text style={styles.settingIcon}>🌐</Text>
             <Text style={styles.settingLabel}>{t('ui.profile.language')}</Text>
           </View>
           <View style={styles.settingValue}>
-            <Text style={styles.currentLanguage}>
-              {getLanguageNativeName(language)}
-            </Text>
+            <Text style={styles.currentLanguage}>{getLanguageNativeName(language)}</Text>
             <Text style={styles.arrow}>›</Text>
           </View>
         </TouchableOpacity>
@@ -149,10 +139,13 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
       {/* App Settings */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>APP SETTINGS</Text>
-        
+
         <TouchableOpacity
           style={styles.settingItem}
-          onPress={() => Alert.alert('Coming Soon', 'Notification settings will be available soon.')}>
+          onPress={() =>
+            Alert.alert('Coming Soon', 'Notification settings will be available soon.')
+          }
+        >
           <View style={styles.settingLeft}>
             <Text style={styles.settingIcon}>🔔</Text>
             <Text style={styles.settingLabel}>Notifications</Text>
@@ -162,7 +155,8 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
 
         <TouchableOpacity
           style={styles.settingItem}
-          onPress={() => Alert.alert('Coming Soon', 'Data sync settings will be available soon.')}>
+          onPress={() => Alert.alert('Coming Soon', 'Data sync settings will be available soon.')}
+        >
           <View style={styles.settingLeft}>
             <Text style={styles.settingIcon}>🔄</Text>
             <Text style={styles.settingLabel}>Data Sync</Text>
@@ -172,7 +166,8 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
 
         <TouchableOpacity
           style={styles.settingItem}
-          onPress={() => Alert.alert('Coming Soon', 'Storage management will be available soon.')}>
+          onPress={() => Alert.alert('Coming Soon', 'Storage management will be available soon.')}
+        >
           <View style={styles.settingLeft}>
             <Text style={styles.settingIcon}>💾</Text>
             <Text style={styles.settingLabel}>Storage</Text>
@@ -184,10 +179,11 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
       {/* Support */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>SUPPORT</Text>
-        
+
         <TouchableOpacity
           style={styles.settingItem}
-          onPress={() => Alert.alert('Help', 'For help, please contact support@madhavai.com')}>
+          onPress={() => Alert.alert('Help', 'For help, please contact support@madhavai.com')}
+        >
           <View style={styles.settingLeft}>
             <Text style={styles.settingIcon}>❓</Text>
             <Text style={styles.settingLabel}>Help & Support</Text>
@@ -195,9 +191,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
           <Text style={styles.arrow}>›</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.settingItem}
-          onPress={handleAbout}>
+        <TouchableOpacity style={styles.settingItem} onPress={handleAbout}>
           <View style={styles.settingLeft}>
             <Text style={styles.settingIcon}>ℹ️</Text>
             <Text style={styles.settingLabel}>About</Text>
@@ -207,7 +201,8 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
 
         <TouchableOpacity
           style={styles.settingItem}
-          onPress={() => Alert.alert('Privacy Policy', 'Privacy policy will be displayed here.')}>
+          onPress={() => Alert.alert('Privacy Policy', 'Privacy policy will be displayed here.')}
+        >
           <View style={styles.settingLeft}>
             <Text style={styles.settingIcon}>🔒</Text>
             <Text style={styles.settingLabel}>Privacy Policy</Text>
@@ -218,14 +213,9 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
 
       {/* Logout Button */}
       <View style={styles.section}>
-        <TouchableOpacity
-          style={styles.logoutButton}
-          onPress={handleLogout}
-          disabled={loading}>
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout} disabled={loading}>
           <Text style={styles.logoutIcon}>🚪</Text>
-          <Text style={styles.logoutText}>
-            {loading ? 'Logging out...' : 'Logout'}
-          </Text>
+          <Text style={styles.logoutText}>{loading ? 'Logging out...' : 'Logout'}</Text>
         </TouchableOpacity>
       </View>
 

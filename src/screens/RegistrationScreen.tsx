@@ -27,7 +27,16 @@ interface RegistrationScreenProps {
 }
 
 const SOIL_TYPES = ['loamy', 'clay', 'sandy', 'silt', 'red', 'black', 'alluvial'];
-const COMMON_CROPS = ['wheat', 'rice', 'cotton', 'sugarcane', 'maize', 'soybean', 'pulses', 'vegetables'];
+const COMMON_CROPS = [
+  'wheat',
+  'rice',
+  'cotton',
+  'sugarcane',
+  'maize',
+  'soybean',
+  'pulses',
+  'vegetables',
+];
 
 const LANGUAGES = [
   { code: 'en', name: 'English', nativeName: 'English' },
@@ -69,7 +78,7 @@ export default function RegistrationScreen({
 
   const toggleCrop = (crop: string) => {
     if (selectedCrops.includes(crop)) {
-      setSelectedCrops(selectedCrops.filter(c => c !== crop));
+      setSelectedCrops(selectedCrops.filter((c) => c !== crop));
     } else {
       setSelectedCrops([...selectedCrops, crop]);
     }
@@ -145,12 +154,8 @@ export default function RegistrationScreen({
           <View style={styles.header}>
             <Text style={styles.logo}>🌾</Text>
             <Text style={styles.title}>Welcome to MADHAV AI</Text>
-            <Text style={styles.subtitle}>
-              Select your preferred language
-            </Text>
-            <Text style={styles.subtitleSecondary}>
-              अपनी पसंदीदा भाषा चुनें
-            </Text>
+            <Text style={styles.subtitle}>Select your preferred language</Text>
+            <Text style={styles.subtitleSecondary}>अपनी पसंदीदा भाषा चुनें</Text>
           </View>
 
           <View style={styles.languageContainer}>
@@ -161,7 +166,8 @@ export default function RegistrationScreen({
                   styles.languageCard,
                   selectedLanguage === lang.code && styles.languageCardSelected,
                 ]}
-                onPress={() => handleLanguageSelect(lang.code)}>
+                onPress={() => handleLanguageSelect(lang.code)}
+              >
                 <Text style={styles.languageNative}>{lang.nativeName}</Text>
                 <Text style={styles.languageName}>{lang.name}</Text>
                 {selectedLanguage === lang.code && (
@@ -181,14 +187,13 @@ export default function RegistrationScreen({
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <Text style={styles.logo}>🌾</Text>
           <Text style={styles.title}>Complete Your Profile</Text>
-          <Text style={styles.subtitle}>
-            Help us personalize your farming experience
-          </Text>
+          <Text style={styles.subtitle}>Help us personalize your farming experience</Text>
         </View>
 
         <View style={styles.form}>
@@ -208,7 +213,7 @@ export default function RegistrationScreen({
           {/* Location */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>📍 Location</Text>
-            
+
             <View style={styles.inputGroup}>
               <Text style={styles.label}>State *</Text>
               <TextInput
@@ -263,7 +268,7 @@ export default function RegistrationScreen({
           {/* Farm Details */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>🚜 Farm Details</Text>
-            
+
             <View style={styles.inputGroup}>
               <Text style={styles.label}>Farm Size (acres) *</Text>
               <TextInput
@@ -284,17 +289,11 @@ export default function RegistrationScreen({
                   {SOIL_TYPES.map((type) => (
                     <TouchableOpacity
                       key={type}
-                      style={[
-                        styles.chip,
-                        soilType === type && styles.chipSelected,
-                      ]}
+                      style={[styles.chip, soilType === type && styles.chipSelected]}
                       onPress={() => setSoilType(type)}
-                      disabled={loading}>
-                      <Text
-                        style={[
-                          styles.chipText,
-                          soilType === type && styles.chipTextSelected,
-                        ]}>
+                      disabled={loading}
+                    >
+                      <Text style={[styles.chipText, soilType === type && styles.chipTextSelected]}>
                         {type.charAt(0).toUpperCase() + type.slice(1)}
                       </Text>
                     </TouchableOpacity>
@@ -314,12 +313,14 @@ export default function RegistrationScreen({
                       selectedCrops.includes(crop) && styles.cropChipSelected,
                     ]}
                     onPress={() => toggleCrop(crop)}
-                    disabled={loading}>
+                    disabled={loading}
+                  >
                     <Text
                       style={[
                         styles.cropChipText,
                         selectedCrops.includes(crop) && styles.cropChipTextSelected,
-                      ]}>
+                      ]}
+                    >
                       {selectedCrops.includes(crop) ? '✓ ' : ''}
                       {crop.charAt(0).toUpperCase() + crop.slice(1)}
                     </Text>
@@ -332,7 +333,8 @@ export default function RegistrationScreen({
           <TouchableOpacity
             style={[styles.button, loading && styles.buttonDisabled]}
             onPress={handleSubmit}
-            disabled={loading}>
+            disabled={loading}
+          >
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
@@ -343,7 +345,8 @@ export default function RegistrationScreen({
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => setStep('language')}
-            disabled={loading}>
+            disabled={loading}
+          >
             <Text style={styles.backButtonText}>← Change Language</Text>
           </TouchableOpacity>
 

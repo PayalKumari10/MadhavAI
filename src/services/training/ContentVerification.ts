@@ -30,9 +30,7 @@ export class ContentVerification {
     return {
       verified: allPassed && lesson.verified,
       verifiedAt: allPassed ? new Date() : undefined,
-      reviewNotes: allPassed
-        ? 'All quality checks passed'
-        : 'Some quality checks failed',
+      reviewNotes: allPassed ? 'All quality checks passed' : 'Some quality checks failed',
     };
   }
 

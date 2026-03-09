@@ -127,8 +127,14 @@ describe('WeatherAdvisor', () => {
       const now = new Date();
       const forecasts = [
         createMockForecast({ date: new Date(now.getTime()) }),
-        createMockForecast({ date: new Date(now.getTime() + 24 * 60 * 60 * 1000), condition: 'rain' }),
-        createMockForecast({ date: new Date(now.getTime() + 48 * 60 * 60 * 1000), condition: 'cloudy' }),
+        createMockForecast({
+          date: new Date(now.getTime() + 24 * 60 * 60 * 1000),
+          condition: 'rain',
+        }),
+        createMockForecast({
+          date: new Date(now.getTime() + 48 * 60 * 60 * 1000),
+          condition: 'cloudy',
+        }),
       ];
 
       const weeklyAdvice = weatherAdvisor.getWeeklyAdvice(forecasts);

@@ -48,10 +48,7 @@ class SoilApi {
     try {
       logger.info(`Uploading soil health card for user ${request.userId}`);
 
-      const response = await this.client.post<SoilHealthData>(
-        `${this.baseUrl}/upload`,
-        request
-      );
+      const response = await this.client.post<SoilHealthData>(`${this.baseUrl}/upload`, request);
 
       logger.info(`Soil health card uploaded successfully: ${response.data.id}`);
       return response.data;
@@ -68,9 +65,7 @@ class SoilApi {
     try {
       logger.info(`Fetching soil health data: ${soilHealthId}`);
 
-      const response = await this.client.get<SoilHealthData>(
-        `${this.baseUrl}/${soilHealthId}`
-      );
+      const response = await this.client.get<SoilHealthData>(`${this.baseUrl}/${soilHealthId}`);
 
       return response.data;
     } catch (error) {
@@ -86,9 +81,7 @@ class SoilApi {
     try {
       logger.info(`Fetching soil health records for user: ${userId}`);
 
-      const response = await this.client.get<SoilHealthData[]>(
-        `${this.baseUrl}/user/${userId}`
-      );
+      const response = await this.client.get<SoilHealthData[]>(`${this.baseUrl}/user/${userId}`);
 
       logger.info(`Found ${response.data.length} soil health records`);
       return response.data;
@@ -106,10 +99,7 @@ class SoilApi {
     try {
       logger.info(`Analyzing soil health: ${request.soilHealthId}`);
 
-      const response = await this.client.post<SoilAnalysis>(
-        `${this.baseUrl}/analyze`,
-        request
-      );
+      const response = await this.client.post<SoilAnalysis>(`${this.baseUrl}/analyze`, request);
 
       logger.info(`Soil analysis completed: ${response.data.overallRating}`);
       return response.data;

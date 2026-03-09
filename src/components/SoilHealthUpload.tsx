@@ -31,8 +31,12 @@ export const SoilHealthUpload: React.FC<SoilHealthUploadProps> = ({
 }) => {
   const [uploadMethod, setUploadMethod] = useState<'image' | 'manual' | null>(null);
   const [processing, setProcessing] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<{ uri: string; name: string; type: string } | null>(null);
-  
+  const [selectedImage, setSelectedImage] = useState<{
+    uri: string;
+    name: string;
+    type: string;
+  } | null>(null);
+
   // Form fields
   const [labName, setLabName] = useState('');
   const [sampleId, setSampleId] = useState('');
@@ -42,27 +46,25 @@ export const SoilHealthUpload: React.FC<SoilHealthUploadProps> = ({
   const [potassium, setPotassium] = useState('');
   const [pH, setPH] = useState('');
   const [organicCarbon, setOrganicCarbon] = useState('');
-  const [soilType, setSoilType] = useState<'clay' | 'sandy' | 'loamy' | 'silt' | 'peaty' | 'chalky' | 'mixed'>('loamy');
+  const [soilType, setSoilType] = useState<
+    'clay' | 'sandy' | 'loamy' | 'silt' | 'peaty' | 'chalky' | 'mixed'
+  >('loamy');
 
   const handleImageSelection = () => {
-    Alert.alert(
-      'Select Image Source',
-      'Choose where to get the image from',
-      [
-        {
-          text: 'Camera',
-          onPress: () => openCamera(),
-        },
-        {
-          text: 'Gallery',
-          onPress: () => openGallery(),
-        },
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-      ]
-    );
+    Alert.alert('Select Image Source', 'Choose where to get the image from', [
+      {
+        text: 'Camera',
+        onPress: () => openCamera(),
+      },
+      {
+        text: 'Gallery',
+        onPress: () => openGallery(),
+      },
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+    ]);
   };
 
   const openCamera = async () => {
@@ -94,20 +96,16 @@ export const SoilHealthUpload: React.FC<SoilHealthUploadProps> = ({
       } else if (result.didCancel) {
         // User cancelled - no action needed
       } else if (result.errorCode) {
-        Alert.alert(
-          'Error',
-          `Failed to pick image: ${result.errorMessage || 'Unknown error'}`,
-          [
-            {
-              text: 'Try Again',
-              onPress: () => openGallery(),
-            },
-            {
-              text: 'Cancel',
-              style: 'cancel',
-            },
-          ]
-        );
+        Alert.alert('Error', `Failed to pick image: ${result.errorMessage || 'Unknown error'}`, [
+          {
+            text: 'Try Again',
+            onPress: () => openGallery(),
+          },
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+        ]);
       }
     } catch {
       Alert.alert('Error', 'Failed to open gallery. Please try again.');
@@ -131,17 +129,19 @@ export const SoilHealthUpload: React.FC<SoilHealthUploadProps> = ({
     }
 
     setProcessing(true);
-    
+
     setTimeout(async () => {
       const extractedData: SoilHealthData = {
         id: `soil-${Date.now()}`,
         userId: userId,
         testDate: new Date(),
         labName: 'State Agricultural Lab',
-        sampleId: `SHC-${new Date().getFullYear()}-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`,
+        sampleId: `SHC-${new Date().getFullYear()}-${Math.floor(Math.random() * 1000)
+          .toString()
+          .padStart(3, '0')}`,
         location: {
           latitude: 28.6139,
-          longitude: 77.2090,
+          longitude: 77.209,
           fieldName: 'Uploaded Field',
         },
         parameters: {
@@ -172,11 +172,9 @@ export const SoilHealthUpload: React.FC<SoilHealthUploadProps> = ({
         await soilHealthStorage.saveSoilHealth(extractedData);
         setProcessing(false);
         setSelectedImage(null);
-        Alert.alert(
-          'Upload Successful',
-          'Soil health card data has been extracted and saved.',
-          [{ text: 'OK', onPress: () => onUploadComplete(extractedData) }]
-        );
+        Alert.alert('Upload Successful', 'Soil health card data has been extracted and saved.', [
+          { text: 'OK', onPress: () => onUploadComplete(extractedData) },
+        ]);
       } catch {
         setProcessing(false);
         setSelectedImage(null);
@@ -199,7 +197,7 @@ export const SoilHealthUpload: React.FC<SoilHealthUploadProps> = ({
       sampleId: sampleId,
       location: {
         latitude: 28.6139,
-        longitude: 77.2090,
+        longitude: 77.209,
         fieldName: fieldName || 'Manual Entry Field',
       },
       parameters: {
@@ -219,11 +217,9 @@ export const SoilHealthUpload: React.FC<SoilHealthUploadProps> = ({
 
     try {
       await soilHealthStorage.saveSoilHealth(manualData);
-      Alert.alert(
-        'Upload Successful',
-        'Soil health data has been saved.',
-        [{ text: 'OK', onPress: () => onUploadComplete(manualData) }]
-      );
+      Alert.alert('Upload Successful', 'Soil health data has been saved.', [
+        { text: 'OK', onPress: () => onUploadComplete(manualData) },
+      ]);
     } catch {
       Alert.alert('Error', 'Failed to save soil health data. Please try again.');
     }
@@ -254,9 +250,7 @@ export const SoilHealthUpload: React.FC<SoilHealthUploadProps> = ({
               <Text style={styles.icon}>✏️</Text>
             </View>
             <Text style={styles.methodTitle}>Manual Entry</Text>
-            <Text style={styles.methodDescription}>
-              Enter soil health parameters manually
-            </Text>
+            <Text style={styles.methodDescription}>Enter soil health parameters manually</Text>
           </TouchableOpacity>
         </View>
 
@@ -274,9 +268,7 @@ export const SoilHealthUpload: React.FC<SoilHealthUploadProps> = ({
         <View style={styles.container}>
           <View style={styles.header}>
             <Text style={styles.title}>Upload Soil Health Card Image</Text>
-            <Text style={styles.subtitle}>
-              We'll extract the data automatically using OCR
-            </Text>
+            <Text style={styles.subtitle}>We'll extract the data automatically using OCR</Text>
           </View>
 
           {processing ? (
@@ -290,16 +282,14 @@ export const SoilHealthUpload: React.FC<SoilHealthUploadProps> = ({
           ) : (
             <View style={styles.uploadContainer}>
               {!selectedImage ? (
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={styles.uploadBox}
                   onPress={handleImageSelection}
                   activeOpacity={0.7}
                 >
                   <Text style={styles.uploadIcon}>📄</Text>
                   <Text style={styles.uploadText}>Tap to select image</Text>
-                  <Text style={styles.uploadSubtext}>
-                    Supported formats: JPG, PNG
-                  </Text>
+                  <Text style={styles.uploadSubtext}>Supported formats: JPG, PNG</Text>
                 </TouchableOpacity>
               ) : (
                 <View style={styles.selectedImageContainer}>
@@ -308,35 +298,23 @@ export const SoilHealthUpload: React.FC<SoilHealthUploadProps> = ({
                       {selectedImage.type?.includes('pdf') ? '�' : '�🖼️'}
                     </Text>
                     <Text style={styles.imagePreviewTitle}>Selected File</Text>
-                    <Text style={styles.imagePreviewFilename}>
-                      {selectedImage.name}
-                    </Text>
+                    <Text style={styles.imagePreviewFilename}>{selectedImage.name}</Text>
                     <Text style={styles.imagePreviewType}>
                       {selectedImage.type || 'Unknown type'}
                     </Text>
                     <View style={styles.imagePreviewDetails}>
-                      <Text style={styles.imagePreviewDetailText}>
-                        ✓ Ready for processing
-                      </Text>
+                      <Text style={styles.imagePreviewDetailText}>✓ Ready for processing</Text>
                     </View>
                   </View>
-                  
-                  <TouchableOpacity
-                    style={styles.changeImageButton}
-                    onPress={handleImageSelection}
-                  >
-                    <Text style={styles.changeImageButtonText}>
-                      Choose Different Image
-                    </Text>
+
+                  <TouchableOpacity style={styles.changeImageButton} onPress={handleImageSelection}>
+                    <Text style={styles.changeImageButtonText}>Choose Different Image</Text>
                   </TouchableOpacity>
                 </View>
               )}
 
               <TouchableOpacity
-                style={[
-                  styles.primaryButton,
-                  !selectedImage && styles.primaryButtonDisabled
-                ]}
+                style={[styles.primaryButton, !selectedImage && styles.primaryButtonDisabled]}
                 onPress={handleImageUpload}
                 disabled={!selectedImage}
               >
@@ -372,7 +350,7 @@ export const SoilHealthUpload: React.FC<SoilHealthUploadProps> = ({
       <View style={styles.formContainer}>
         <View style={styles.formSection}>
           <Text style={styles.sectionTitle}>Test Information</Text>
-          
+
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Lab Name *</Text>
             <TextInput
@@ -409,7 +387,7 @@ export const SoilHealthUpload: React.FC<SoilHealthUploadProps> = ({
 
         <View style={styles.formSection}>
           <Text style={styles.sectionTitle}>Soil Parameters</Text>
-          
+
           <View style={styles.inputRow}>
             <View style={[styles.inputGroup, styles.halfWidth]}>
               <Text style={styles.label}>Nitrogen (kg/ha) *</Text>
@@ -480,17 +458,11 @@ export const SoilHealthUpload: React.FC<SoilHealthUploadProps> = ({
               {(['clay', 'sandy', 'loamy', 'silt'] as const).map((type) => (
                 <TouchableOpacity
                   key={type}
-                  style={[
-                    styles.soilTypeButton,
-                    soilType === type && styles.soilTypeButtonActive,
-                  ]}
+                  style={[styles.soilTypeButton, soilType === type && styles.soilTypeButtonActive]}
                   onPress={() => setSoilType(type)}
                 >
                   <Text
-                    style={[
-                      styles.soilTypeText,
-                      soilType === type && styles.soilTypeTextActive,
-                    ]}
+                    style={[styles.soilTypeText, soilType === type && styles.soilTypeTextActive]}
                   >
                     {type.charAt(0).toUpperCase() + type.slice(1)}
                   </Text>
@@ -504,10 +476,7 @@ export const SoilHealthUpload: React.FC<SoilHealthUploadProps> = ({
           <Text style={styles.primaryButtonText}>Save Soil Health Data</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.secondaryButton}
-          onPress={() => setUploadMethod(null)}
-        >
+        <TouchableOpacity style={styles.secondaryButton} onPress={() => setUploadMethod(null)}>
           <Text style={styles.secondaryButtonText}>Back</Text>
         </TouchableOpacity>
       </View>

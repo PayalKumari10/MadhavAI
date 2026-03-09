@@ -36,7 +36,13 @@ class MarketService {
       const cached = await this.getCachedData(latitude, longitude);
       if (cached && this.isCacheValid(cached.timestamp)) {
         logger.info('Returning cached market prices');
-        return this.filterPricesByLocation(cached.data.prices, latitude, longitude, radiusKm, crops);
+        return this.filterPricesByLocation(
+          cached.data.prices,
+          latitude,
+          longitude,
+          radiusKm,
+          crops
+        );
       }
 
       // Fetch fresh data from API
@@ -55,7 +61,13 @@ class MarketService {
       const cached = await this.getCachedData(latitude, longitude);
       if (cached) {
         logger.info('Returning stale cached market prices as fallback');
-        return this.filterPricesByLocation(cached.data.prices, latitude, longitude, radiusKm, crops);
+        return this.filterPricesByLocation(
+          cached.data.prices,
+          latitude,
+          longitude,
+          radiusKm,
+          crops
+        );
       }
 
       throw error;
@@ -154,13 +166,10 @@ class MarketService {
   /**
    * Fetch market data from external API (mock implementation)
    */
-  private async fetchMarketDataFromAPI(
-    latitude: number,
-    longitude: number
-  ): Promise<MarketData> {
+  private async fetchMarketDataFromAPI(latitude: number, longitude: number): Promise<MarketData> {
     // Mock implementation - in production, this would call actual government/market APIs
     // like AGMARKNET, eNAM, etc.
-    
+
     await new Promise<void>((resolve) => setTimeout(resolve, 100)); // Simulate API call
 
     const mockData: MarketData = {
@@ -359,12 +368,7 @@ class MarketService {
   /**
    * Calculate distance between two coordinates using Haversine formula
    */
-  private calculateDistance(
-    lat1: number,
-    lon1: number,
-    lat2: number,
-    lon2: number
-  ): number {
+  private calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
     const R = 6371; // Earth's radius in km
     const dLat = this.toRadians(lat2 - lat1);
     const dLon = this.toRadians(lon2 - lon1);

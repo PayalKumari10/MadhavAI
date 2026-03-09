@@ -33,7 +33,7 @@ describe('SyncQueue', () => {
       // This test verifies that the queue can be initialized
       // In a real scenario, it would load from storage
       await syncQueue.initialize();
-      
+
       // Verify initialization doesn't throw
       expect(true).toBe(true);
     });
@@ -60,10 +60,10 @@ describe('SyncQueue', () => {
   describe('getPendingItems', () => {
     it('should return only pending items', async () => {
       await syncQueue.clear();
-      
+
       const id1 = await syncQueue.enqueue('profile', 'create', { name: 'Test1' });
       await syncQueue.enqueue('profile', 'create', { name: 'Test2' });
-      
+
       await syncQueue.updateItemStatus(id1, 'completed');
 
       const pendingItems = await syncQueue.getPendingItems();
@@ -126,16 +126,16 @@ describe('SyncQueue', () => {
   describe('clearCompleted', () => {
     it('should remove completed items', async () => {
       await syncQueue.clear();
-      
+
       const id1 = await syncQueue.enqueue('profile', 'create', { name: 'Test1' });
       await syncQueue.enqueue('profile', 'create', { name: 'Test2' });
-      
+
       await syncQueue.updateItemStatus(id1, 'completed');
 
       const removedCount = await syncQueue.clearCompleted();
 
       expect(removedCount).toBe(1);
-      
+
       const items = await syncQueue.getAllItems();
       expect(items.length).toBe(1);
       expect(items[0].status).toBe('pending');
@@ -157,7 +157,7 @@ describe('SyncQueue', () => {
   describe('size', () => {
     it('should return queue size', async () => {
       await syncQueue.clear();
-      
+
       await syncQueue.enqueue('profile', 'create', { name: 'Test1' });
       await syncQueue.enqueue('profile', 'create', { name: 'Test2' });
 

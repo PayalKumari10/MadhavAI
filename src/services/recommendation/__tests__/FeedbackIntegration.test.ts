@@ -134,11 +134,7 @@ describe('Feedback Integration', () => {
         timing: 'Standard',
       };
 
-      const improved = await improver.applyAdjustments(
-        newRecommendation,
-        'fertilizer',
-        context
-      );
+      const improved = await improver.applyAdjustments(newRecommendation, 'fertilizer', context);
 
       // Dosage should be adjusted based on user feedback
       expect(improved.dosage).not.toBe(100);
@@ -192,10 +188,8 @@ describe('Feedback Integration', () => {
       const suggestions = await improver.getImprovementSuggestions(allFeedback);
 
       expect(suggestions.length).toBeGreaterThan(0);
-      
-      const expensiveSuggestion = suggestions.find((s) =>
-        s.issue.includes('Too expensive')
-      );
+
+      const expensiveSuggestion = suggestions.find((s) => s.issue.includes('Too expensive'));
       expect(expensiveSuggestion).toBeDefined();
       expect(expensiveSuggestion!.priority).toBe('high');
     });
@@ -207,20 +201,8 @@ describe('Feedback Integration', () => {
       };
 
       // Collect diverse feedback
-      await collector.collectAcceptedFeedback(
-        'user-1',
-        'crop',
-        'rec-1',
-        {},
-        contextSnapshot
-      );
-      await collector.collectAcceptedFeedback(
-        'user-2',
-        'crop',
-        'rec-2',
-        {},
-        contextSnapshot
-      );
+      await collector.collectAcceptedFeedback('user-1', 'crop', 'rec-1', {}, contextSnapshot);
+      await collector.collectAcceptedFeedback('user-2', 'crop', 'rec-2', {}, contextSnapshot);
       await collector.collectRejectedFeedback(
         'user-3',
         'crop',
@@ -281,27 +263,9 @@ describe('Feedback Integration', () => {
       allFeedback[1].timestamp = oldDate;
 
       // Recent feedback - mostly accepted
-      await collector.collectAcceptedFeedback(
-        'user-3',
-        'crop',
-        'rec-3',
-        {},
-        contextSnapshot
-      );
-      await collector.collectAcceptedFeedback(
-        'user-4',
-        'crop',
-        'rec-4',
-        {},
-        contextSnapshot
-      );
-      await collector.collectAcceptedFeedback(
-        'user-5',
-        'crop',
-        'rec-5',
-        {},
-        contextSnapshot
-      );
+      await collector.collectAcceptedFeedback('user-3', 'crop', 'rec-3', {}, contextSnapshot);
+      await collector.collectAcceptedFeedback('user-4', 'crop', 'rec-4', {}, contextSnapshot);
+      await collector.collectAcceptedFeedback('user-5', 'crop', 'rec-5', {}, contextSnapshot);
 
       const updatedFeedback = await collector.getAllFeedback();
       updatedFeedback[2].timestamp = recentDate;
@@ -421,21 +385,13 @@ describe('Feedback Integration', () => {
       // Apply adjustments for kharif season
       const kharifContext = createMockContext();
       kharifContext.currentSeason = 'kharif';
-      const kharifRec = await improver.applyAdjustments(
-        { dosage: 100 },
-        'crop',
-        kharifContext
-      );
+      const kharifRec = await improver.applyAdjustments({ dosage: 100 }, 'crop', kharifContext);
       expect(kharifRec.dosage).toBeLessThan(100);
 
       // Apply adjustments for rabi season
       const rabiContext = createMockContext();
       rabiContext.currentSeason = 'rabi';
-      const rabiRec = await improver.applyAdjustments(
-        { dosage: 100 },
-        'crop',
-        rabiContext
-      );
+      const rabiRec = await improver.applyAdjustments({ dosage: 100 }, 'crop', rabiContext);
       expect(rabiRec.dosage).toBeGreaterThan(100);
     });
   });
@@ -508,11 +464,7 @@ describe('Feedback Integration', () => {
 
       // Apply to new recommendation
       const newRecommendation = { cropName: 'Rice', dosage: 100 };
-      const improved = await improver.applyAdjustments(
-        newRecommendation,
-        'crop',
-        context
-      );
+      const improved = await improver.applyAdjustments(newRecommendation, 'crop', context);
 
       // Verify improvement was applied
       // The adjustment uses weighted average: 70% current (100) + 30% learned (85) = 95.5

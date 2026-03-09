@@ -3,14 +3,14 @@
  * React hook for accessing translation functionality
  */
 
-import {useState, useEffect, useCallback} from 'react';
-import {LanguageCode, TranslationKey} from '../types/translation.types';
+import { useState, useEffect, useCallback } from 'react';
+import { LanguageCode, TranslationKey } from '../types/translation.types';
 import TranslationService from '../services/translation/TranslationService';
 import LanguagePreferenceManager from '../services/translation/LanguagePreferenceManager';
 
 interface UseTranslationResult {
-  t: (key: TranslationKey, params?: {[key: string]: string | number}) => string;
-  translate: (key: TranslationKey, params?: {[key: string]: string | number}) => string;
+  t: (key: TranslationKey, params?: { [key: string]: string | number }) => string;
+  translate: (key: TranslationKey, params?: { [key: string]: string | number }) => string;
   language: LanguageCode;
   setLanguage: (language: LanguageCode) => Promise<void>;
   changeLanguage: (language: LanguageCode) => Promise<void>;
@@ -50,10 +50,10 @@ export function useTranslation(): UseTranslationResult {
 
         // Get user's language preference
         const preferredLanguage = await languagePreferenceManagerInstance.getLanguagePreference();
-        
+
         // Initialize translation service with preferred language
         await translationServiceInstance.initialize(preferredLanguage);
-        
+
         setLanguageState(preferredLanguage);
         setIsLoading(false);
       } catch (err) {
@@ -67,7 +67,7 @@ export function useTranslation(): UseTranslationResult {
 
   // Translation function
   const t = useCallback(
-    (key: TranslationKey, params?: {[key: string]: string | number}): string => {
+    (key: TranslationKey, params?: { [key: string]: string | number }): string => {
       if (!translationServiceInstance) {
         return key;
       }
@@ -78,31 +78,28 @@ export function useTranslation(): UseTranslationResult {
   );
 
   // Set language function
-  const setLanguage = useCallback(
-    async (newLanguage: LanguageCode): Promise<void> => {
-      try {
-        if (!translationServiceInstance || !languagePreferenceManagerInstance) {
-          throw new Error('Translation services not initialized');
-        }
-
-        setIsLoading(true);
-        
-        // Update translation service
-        await translationServiceInstance.setLanguage(newLanguage);
-        
-        // Update preference (userId would come from auth context in real app)
-        // For now, just update local preference
-        await languagePreferenceManagerInstance.setRegistrationLanguage(newLanguage);
-        
-        setLanguageState(newLanguage);
-        setIsLoading(false);
-      } catch (err) {
-        setError(err instanceof Error ? err : new Error('Failed to change language'));
-        setIsLoading(false);
+  const setLanguage = useCallback(async (newLanguage: LanguageCode): Promise<void> => {
+    try {
+      if (!translationServiceInstance || !languagePreferenceManagerInstance) {
+        throw new Error('Translation services not initialized');
       }
-    },
-    []
-  );
+
+      setIsLoading(true);
+
+      // Update translation service
+      await translationServiceInstance.setLanguage(newLanguage);
+
+      // Update preference (userId would come from auth context in real app)
+      // For now, just update local preference
+      await languagePreferenceManagerInstance.setRegistrationLanguage(newLanguage);
+
+      setLanguageState(newLanguage);
+      setIsLoading(false);
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error('Failed to change language'));
+      setIsLoading(false);
+    }
+  }, []);
 
   return {
     t,

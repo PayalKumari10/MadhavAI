@@ -4,14 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  Switch,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, Switch, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { AlertPreferences as AlertPreferencesType, AlertType } from '../../types/alert.types';
 
 interface AlertPreferencesProps {
@@ -31,10 +24,7 @@ export const AlertPreferences: React.FC<AlertPreferencesProps> = ({
     setLocalPreferences(preferences);
   }, [preferences]);
 
-  const handleToggle = async (
-    key: keyof AlertPreferencesType,
-    value: boolean
-  ) => {
+  const handleToggle = async (key: keyof AlertPreferencesType, value: boolean) => {
     setIsUpdating(true);
     try {
       const updated = { ...localPreferences, [key]: value };
@@ -104,7 +94,7 @@ export const AlertPreferences: React.FC<AlertPreferencesProps> = ({
     <ScrollView style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Notification Channels</Text>
-        
+
         <View style={styles.preferenceRow}>
           <View style={styles.preferenceInfo}>
             <Text style={styles.preferenceLabel}>SMS Notifications</Text>
@@ -122,9 +112,7 @@ export const AlertPreferences: React.FC<AlertPreferencesProps> = ({
         <View style={styles.preferenceRow}>
           <View style={styles.preferenceInfo}>
             <Text style={styles.preferenceLabel}>Push Notifications</Text>
-            <Text style={styles.preferenceDescription}>
-              Receive in-app push notifications
-            </Text>
+            <Text style={styles.preferenceDescription}>Receive in-app push notifications</Text>
           </View>
           <Switch
             value={localPreferences.enablePushNotifications}
@@ -150,12 +138,13 @@ export const AlertPreferences: React.FC<AlertPreferencesProps> = ({
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Quiet Hours</Text>
-        
+
         <View style={styles.preferenceRow}>
           <View style={styles.preferenceInfo}>
             <Text style={styles.preferenceLabel}>Enable Quiet Hours</Text>
             <Text style={styles.preferenceDescription}>
-              No alerts during: {localPreferences.quietHours.start} - {localPreferences.quietHours.end}
+              No alerts during: {localPreferences.quietHours.start} -{' '}
+              {localPreferences.quietHours.end}
             </Text>
           </View>
           <Switch
@@ -181,9 +170,7 @@ export const AlertPreferences: React.FC<AlertPreferencesProps> = ({
         {(Object.keys(alertTypeLabels) as AlertType[]).map((type) => (
           <View key={type} style={styles.preferenceRow}>
             <View style={styles.preferenceInfo}>
-              <Text style={styles.preferenceLabel}>
-                {alertTypeLabels[type]}
-              </Text>
+              <Text style={styles.preferenceLabel}>{alertTypeLabels[type]}</Text>
             </View>
             <Switch
               value={localPreferences.alertTypes[type]}
@@ -195,9 +182,7 @@ export const AlertPreferences: React.FC<AlertPreferencesProps> = ({
       </View>
 
       <View style={styles.footer}>
-        <Text style={styles.footerText}>
-          Changes are saved automatically
-        </Text>
+        <Text style={styles.footerText}>Changes are saved automatically</Text>
       </View>
     </ScrollView>
   );

@@ -229,9 +229,9 @@ describe('ApplicationGuide', () => {
       const reminders = guide.getSchemesWithApproachingDeadlines(schemes);
 
       expect(reminders).toHaveLength(2);
-      expect(reminders.some(r => r.schemeId === 'scheme-001')).toBe(true);
-      expect(reminders.some(r => r.schemeId === 'scheme-002')).toBe(true);
-      expect(reminders.some(r => r.schemeId === 'scheme-003')).toBe(false);
+      expect(reminders.some((r) => r.schemeId === 'scheme-001')).toBe(true);
+      expect(reminders.some((r) => r.schemeId === 'scheme-002')).toBe(true);
+      expect(reminders.some((r) => r.schemeId === 'scheme-003')).toBe(false);
     });
 
     it('should sort reminders by urgency (days remaining)', () => {
@@ -279,7 +279,7 @@ describe('ApplicationGuide', () => {
       const reminderDates = guide.scheduleReminders(mockScheme);
 
       expect(reminderDates.length).toBeGreaterThan(0);
-      expect(reminderDates.every(date => date instanceof Date)).toBe(true);
+      expect(reminderDates.every((date) => date instanceof Date)).toBe(true);
     });
 
     it('should return empty array for scheme without deadline', () => {
@@ -293,7 +293,7 @@ describe('ApplicationGuide', () => {
       const now = new Date();
       const reminderDates = guide.scheduleReminders(mockScheme);
 
-      expect(reminderDates.every(date => date > now)).toBe(true);
+      expect(reminderDates.every((date) => date > now)).toBe(true);
     });
   });
 
@@ -311,7 +311,7 @@ describe('ApplicationGuide', () => {
     it('should initialize all documents as unchecked', () => {
       const checklist = guide.getDocumentChecklist(mockScheme);
 
-      expect(checklist.every(item => item.checked === false)).toBe(true);
+      expect(checklist.every((item) => item.checked === false)).toBe(true);
     });
   });
 

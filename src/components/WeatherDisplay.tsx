@@ -37,7 +37,7 @@ export const WeatherDisplay: React.FC<WeatherDisplayProps> = ({
     try {
       setLoading(true);
       setError(null);
-      
+
       try {
         const data = await weatherService.getForecast(latitude, longitude);
         setForecast(data);
@@ -59,29 +59,35 @@ export const WeatherDisplay: React.FC<WeatherDisplayProps> = ({
   const generateMockForecast = (lat: number, lon: number): WeatherForecast => {
     const today = new Date();
     const dailyForecasts = [];
-    
+
     // Generate varied weather conditions for realistic forecast
-    const conditions: Array<'clear' | 'partly_cloudy' | 'cloudy' | 'rain' | 'drizzle'> = ['clear', 'partly_cloudy', 'cloudy', 'rain', 'drizzle'];
+    const conditions: Array<'clear' | 'partly_cloudy' | 'cloudy' | 'rain' | 'drizzle'> = [
+      'clear',
+      'partly_cloudy',
+      'cloudy',
+      'rain',
+      'drizzle',
+    ];
     const descriptions = ['Clear Sky', 'Partly Cloudy', 'Cloudy', 'Light Rain', 'Drizzle'];
-    
+
     for (let i = 0; i < 7; i++) {
       const date = new Date(today);
       date.setDate(date.getDate() + i);
-      
+
       const conditionIndex = Math.floor(Math.random() * conditions.length);
       const condition = conditions[conditionIndex];
       const hasRain = condition.includes('rain') || condition === 'drizzle';
-      
+
       // Calculate sunrise and sunset times
       const sunrise = new Date(date);
       sunrise.setHours(6, 0, 0, 0);
       const sunset = new Date(date);
       sunset.setHours(18, 30, 0, 0);
-      
+
       const tempCurrent = 23 + Math.random() * 5;
       const tempMin = 18 + Math.random() * 5;
       const tempMax = 28 + Math.random() * 7;
-      
+
       dailyForecasts.push({
         date: date,
         condition: condition,
@@ -95,14 +101,21 @@ export const WeatherDisplay: React.FC<WeatherDisplayProps> = ({
         precipitation: {
           probability: hasRain ? 60 + Math.random() * 30 : 5 + Math.random() * 15,
           amount: hasRain ? 5 + Math.random() * 15 : 0,
-          type: (hasRain ? (condition === 'rain' ? 'rain' : 'rain') : 'none') as 'none' | 'rain' | 'snow' | 'hail',
+          type: (hasRain ? (condition === 'rain' ? 'rain' : 'rain') : 'none') as
+            | 'none'
+            | 'rain'
+            | 'snow'
+            | 'hail',
         },
         humidity: hasRain ? 70 + Math.random() * 20 : 50 + Math.random() * 20,
         wind: {
           speed: 10 + Math.random() * 15,
           direction: ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][Math.floor(Math.random() * 8)],
         },
-        uvIndex: conditions[conditionIndex] === 'clear' ? 8 + Math.floor(Math.random() * 3) : 4 + Math.floor(Math.random() * 4),
+        uvIndex:
+          conditions[conditionIndex] === 'clear'
+            ? 8 + Math.floor(Math.random() * 3)
+            : 4 + Math.floor(Math.random() * 4),
         sunrise: sunrise,
         sunset: sunset,
       });
@@ -176,37 +189,38 @@ export const WeatherDisplay: React.FC<WeatherDisplayProps> = ({
           <View style={styles.temperatureSection}>
             <Text style={styles.weatherIcon}>{getWeatherIcon(forecast.current.condition)}</Text>
             <View style={styles.tempContainer}>
-              <Text style={styles.temperature}>{Math.round(forecast.current.temperature.current)}°C</Text>
+              <Text style={styles.temperature}>
+                {Math.round(forecast.current.temperature.current)}°C
+              </Text>
               <Text style={styles.condition}>{forecast.current.description}</Text>
               <Text style={styles.feelsLike}>
                 Feels like {Math.round(forecast.current.temperature.feelsLike)}°
               </Text>
             </View>
           </View>
-          
+
           <View style={styles.detailsGrid}>
             <View style={styles.detailCard}>
               <Text style={styles.detailIcon}>🌡️</Text>
               <Text style={styles.detailLabel}>High/Low</Text>
               <Text style={styles.detailValue}>
-                {Math.round(forecast.current.temperature.max)}° / {Math.round(forecast.current.temperature.min)}°
+                {Math.round(forecast.current.temperature.max)}° /{' '}
+                {Math.round(forecast.current.temperature.min)}°
               </Text>
             </View>
-            
+
             <View style={styles.detailCard}>
               <Text style={styles.detailIcon}>💧</Text>
               <Text style={styles.detailLabel}>Humidity</Text>
               <Text style={styles.detailValue}>{Math.round(forecast.current.humidity)}%</Text>
             </View>
-            
+
             <View style={styles.detailCard}>
               <Text style={styles.detailIcon}>💨</Text>
               <Text style={styles.detailLabel}>Wind</Text>
-              <Text style={styles.detailValue}>
-                {Math.round(forecast.current.wind.speed)} km/h
-              </Text>
+              <Text style={styles.detailValue}>{Math.round(forecast.current.wind.speed)} km/h</Text>
             </View>
-            
+
             <View style={styles.detailCard}>
               <Text style={styles.detailIcon}>☀️</Text>
               <Text style={styles.detailLabel}>UV Index</Text>
@@ -321,7 +335,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
-    paddingLeft: 30
+    paddingLeft: 30,
   },
   weatherIcon: {
     fontSize: 80,
@@ -340,8 +354,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#FFF',
     opacity: 0.95,
-    marginTop: 4,  flexWrap: 'wrap',
-  width: '95%'
+    marginTop: 4,
+    flexWrap: 'wrap',
+    width: '95%',
   },
   feelsLike: {
     fontSize: 14,

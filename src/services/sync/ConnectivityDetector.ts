@@ -10,13 +10,17 @@ import { logger } from '../../utils/logger';
 type ConnectivityListener = (isOnline: boolean) => void;
 
 // Type declarations for browser APIs
-declare const window: {
-  addEventListener: (event: string, handler: () => void) => void;
-} | undefined;
+declare const window:
+  | {
+      addEventListener: (event: string, handler: () => void) => void;
+    }
+  | undefined;
 
-declare const navigator: {
-  onLine: boolean;
-} | undefined;
+declare const navigator:
+  | {
+      onLine: boolean;
+    }
+  | undefined;
 
 class ConnectivityDetector {
   private listeners: ConnectivityListener[] = [];
@@ -51,7 +55,11 @@ class ConnectivityDetector {
       lastChecked: new Date(),
     };
 
-    logger.info(`Connectivity changed: ${wasOnline ? 'online' : 'offline'} -> ${isOnline ? 'online' : 'offline'}`);
+    logger.info(
+      `Connectivity changed: ${wasOnline ? 'online' : 'offline'} -> ${
+        isOnline ? 'online' : 'offline'
+      }`
+    );
 
     // Notify listeners
     this.listeners.forEach((listener) => {
@@ -107,10 +115,11 @@ class ConnectivityDetector {
     try {
       // In a real implementation, this would check actual network connectivity
       // For now, we'll use navigator.onLine if available
-      const isOnline = typeof navigator !== 'undefined' && navigator.onLine !== undefined 
-        ? navigator.onLine 
-        : true;
-      
+      const isOnline =
+        typeof navigator !== 'undefined' && navigator.onLine !== undefined
+          ? navigator.onLine
+          : true;
+
       this.currentStatus = {
         isOnline,
         lastChecked: new Date(),

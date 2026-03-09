@@ -54,12 +54,7 @@ class WeatherAdvisor {
           'Reduced sun exposure - good for workers',
           'Watch for potential rain',
         ],
-        doActivities: [
-          'Weeding',
-          'Pruning',
-          'Field inspection',
-          'Equipment maintenance',
-        ],
+        doActivities: ['Weeding', 'Pruning', 'Field inspection', 'Equipment maintenance'],
         avoidActivities: ['Pesticide spraying (if rain expected)'],
         priority: 'low',
       },

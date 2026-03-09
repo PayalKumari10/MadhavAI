@@ -5,9 +5,9 @@
  */
 
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
-import {RecommendationSummary} from '../../types/dashboard.types';
-import {useTranslation} from '../../hooks/useTranslation';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { RecommendationSummary } from '../../types/dashboard.types';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface RecommendationsWidgetProps {
   recommendations: RecommendationSummary[];
@@ -18,7 +18,7 @@ const RecommendationsWidget: React.FC<RecommendationsWidgetProps> = ({
   recommendations,
   navigation,
 }) => {
-  const {translate} = useTranslation();
+  const { translate } = useTranslation();
 
   const getTypeIcon = (type: string): string => {
     switch (type) {
@@ -35,7 +35,7 @@ const RecommendationsWidget: React.FC<RecommendationsWidgetProps> = ({
     }
   };
 
-  const renderRecommendation = ({item}: {item: RecommendationSummary}) => (
+  const renderRecommendation = ({ item }: { item: RecommendationSummary }) => (
     <View style={styles.recItem}>
       <Text style={styles.recIcon}>{getTypeIcon(item.type)}</Text>
       <View style={styles.recContent}>
@@ -56,7 +56,8 @@ const RecommendationsWidget: React.FC<RecommendationsWidgetProps> = ({
     <TouchableOpacity
       style={styles.container}
       onPress={() => navigation && navigation.navigate && navigation.navigate('Recommendations')}
-      activeOpacity={0.7}>
+      activeOpacity={0.7}
+    >
       <View style={styles.header}>
         <Text style={styles.icon}>💡</Text>
         <Text style={styles.title}>{translate('dashboard.recommendations')}</Text>
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
     padding: 16,
     elevation: 2,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },

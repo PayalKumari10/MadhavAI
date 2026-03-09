@@ -33,7 +33,7 @@ class EncryptedStorageService {
   async getItem<T>(key: string): Promise<T | null> {
     try {
       const jsonValue = await EncryptedStorageLib.getItem(key);
-      
+
       if (jsonValue === null || jsonValue === undefined) {
         return null;
       }

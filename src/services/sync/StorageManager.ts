@@ -221,9 +221,7 @@ class StorageManager {
    */
   private async updateStorageInfo(): Promise<void> {
     try {
-      const storedInfo = await encryptedStorage.getItem<Map<string, StorageItem>>(
-        STORAGE_INFO_KEY
-      );
+      const storedInfo = await encryptedStorage.getItem<Map<string, StorageItem>>(STORAGE_INFO_KEY);
 
       if (storedInfo) {
         // Convert plain object back to Map

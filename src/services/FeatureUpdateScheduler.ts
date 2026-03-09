@@ -1,6 +1,6 @@
 /**
  * Feature Update Scheduler
- * 
+ *
  * Manages monthly feature update schedule and rollout
  */
 
@@ -87,11 +87,8 @@ export class FeatureUpdateScheduler {
   private isReadyForRollout(update: FeatureUpdate): boolean {
     const releaseDate = new Date(update.releaseDate);
     const now = new Date();
-    
-    return (
-      update.status === 'scheduled' &&
-      releaseDate <= now
-    );
+
+    return update.status === 'scheduled' && releaseDate <= now;
   }
 
   /**
@@ -129,7 +126,7 @@ export class FeatureUpdateScheduler {
     const userId = await this.getUserId();
     const hash = this.hashUserId(userId + update.id);
     const bucket = hash % 100;
-    
+
     return bucket < update.rolloutPercentage;
   }
 
@@ -138,10 +135,13 @@ export class FeatureUpdateScheduler {
    */
   private async enableFeature(feature: Feature): Promise<void> {
     const key = `feature_${feature.id}`;
-    await AsyncStorage.setItem(key, JSON.stringify({
-      ...feature,
-      enabledAt: new Date(),
-    }));
+    await AsyncStorage.setItem(
+      key,
+      JSON.stringify({
+        ...feature,
+        enabledAt: new Date(),
+      })
+    );
   }
 
   /**
@@ -170,7 +170,7 @@ export class FeatureUpdateScheduler {
     try {
       const keys = await AsyncStorage.getAllKeys();
       const featureKeys = keys.filter((key: string) => key.startsWith('feature_'));
-      
+
       const features: Feature[] = [];
       for (const key of featureKeys) {
         const featureJson = await AsyncStorage.getItem(key);
@@ -196,7 +196,7 @@ export class FeatureUpdateScheduler {
     const schedule = await this.loadSchedule();
     const now = new Date();
 
-    return schedule.updates.filter(update => {
+    return schedule.updates.filter((update) => {
       const releaseDate = new Date(update.releaseDate);
       return releaseDate > now && update.status === 'scheduled';
     });
@@ -299,9 +299,7 @@ export class FeatureUpdateScheduler {
     const schedule = await this.loadSchedule();
     const completed = await this.getCompletedUpdates();
 
-    return schedule.updates.filter(update => 
-      completed.includes(update.id)
-    );
+    return schedule.updates.filter((update) => completed.includes(update.id));
   }
 
   /**
@@ -314,9 +312,7 @@ export class FeatureUpdateScheduler {
     }
 
     // Sort by release date
-    upcoming.sort((a, b) => 
-      new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime()
-    );
+    upcoming.sort((a, b) => new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime());
 
     return upcoming[0];
   }
@@ -343,12 +339,11 @@ export class FeatureUpdateScheduler {
    */
   async clearAllData(): Promise<void> {
     const keys = await AsyncStorage.getAllKeys();
-    const featureKeys = keys.filter((key: string) => 
-      key.startsWith('feature_') || 
-      key === this.STORAGE_KEY ||
-      key === 'completed_updates'
+    const featureKeys = keys.filter(
+      (key: string) =>
+        key.startsWith('feature_') || key === this.STORAGE_KEY || key === 'completed_updates'
     );
-    
+
     // Remove each key individually
     for (const key of featureKeys) {
       await AsyncStorage.removeItem(key);

@@ -4,8 +4,8 @@
  * Requirements: 14.8
  */
 
-import {Alert} from '../../types/alert.types';
-import {Insight} from '../../types/dashboard.types';
+import { Alert } from '../../types/alert.types';
+import { Insight } from '../../types/dashboard.types';
 
 /**
  * Priority weights for different factors
@@ -36,7 +36,7 @@ export class PriorityEngine {
    * Requirement: 14.8
    */
   prioritizeAlerts(alerts: Alert[]): Alert[] {
-    const scoredAlerts = alerts.map(alert => ({
+    const scoredAlerts = alerts.map((alert) => ({
       item: alert,
       score: this.calculateAlertPriority(alert),
       reason: this.getAlertPriorityReason(alert),
@@ -45,7 +45,7 @@ export class PriorityEngine {
     // Sort by score descending
     scoredAlerts.sort((a, b) => b.score - a.score);
 
-    return scoredAlerts.map(scored => scored.item);
+    return scoredAlerts.map((scored) => scored.item);
   }
 
   /**
@@ -53,7 +53,7 @@ export class PriorityEngine {
    * Requirement: 14.8
    */
   prioritizeInsights(insights: Insight[]): Insight[] {
-    const scoredInsights = insights.map(insight => ({
+    const scoredInsights = insights.map((insight) => ({
       item: insight,
       score: this.calculateInsightPriority(insight),
       reason: this.getInsightPriorityReason(insight),
@@ -62,7 +62,7 @@ export class PriorityEngine {
     // Sort by score descending
     scoredInsights.sort((a, b) => b.score - a.score);
 
-    return scoredInsights.map(scored => scored.item);
+    return scoredInsights.map((scored) => scored.item);
   }
 
   /**
@@ -75,8 +75,7 @@ export class PriorityEngine {
       const alert = item as Alert;
       const now = new Date();
       const scheduledTime = new Date(alert.scheduledTime);
-      const hoursUntil =
-        (scheduledTime.getTime() - now.getTime()) / (1000 * 60 * 60);
+      const hoursUntil = (scheduledTime.getTime() - now.getTime()) / (1000 * 60 * 60);
 
       // Time-sensitive if within 24 hours
       return hoursUntil <= 24 && hoursUntil >= 0;
@@ -85,9 +84,7 @@ export class PriorityEngine {
       const insight = item as Insight;
       return (
         insight.priority === 'high' &&
-        (insight.type === 'alert' ||
-          insight.type === 'harvest' ||
-          insight.type === 'weather')
+        (insight.type === 'alert' || insight.type === 'harvest' || insight.type === 'weather')
       );
     }
   }
@@ -148,8 +145,7 @@ export class PriorityEngine {
   private getTimeSensitivityScore(alert: Alert): number {
     const now = new Date();
     const scheduledTime = new Date(alert.scheduledTime);
-    const hoursUntil =
-      (scheduledTime.getTime() - now.getTime()) / (1000 * 60 * 60);
+    const hoursUntil = (scheduledTime.getTime() - now.getTime()) / (1000 * 60 * 60);
 
     if (hoursUntil < 0) {
       // Past due
@@ -212,7 +208,7 @@ export class PriorityEngine {
    * Get type-based score for insight
    */
   private getInsightTypeScore(type: string): number {
-    const typeScores: {[key: string]: number} = {
+    const typeScores: { [key: string]: number } = {
       alert: 100,
       harvest: 90,
       weather: 85,
@@ -272,7 +268,9 @@ export class PriorityEngine {
    * Filter items to show only time-sensitive ones first
    * Requirement: 14.8
    */
-  filterTimeSensitive<T extends Alert | Insight>(items: T[]): {
+  filterTimeSensitive<T extends Alert | Insight>(
+    items: T[]
+  ): {
     timeSensitive: T[];
     others: T[];
   } {
@@ -287,7 +285,7 @@ export class PriorityEngine {
       }
     }
 
-    return {timeSensitive, others};
+    return { timeSensitive, others };
   }
 }
 

@@ -5,20 +5,17 @@
  */
 
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
-import {CropStatus} from '../../types/dashboard.types';
-import {useTranslation} from '../../hooks/useTranslation';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { CropStatus } from '../../types/dashboard.types';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface CropStatusWidgetProps {
   cropStatus: CropStatus[];
   navigation: any;
 }
 
-const CropStatusWidget: React.FC<CropStatusWidgetProps> = ({
-  cropStatus,
-  navigation,
-}) => {
-  const {translate} = useTranslation();
+const CropStatusWidget: React.FC<CropStatusWidgetProps> = ({ cropStatus, navigation }) => {
+  const { translate } = useTranslation();
 
   const navigateToCropPlanner = () => {
     if (navigation && navigation.navigate) {
@@ -52,14 +49,13 @@ const CropStatusWidget: React.FC<CropStatusWidgetProps> = ({
     }
   };
 
-  const renderCrop = ({item}: {item: CropStatus}) => (
+  const renderCrop = ({ item }: { item: CropStatus }) => (
     <View style={styles.cropItem}>
       <View style={styles.cropHeader}>
         <Text style={styles.cropName}>{item.cropName}</Text>
         <View style={styles.healthBadge}>
           <Text style={styles.healthIcon}>{getHealthIcon(item.health)}</Text>
-          <Text
-            style={[styles.healthText, {color: getHealthColor(item.health)}]}>
+          <Text style={[styles.healthText, { color: getHealthColor(item.health) }]}>
             {translate(`crop.health.${item.health}`)}
           </Text>
         </View>
@@ -67,24 +63,17 @@ const CropStatusWidget: React.FC<CropStatusWidgetProps> = ({
 
       <View style={styles.cropDetails}>
         <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>
-            {translate('crop.stage')}:
-          </Text>
+          <Text style={styles.detailLabel}>{translate('crop.stage')}:</Text>
           <Text style={styles.detailValue}>{item.stage}</Text>
         </View>
         <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>
-            {translate('crop.area')}:
-          </Text>
+          <Text style={styles.detailLabel}>{translate('crop.area')}:</Text>
           <Text style={styles.detailValue}>{item.farmArea} acres</Text>
         </View>
         <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>
-            {translate('crop.next_activity')}:
-          </Text>
+          <Text style={styles.detailLabel}>{translate('crop.next_activity')}:</Text>
           <Text style={styles.detailValue}>
-            {item.nextActivity} ({item.daysToNextActivity}{' '}
-            {translate('common.days')})
+            {item.nextActivity} ({item.daysToNextActivity} {translate('common.days')})
           </Text>
         </View>
       </View>
@@ -92,10 +81,7 @@ const CropStatusWidget: React.FC<CropStatusWidgetProps> = ({
   );
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={navigateToCropPlanner}
-      activeOpacity={0.7}>
+    <TouchableOpacity style={styles.container} onPress={navigateToCropPlanner} activeOpacity={0.7}>
       <View style={styles.header}>
         <Text style={styles.icon}>🌾</Text>
         <Text style={styles.title}>{translate('dashboard.crop_status')}</Text>
@@ -121,7 +107,7 @@ const styles = StyleSheet.create({
     padding: 16,
     elevation: 2,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },

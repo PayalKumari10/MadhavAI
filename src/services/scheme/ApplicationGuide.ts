@@ -1,7 +1,7 @@
 /**
  * Application Guide Service
  * Requirements: 2.3, 2.6
- * 
+ *
  * Provides step-by-step guidance for scheme applications and deadline tracking
  */
 
@@ -77,20 +77,20 @@ export class ApplicationGuide {
     }
 
     parts.push('📋 Required Documents:');
-    guidance.requiredDocuments.forEach(doc => {
+    guidance.requiredDocuments.forEach((doc) => {
       parts.push(`   • ${doc}`);
     });
     parts.push('');
 
     parts.push('📝 Application Steps:');
-    guidance.steps.forEach(step => {
+    guidance.steps.forEach((step) => {
       parts.push(`\n${step.stepNumber}. ${step.title}`);
       parts.push(`   ${step.description}`);
-      
+
       if (step.requiredDocuments && step.requiredDocuments.length > 0) {
         parts.push(`   Documents needed: ${step.requiredDocuments.join(', ')}`);
       }
-      
+
       if (step.estimatedTime) {
         parts.push(`   Time required: ${step.estimatedTime}`);
       }
@@ -139,7 +139,7 @@ export class ApplicationGuide {
     }
 
     const daysRemaining = this.calculateDaysRemaining(scheme.applicationDeadline);
-    
+
     if (daysRemaining <= 0) {
       return null; // Deadline has passed
     }
@@ -182,7 +182,7 @@ export class ApplicationGuide {
    */
   scheduleReminders(scheme: Scheme): Date[] {
     const reminder = this.getDeadlineReminder(scheme);
-    
+
     if (!reminder) {
       return [];
     }
@@ -213,7 +213,7 @@ export class ApplicationGuide {
       if (daysRemaining >= days) {
         const reminderDate = new Date(deadline);
         reminderDate.setDate(reminderDate.getDate() - days);
-        
+
         // Only include future reminders
         if (reminderDate > now) {
           reminderDates.push(reminderDate);
@@ -229,7 +229,7 @@ export class ApplicationGuide {
    */
   private calculateTotalTime(steps: ApplicationStep[]): string {
     const times = steps
-      .map(step => step.estimatedTime)
+      .map((step) => step.estimatedTime)
       .filter((time): time is string => time !== undefined);
 
     if (times.length === 0) {
@@ -245,7 +245,7 @@ export class ApplicationGuide {
    * Get required documents checklist
    */
   getDocumentChecklist(scheme: Scheme): { document: string; checked: boolean }[] {
-    return scheme.requiredDocuments.map(doc => ({
+    return scheme.requiredDocuments.map((doc) => ({
       document: doc,
       checked: false,
     }));
@@ -254,12 +254,15 @@ export class ApplicationGuide {
   /**
    * Validate if all required documents are available
    */
-  validateDocuments(scheme: Scheme, availableDocuments: string[]): {
+  validateDocuments(
+    scheme: Scheme,
+    availableDocuments: string[]
+  ): {
     isComplete: boolean;
     missingDocuments: string[];
   } {
     const missingDocuments = scheme.requiredDocuments.filter(
-      doc => !availableDocuments.includes(doc)
+      (doc) => !availableDocuments.includes(doc)
     );
 
     return {

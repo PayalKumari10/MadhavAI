@@ -55,21 +55,21 @@ export class DatabaseService {
    */
   async query<T = any>(sql: string, params: any[] = []): Promise<T[]> {
     logger.info('Query SQL', { sql, params });
-    
+
     // Simple table name extraction from SQL
     const tableMatch = sql.match(/FROM\s+(\w+)/i);
     if (tableMatch) {
       const tableName = tableMatch[1];
       const data = this.store.get(tableName) || [];
-      
+
       // Apply simple WHERE filtering if userId is in params
       if (params.length > 0 && sql.includes('userId')) {
         return data.filter((row: any) => row.userId === params[0]) as T[];
       }
-      
+
       return data as T[];
     }
-    
+
     return [];
   }
 

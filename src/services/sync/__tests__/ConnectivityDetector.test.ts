@@ -66,10 +66,10 @@ describe('ConnectivityDetector', () => {
 
     it('should update status after check', async () => {
       const beforeCheck = connectivityDetector.getStatus().lastChecked;
-      
+
       await new Promise<void>((resolve) => setTimeout(() => resolve(), 10));
       await connectivityDetector.checkConnectivity();
-      
+
       const afterCheck = connectivityDetector.getStatus().lastChecked;
       expect(afterCheck.getTime()).toBeGreaterThanOrEqual(beforeCheck.getTime());
     });

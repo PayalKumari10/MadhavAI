@@ -10,8 +10,8 @@ import {
   QuickAction,
   Insight,
 } from '../../types/dashboard.types';
-import {DatabaseService} from '../storage/DatabaseService';
-import {UserProfile} from '../../types/profile.types';
+import { DatabaseService } from '../storage/DatabaseService';
+import { UserProfile } from '../../types/profile.types';
 
 /**
  * Default widget configuration
@@ -77,14 +77,11 @@ export class WidgetManager {
    * Get dashboard preferences for a user
    * Requirement: 14.6
    */
-  async getDashboardPreferences(
-    userId: string,
-  ): Promise<DashboardPreferences> {
+  async getDashboardPreferences(userId: string): Promise<DashboardPreferences> {
     try {
-      const prefs = await this.db.query(
-        'SELECT * FROM dashboard_preferences WHERE userId = ?',
-        [userId],
-      );
+      const prefs = await this.db.query('SELECT * FROM dashboard_preferences WHERE userId = ?', [
+        userId,
+      ]);
 
       if (prefs.length === 0) {
         // Return default preferences
@@ -104,13 +101,13 @@ export class WidgetManager {
    */
   async updateDashboardPreferences(
     userId: string,
-    preferences: DashboardPreferences,
+    preferences: DashboardPreferences
   ): Promise<void> {
     try {
       await this.db.execute(
         `INSERT OR REPLACE INTO dashboard_preferences (userId, preferences, updatedAt)
          VALUES (?, ?, ?)`,
-        [userId, JSON.stringify(preferences), new Date().toISOString()],
+        [userId, JSON.stringify(preferences), new Date().toISOString()]
       );
     } catch (error) {
       console.error('Error updating dashboard preferences:', error);
@@ -124,23 +121,17 @@ export class WidgetManager {
    */
   async getEnabledWidgets(userId: string): Promise<WidgetConfig[]> {
     const preferences = await this.getDashboardPreferences(userId);
-    return preferences.widgets
-      .filter(widget => widget.enabled)
-      .sort((a, b) => a.order - b.order);
+    return preferences.widgets.filter((widget) => widget.enabled).sort((a, b) => a.order - b.order);
   }
 
   /**
    * Enable/disable a widget
    * Requirement: 14.6
    */
-  async toggleWidget(
-    userId: string,
-    widgetId: string,
-    enabled: boolean,
-  ): Promise<void> {
+  async toggleWidget(userId: string, widgetId: string, enabled: boolean): Promise<void> {
     const preferences = await this.getDashboardPreferences(userId);
 
-    const widget = preferences.widgets.find(w => w.id === widgetId);
+    const widget = preferences.widgets.find((w) => w.id === widgetId);
     if (widget) {
       widget.enabled = enabled;
       await this.updateDashboardPreferences(userId, preferences);
@@ -151,15 +142,12 @@ export class WidgetManager {
    * Reorder widgets
    * Requirement: 14.6
    */
-  async reorderWidgets(
-    userId: string,
-    widgetOrder: string[],
-  ): Promise<void> {
+  async reorderWidgets(userId: string, widgetOrder: string[]): Promise<void> {
     const preferences = await this.getDashboardPreferences(userId);
 
     // Update order based on array position
     widgetOrder.forEach((widgetId, index) => {
-      const widget = preferences.widgets.find(w => w.id === widgetId);
+      const widget = preferences.widgets.find((w) => w.id === widgetId);
       if (widget) {
         widget.order = index + 1;
       }
@@ -239,10 +227,7 @@ export class WidgetManager {
    * Generate personalized insights based on current season and crop stage
    * Requirement: 14.7
    */
-  async generatePersonalizedInsights(
-    userId: string,
-    profile: UserProfile,
-  ): Promise<Insight[]> {
+  async generatePersonalizedInsights(userId: string, profile: UserProfile): Promise<Insight[]> {
     const insights: Insight[] = [];
 
     try {
@@ -253,7 +238,7 @@ export class WidgetManager {
       // Get active crop plans
       const cropPlans = await this.db.query(
         'SELECT * FROM crop_plans WHERE userId = ? AND status = ?',
-        [userId, 'active'],
+        [userId, 'active']
       );
 
       // Season-based insights
@@ -280,17 +265,13 @@ export class WidgetManager {
   /**
    * Get seasonal insights
    */
-  private getSeasonalInsights(
-    season: string,
-    cropPlans: any[],
-  ): Insight[] {
+  private getSeasonalInsights(season: string, cropPlans: any[]): Insight[] {
     const insights: Insight[] = [];
 
     if (season === 'monsoon' && cropPlans.length === 0) {
       insights.push({
         type: 'seasonal',
-        message:
-          'Monsoon season is ideal for sowing. Check crop recommendations for your region.',
+        message: 'Monsoon season is ideal for sowing. Check crop recommendations for your region.',
         actionable: true,
         actionUrl: 'Recommendations',
         priority: 'high',
@@ -298,8 +279,7 @@ export class WidgetManager {
     } else if (season === 'summer' && cropPlans.length > 0) {
       insights.push({
         type: 'seasonal',
-        message:
-          'Summer season requires careful irrigation. Monitor soil moisture regularly.',
+        message: 'Summer season requires careful irrigation. Monitor soil moisture regularly.',
         actionable: true,
         actionUrl: 'CropPlanner',
         priority: 'medium',
@@ -307,8 +287,7 @@ export class WidgetManager {
     } else if (season === 'winter') {
       insights.push({
         type: 'seasonal',
-        message:
-          'Winter crops like wheat and mustard are suitable for this season.',
+        message: 'Winter crops like wheat and mustard are suitable for this season.',
         actionable: true,
         actionUrl: 'Recommendations',
         priority: 'medium',
@@ -357,10 +336,9 @@ export class WidgetManager {
 
     try {
       // Check for weather alerts
-      const alerts = await this.db.query(
-        'SELECT * FROM weather_alerts WHERE startTime > ?',
-        [new Date().toISOString()],
-      );
+      const alerts = await this.db.query('SELECT * FROM weather_alerts WHERE startTime > ?', [
+        new Date().toISOString(),
+      ]);
 
       if (alerts.length > 0) {
         const alert = alerts[0];
@@ -390,14 +368,12 @@ export class WidgetManager {
       for (const crop of profile.primaryCrops) {
         const prices = await this.db.query(
           'SELECT * FROM market_prices WHERE cropName = ? ORDER BY date DESC LIMIT 30',
-          [crop],
+          [crop]
         );
 
         if (prices.length > 0) {
           const currentPrice = prices[0].price;
-          const avgPrice =
-            prices.reduce((sum: number, p: any) => sum + p.price, 0) /
-            prices.length;
+          const avgPrice = prices.reduce((sum: number, p: any) => sum + p.price, 0) / prices.length;
 
           if (currentPrice > avgPrice * 1.15) {
             insights.push({

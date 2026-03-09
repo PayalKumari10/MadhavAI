@@ -16,7 +16,7 @@ export interface OTPResponse {
 }
 
 // Common types
-export type Language = 
+export type Language =
   | 'hi' // Hindi
   | 'ta' // Tamil
   | 'te' // Telugu
@@ -29,7 +29,7 @@ export type Language =
   | 'or' // Odia
   | 'en'; // English
 
-export type AlertType = 
+export type AlertType =
   | 'sowing'
   | 'fertilizer'
   | 'irrigation'

@@ -5,19 +5,17 @@
  */
 
 import React from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
-import {Alert} from '../../types/alert.types';
-import {useTranslation} from '../../hooks/useTranslation';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { Alert } from '../../types/alert.types';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface UpcomingActivitiesWidgetProps {
   alerts: Alert[];
   navigation: any;
 }
 
-const UpcomingActivitiesWidget: React.FC<UpcomingActivitiesWidgetProps> = ({
-  alerts,
-}) => {
-  const {translate} = useTranslation();
+const UpcomingActivitiesWidget: React.FC<UpcomingActivitiesWidgetProps> = ({ alerts }) => {
+  const { translate } = useTranslation();
 
   const formatDate = (date: Date): string => {
     const alertDate = new Date(date);
@@ -28,7 +26,7 @@ const UpcomingActivitiesWidget: React.FC<UpcomingActivitiesWidgetProps> = ({
   };
 
   const getActivityIcon = (type: string): string => {
-    const iconMap: {[key: string]: string} = {
+    const iconMap: { [key: string]: string } = {
       sowing: '🌱',
       fertilizer: '🧪',
       irrigation: '💧',
@@ -41,7 +39,7 @@ const UpcomingActivitiesWidget: React.FC<UpcomingActivitiesWidgetProps> = ({
     return iconMap[type] || '📅';
   };
 
-  const renderActivity = ({item, index}: {item: Alert; index: number}) => (
+  const renderActivity = ({ item, index }: { item: Alert; index: number }) => (
     <View style={styles.activityItem}>
       <View style={styles.timeline}>
         <View style={styles.timelineDot} />
@@ -52,9 +50,7 @@ const UpcomingActivitiesWidget: React.FC<UpcomingActivitiesWidgetProps> = ({
           <Text style={styles.activityIcon}>{getActivityIcon(item.type)}</Text>
           <View style={styles.activityInfo}>
             <Text style={styles.activityTitle}>{item.title}</Text>
-            <Text style={styles.activityDate}>
-              {formatDate(item.scheduledTime)}
-            </Text>
+            <Text style={styles.activityDate}>{formatDate(item.scheduledTime)}</Text>
           </View>
         </View>
         <Text style={styles.activityDescription} numberOfLines={2}>
@@ -72,15 +68,13 @@ const UpcomingActivitiesWidget: React.FC<UpcomingActivitiesWidgetProps> = ({
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.icon}>📅</Text>
-        <Text style={styles.title}>
-          {translate('dashboard.upcoming_activities')}
-        </Text>
+        <Text style={styles.title}>{translate('dashboard.upcoming_activities')}</Text>
       </View>
 
       <FlatList
         data={alerts.slice(0, 5)}
         renderItem={renderActivity}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         scrollEnabled={false}
       />
     </View>
@@ -95,7 +89,7 @@ const styles = StyleSheet.create({
     padding: 16,
     elevation: 2,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },

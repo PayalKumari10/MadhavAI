@@ -69,7 +69,9 @@ class SellingAdvisor {
     );
 
     logger.info(
-      `Recommendation: ${shouldSell ? 'SELL' : 'HOLD'} - ${reason} (${priceAdvantage.toFixed(2)}% advantage)`
+      `Recommendation: ${shouldSell ? 'SELL' : 'HOLD'} - ${reason} (${priceAdvantage.toFixed(
+        2
+      )}% advantage)`
     );
 
     return {
@@ -117,13 +119,17 @@ class SellingAdvisor {
             averagePrice: trend.average,
             changePercent: priceAdvantage,
             isFavorable: true,
-            recommendation: `Excellent selling opportunity! Price is ${priceAdvantage.toFixed(1)}% above 30-day average at ${price.mandiName}.`,
+            recommendation: `Excellent selling opportunity! Price is ${priceAdvantage.toFixed(
+              1
+            )}% above 30-day average at ${price.mandiName}.`,
             mandiName: price.mandiName,
             date: new Date(),
           });
 
           logger.info(
-            `Favorable price detected: ${crop} at ${price.mandiName} (${priceAdvantage.toFixed(1)}% above average)`
+            `Favorable price detected: ${crop} at ${price.mandiName} (${priceAdvantage.toFixed(
+              1
+            )}% above average)`
           );
         }
       });
@@ -176,7 +182,9 @@ class SellingAdvisor {
         });
 
         logger.info(
-          `Significant price change detected: ${crop} ${direction} by ${absChangePercent.toFixed(1)}%`
+          `Significant price change detected: ${crop} ${direction} by ${absChangePercent.toFixed(
+            1
+          )}%`
         );
       }
     });
@@ -188,7 +196,11 @@ class SellingAdvisor {
   /**
    * Get optimal selling timing based on trends
    */
-  getOptimalTiming(prices: MarketPrice[], crop: string, variety?: string): {
+  getOptimalTiming(
+    prices: MarketPrice[],
+    crop: string,
+    variety?: string
+  ): {
     timing: 'now' | 'soon' | 'wait' | 'monitor';
     reason: string;
     expectedPriceMovement: 'rising' | 'falling' | 'stable';
@@ -272,7 +284,9 @@ class SellingAdvisor {
     if (isFavorable && trend.trend === 'falling') {
       return {
         shouldSell: true,
-        reason: `Excellent selling opportunity! Price is ${priceAdvantage.toFixed(1)}% above average but trending down. Sell now to maximize profit.`,
+        reason: `Excellent selling opportunity! Price is ${priceAdvantage.toFixed(
+          1
+        )}% above average but trending down. Sell now to maximize profit.`,
         timing: 'immediate',
         confidence: 'high',
       };
@@ -282,7 +296,9 @@ class SellingAdvisor {
     if (isFavorable && trend.trend === 'stable') {
       return {
         shouldSell: true,
-        reason: `Good selling opportunity. Price is ${priceAdvantage.toFixed(1)}% above average and stable. Consider selling soon.`,
+        reason: `Good selling opportunity. Price is ${priceAdvantage.toFixed(
+          1
+        )}% above average and stable. Consider selling soon.`,
         timing: 'immediate',
         confidence: 'medium',
       };
@@ -292,7 +308,9 @@ class SellingAdvisor {
     if (isFavorable && trend.trend === 'rising') {
       return {
         shouldSell: false,
-        reason: `Price is ${priceAdvantage.toFixed(1)}% above average and rising. Consider waiting for even higher prices.`,
+        reason: `Price is ${priceAdvantage.toFixed(
+          1
+        )}% above average and rising. Consider waiting for even higher prices.`,
         timing: 'monitor',
         confidence: 'low',
       };

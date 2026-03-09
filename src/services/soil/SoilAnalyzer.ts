@@ -54,9 +54,7 @@ class SoilAnalyzer {
     const deficiencies = nutrientStatus
       .filter((n) => n.status === 'deficient' || n.status === 'low')
       .map((n) => n.nutrient);
-    const excesses = nutrientStatus
-      .filter((n) => n.status === 'excessive')
-      .map((n) => n.nutrient);
+    const excesses = nutrientStatus.filter((n) => n.status === 'excessive').map((n) => n.nutrient);
 
     const score = this.calculateOverallScore(soilData, nutrientStatus);
     const rating = this.getRating(score);

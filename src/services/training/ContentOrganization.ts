@@ -64,18 +64,15 @@ export class ContentOrganization {
   /**
    * Get recommended learning path for a category
    */
-  async getLearningPath(
-    category: LessonCategory,
-    language: string
-  ): Promise<Lesson[]> {
+  async getLearningPath(category: LessonCategory, language: string): Promise<Lesson[]> {
     const lessons = await this.contentManager.getLessons(category, language);
-    
+
     // Sort by difficulty (beginner first) and then by title
     return lessons.sort((a, b) => {
       const difficultyOrder = { beginner: 1, intermediate: 2, advanced: 3 };
       const diffA = difficultyOrder[a.difficulty];
       const diffB = difficultyOrder[b.difficulty];
-      
+
       if (diffA !== diffB) {
         return diffA - diffB;
       }
@@ -146,10 +143,7 @@ export class ContentOrganization {
   /**
    * Get category description in specified language
    */
-  private getCategoryDescription(
-    category: LessonCategory,
-    language: string
-  ): string {
+  private getCategoryDescription(category: LessonCategory, language: string): string {
     const descriptions: { [key: string]: { [lang: string]: string } } = {
       pest_management: {
         en: 'Learn to identify and control pests naturally',
@@ -223,16 +217,11 @@ export class ContentOrganization {
   /**
    * Get lessons suitable for low-literacy users
    */
-  async getLowLiteracyLessons(
-    category: LessonCategory,
-    language: string
-  ): Promise<Lesson[]> {
+  async getLowLiteracyLessons(category: LessonCategory, language: string): Promise<Lesson[]> {
     const lessons = await this.contentManager.getLessons(category, language);
-    
+
     // Filter for beginner level with visual aids
-    return lessons.filter(
-      (lesson) => lesson.difficulty === 'beginner'
-    );
+    return lessons.filter((lesson) => lesson.difficulty === 'beginner');
   }
 
   /**
@@ -247,7 +236,7 @@ export class ContentOrganization {
     for (const category of LESSON_CATEGORIES) {
       const lessons = await this.contentManager.searchLessons(keyword, language);
       const categoryLessons = lessons.filter((l) => l.category === category);
-      
+
       if (categoryLessons.length > 0) {
         results[category] = categoryLessons;
       }

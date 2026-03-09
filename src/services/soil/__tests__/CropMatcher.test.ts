@@ -37,8 +37,8 @@ describe('CropMatcher', () => {
       const matches = cropMatcher.matchCrops(soilData);
 
       expect(matches).toHaveLength(10);
-      expect(matches.every(m => m.crop)).toBe(true);
-      expect(matches.every(m => m.suitabilityScore >= 0 && m.suitabilityScore <= 100)).toBe(true);
+      expect(matches.every((m) => m.crop)).toBe(true);
+      expect(matches.every((m) => m.suitabilityScore >= 0 && m.suitabilityScore <= 100)).toBe(true);
     });
 
     it('should sort matches by suitability score descending', () => {
@@ -126,14 +126,18 @@ describe('CropMatcher', () => {
       const match = matches[0];
 
       expect(match.recommendations.length).toBeGreaterThan(0);
-      expect(match.recommendations.some(r => r.includes('pH') || r.includes('lime') || r.includes('sulfur'))).toBe(true);
+      expect(
+        match.recommendations.some(
+          (r) => r.includes('pH') || r.includes('lime') || r.includes('sulfur')
+        )
+      ).toBe(true);
     });
 
     it('should include explanation for each match', () => {
       const soilData = createSoilData();
       const matches = cropMatcher.matchCrops(soilData);
 
-      matches.forEach(match => {
+      matches.forEach((match) => {
         expect(match.explanation).toBeTruthy();
         expect(match.explanation).toContain(match.crop);
         expect(typeof match.explanation).toBe('string');
@@ -149,8 +153,8 @@ describe('CropMatcher', () => {
       const sandyMatches = cropMatcher.matchCrops(sandySoil);
 
       // Rice prefers loamy soil
-      const riceLoamy = loamyMatches.find(m => m.crop === 'Rice');
-      const riceSandy = sandyMatches.find(m => m.crop === 'Rice');
+      const riceLoamy = loamyMatches.find((m) => m.crop === 'Rice');
+      const riceSandy = sandyMatches.find((m) => m.crop === 'Rice');
 
       expect(riceLoamy!.matchDetails.soilTypeMatch).toBe(true);
       expect(riceSandy!.matchDetails.soilTypeMatch).toBe(false);
@@ -177,7 +181,9 @@ describe('CropMatcher', () => {
       const topMatches = cropMatcher.getTopMatches(soilData, 5);
 
       for (let i = 0; i < topMatches.length - 1; i++) {
-        expect(topMatches[i].suitabilityScore).toBeGreaterThanOrEqual(topMatches[i + 1].suitabilityScore);
+        expect(topMatches[i].suitabilityScore).toBeGreaterThanOrEqual(
+          topMatches[i + 1].suitabilityScore
+        );
       }
     });
   });
@@ -197,7 +203,7 @@ describe('CropMatcher', () => {
       });
 
       const matches = cropMatcher.matchCrops(soilData);
-      const rice = matches.find(m => m.crop === 'Rice');
+      const rice = matches.find((m) => m.crop === 'Rice');
 
       expect(rice).toBeDefined();
       expect(rice!.suitabilityScore).toBeGreaterThan(70);
@@ -217,7 +223,7 @@ describe('CropMatcher', () => {
       });
 
       const matches = cropMatcher.matchCrops(soilData);
-      const wheat = matches.find(m => m.crop === 'Wheat');
+      const wheat = matches.find((m) => m.crop === 'Wheat');
 
       expect(wheat).toBeDefined();
       expect(wheat!.suitabilityScore).toBeGreaterThan(70);
@@ -237,7 +243,7 @@ describe('CropMatcher', () => {
       });
 
       const matches = cropMatcher.matchCrops(soilData);
-      const cotton = matches.find(m => m.crop === 'Cotton');
+      const cotton = matches.find((m) => m.crop === 'Cotton');
 
       expect(cotton).toBeDefined();
       expect(cotton!.suitabilityScore).toBeGreaterThan(60);
@@ -260,7 +266,7 @@ describe('CropMatcher', () => {
       const matches = cropMatcher.matchCrops(soilData);
 
       expect(matches).toHaveLength(10);
-      expect(matches.every(m => m.recommendations.length > 0)).toBe(true);
+      expect(matches.every((m) => m.recommendations.length > 0)).toBe(true);
     });
 
     it('should handle extremely alkaline soil', () => {
@@ -278,7 +284,7 @@ describe('CropMatcher', () => {
       const matches = cropMatcher.matchCrops(soilData);
 
       expect(matches).toHaveLength(10);
-      expect(matches.every(m => m.recommendations.length > 0)).toBe(true);
+      expect(matches.every((m) => m.recommendations.length > 0)).toBe(true);
     });
 
     it('should handle very low nutrients', () => {
@@ -296,7 +302,7 @@ describe('CropMatcher', () => {
       const matches = cropMatcher.matchCrops(soilData);
 
       expect(matches).toHaveLength(10);
-      matches.forEach(match => {
+      matches.forEach((match) => {
         expect(match.recommendations.length).toBeGreaterThan(2);
       });
     });

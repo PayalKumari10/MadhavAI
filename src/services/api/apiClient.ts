@@ -59,10 +59,7 @@ class APIClient {
   /**
    * GET request
    */
-  async get<T = any>(
-    url: string,
-    config?: AxiosRequestConfig
-  ): Promise<AxiosResponse<T>> {
+  async get<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     return this.client.get<T>(url, config);
   }
 
@@ -91,10 +88,7 @@ class APIClient {
   /**
    * DELETE request
    */
-  async delete<T = any>(
-    url: string,
-    config?: AxiosRequestConfig
-  ): Promise<AxiosResponse<T>> {
+  async delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     return this.client.delete<T>(url, config);
   }
 

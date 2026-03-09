@@ -51,10 +51,7 @@ export const LessonBrowser: React.FC<LessonBrowserProps> = ({
   };
 
   const renderLesson = ({ item }: { item: Lesson }) => (
-    <TouchableOpacity
-      style={styles.lessonCard}
-      onPress={() => onLessonSelect(item.id)}
-    >
+    <TouchableOpacity style={styles.lessonCard} onPress={() => onLessonSelect(item.id)}>
       <View style={styles.lessonHeader}>
         <Text style={styles.lessonTitle}>{item.title}</Text>
         <View style={[styles.difficultyBadge, getDifficultyStyle(item.difficulty)]}>
@@ -63,17 +60,12 @@ export const LessonBrowser: React.FC<LessonBrowserProps> = ({
       </View>
 
       <View style={styles.lessonMeta}>
-        <Text style={styles.metaText}>
-          ⏱️ {Math.floor(item.duration / 60)} min
-        </Text>
+        <Text style={styles.metaText}>⏱️ {Math.floor(item.duration / 60)} min</Text>
         <Text style={styles.metaText}>📚 {item.category}</Text>
       </View>
 
       {onDownload && (
-        <TouchableOpacity
-          style={styles.downloadButton}
-          onPress={() => onDownload(item.id)}
-        >
+        <TouchableOpacity style={styles.downloadButton} onPress={() => onDownload(item.id)}>
           <Text style={styles.downloadText}>⬇️ Download for offline</Text>
         </TouchableOpacity>
       )}

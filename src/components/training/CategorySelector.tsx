@@ -4,13 +4,7 @@
  */
 
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { LessonCategory } from '../../types/training.types';
 
 interface CategoryInfo {
@@ -47,27 +41,18 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
         <Text style={styles.categoryName}>{category.name}</Text>
         <Text style={styles.categoryDescription}>{category.description}</Text>
         <View style={styles.lessonCountBadge}>
-          <Text style={styles.lessonCountText}>
-            {category.lessonCount} lessons
-          </Text>
+          <Text style={styles.lessonCountText}>{category.lessonCount} lessons</Text>
         </View>
       </TouchableOpacity>
     );
   };
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.contentContainer}
-    >
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       <Text style={styles.title}>Choose a Topic</Text>
-      <Text style={styles.subtitle}>
-        Select a category to start learning
-      </Text>
+      <Text style={styles.subtitle}>Select a category to start learning</Text>
 
-      <View style={styles.grid}>
-        {categories.map(renderCategory)}
-      </View>
+      <View style={styles.grid}>{categories.map(renderCategory)}</View>
     </ScrollView>
   );
 };

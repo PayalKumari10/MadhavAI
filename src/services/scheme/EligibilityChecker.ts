@@ -1,7 +1,7 @@
 /**
  * Eligibility Checker Service
  * Requirements: 2.2, 2.4
- * 
+ *
  * Analyzes user profile against scheme eligibility criteria
  */
 
@@ -38,29 +38,37 @@ export class EligibilityChecker {
     // Check farm size
     if (criteria.minFarmSize !== undefined || criteria.maxFarmSize !== undefined) {
       const farmSize = userProfile.farmSize;
-      
+
       if (criteria.minFarmSize !== undefined && farmSize < criteria.minFarmSize) {
         isEligible = false;
-        reasons.push(`Farm size (${farmSize} acres) is below minimum requirement (${criteria.minFarmSize} acres)`);
+        reasons.push(
+          `Farm size (${farmSize} acres) is below minimum requirement (${criteria.minFarmSize} acres)`
+        );
       }
-      
+
       if (criteria.maxFarmSize !== undefined && farmSize > criteria.maxFarmSize) {
         isEligible = false;
-        reasons.push(`Farm size (${farmSize} acres) exceeds maximum limit (${criteria.maxFarmSize} acres)`);
+        reasons.push(
+          `Farm size (${farmSize} acres) exceeds maximum limit (${criteria.maxFarmSize} acres)`
+        );
       }
-      
+
       if (isEligible && criteria.minFarmSize !== undefined && criteria.maxFarmSize !== undefined) {
-        reasons.push(`Farm size (${farmSize} acres) meets requirements (${criteria.minFarmSize}-${criteria.maxFarmSize} acres)`);
+        reasons.push(
+          `Farm size (${farmSize} acres) meets requirements (${criteria.minFarmSize}-${criteria.maxFarmSize} acres)`
+        );
       }
     }
 
     // Check location (state)
     if (criteria.allowedStates && criteria.allowedStates.length > 0) {
       const userState = userProfile.location.state;
-      
+
       if (!criteria.allowedStates.includes(userState)) {
         isEligible = false;
-        reasons.push(`Scheme not available in ${userState}. Available in: ${criteria.allowedStates.join(', ')}`);
+        reasons.push(
+          `Scheme not available in ${userState}. Available in: ${criteria.allowedStates.join(', ')}`
+        );
       } else {
         reasons.push(`Location (${userState}) is eligible`);
       }
@@ -69,10 +77,14 @@ export class EligibilityChecker {
     // Check location (district)
     if (criteria.allowedDistricts && criteria.allowedDistricts.length > 0) {
       const userDistrict = userProfile.location.district;
-      
+
       if (!criteria.allowedDistricts.includes(userDistrict)) {
         isEligible = false;
-        reasons.push(`Scheme not available in ${userDistrict} district. Available in: ${criteria.allowedDistricts.join(', ')}`);
+        reasons.push(
+          `Scheme not available in ${userDistrict} district. Available in: ${criteria.allowedDistricts.join(
+            ', '
+          )}`
+        );
       } else {
         reasons.push(`District (${userDistrict}) is eligible`);
       }
@@ -81,11 +93,15 @@ export class EligibilityChecker {
     // Check crops
     if (criteria.allowedCrops && criteria.allowedCrops.length > 0) {
       const userCrops = userProfile.primaryCrops;
-      const matchingCrops = userCrops.filter(crop => criteria.allowedCrops!.includes(crop));
-      
+      const matchingCrops = userCrops.filter((crop) => criteria.allowedCrops!.includes(crop));
+
       if (matchingCrops.length === 0) {
         isEligible = false;
-        reasons.push(`None of your crops (${userCrops.join(', ')}) are eligible. Eligible crops: ${criteria.allowedCrops.join(', ')}`);
+        reasons.push(
+          `None of your crops (${userCrops.join(
+            ', '
+          )}) are eligible. Eligible crops: ${criteria.allowedCrops.join(', ')}`
+        );
       } else {
         reasons.push(`Your crops (${matchingCrops.join(', ')}) are eligible`);
       }
@@ -94,10 +110,14 @@ export class EligibilityChecker {
     // Check farmer category (based on farm size)
     if (criteria.farmerCategory && criteria.farmerCategory.length > 0) {
       const category = this.determineFarmerCategory(userProfile.farmSize);
-      
+
       if (!criteria.farmerCategory.includes(category)) {
         isEligible = false;
-        reasons.push(`Farmer category (${category}) not eligible. Eligible categories: ${criteria.farmerCategory.join(', ')}`);
+        reasons.push(
+          `Farmer category (${category}) not eligible. Eligible categories: ${criteria.farmerCategory.join(
+            ', '
+          )}`
+        );
       } else {
         reasons.push(`Farmer category (${category}) is eligible`);
       }
@@ -141,7 +161,7 @@ export class EligibilityChecker {
    * Check eligibility for multiple schemes
    */
   checkMultipleSchemes(schemes: Scheme[], userProfile: UserProfile): EligibilityResult[] {
-    return schemes.map(scheme => this.checkEligibility(scheme, userProfile));
+    return schemes.map((scheme) => this.checkEligibility(scheme, userProfile));
   }
 
   /**
@@ -150,29 +170,25 @@ export class EligibilityChecker {
   getEligibleSchemes(schemes: Scheme[], userProfile: UserProfile): Scheme[] {
     const results = this.checkMultipleSchemes(schemes, userProfile);
     const eligibleSchemeIds = results
-      .filter(result => result.isEligible)
-      .map(result => result.schemeId);
-    
-    return schemes.filter(scheme => eligibleSchemeIds.includes(scheme.id));
+      .filter((result) => result.isEligible)
+      .map((result) => result.schemeId);
+
+    return schemes.filter((scheme) => eligibleSchemeIds.includes(scheme.id));
   }
 
   /**
    * Get alternative schemes for ineligible users
    */
-  getAlternativeSchemes(
-    scheme: Scheme,
-    userProfile: UserProfile,
-    allSchemes: Scheme[]
-  ): Scheme[] {
+  getAlternativeSchemes(scheme: Scheme, userProfile: UserProfile, allSchemes: Scheme[]): Scheme[] {
     // Check if user is eligible for the original scheme
     const eligibilityResult = this.checkEligibility(scheme, userProfile);
-    
+
     if (eligibilityResult.isEligible) {
       return []; // No alternatives needed
     }
 
     // Find schemes in the same category
-    const alternatives = allSchemes.filter(s => {
+    const alternatives = allSchemes.filter((s) => {
       // Skip the original scheme
       if (s.id === scheme.id) {
         return false;
@@ -189,14 +205,14 @@ export class EligibilityChecker {
     });
 
     // Sort by confidence
-    const alternativesWithEligibility = alternatives.map(alt => ({
+    const alternativesWithEligibility = alternatives.map((alt) => ({
       scheme: alt,
       eligibility: this.checkEligibility(alt, userProfile),
     }));
 
     alternativesWithEligibility.sort((a, b) => b.eligibility.confidence - a.eligibility.confidence);
 
-    return alternativesWithEligibility.map(a => a.scheme);
+    return alternativesWithEligibility.map((a) => a.scheme);
   }
 
   /**
@@ -221,21 +237,21 @@ export class EligibilityChecker {
    */
   getEligibilityExplanation(scheme: Scheme, userProfile: UserProfile): string {
     const result = this.checkEligibility(scheme, userProfile);
-    
+
     const parts: string[] = [];
-    
+
     if (result.isEligible) {
       parts.push(`You are eligible for ${scheme.name}.`);
       parts.push('');
       parts.push('Eligibility details:');
-      result.reasons.forEach(reason => {
+      result.reasons.forEach((reason) => {
         parts.push(`• ${reason}`);
       });
-      
+
       if (result.missingCriteria && result.missingCriteria.length > 0) {
         parts.push('');
         parts.push('Note: Some information is missing, which may affect final eligibility:');
-        result.missingCriteria.forEach(criteria => {
+        result.missingCriteria.forEach((criteria) => {
           parts.push(`• ${criteria}`);
         });
       }
@@ -243,19 +259,19 @@ export class EligibilityChecker {
       parts.push(`You are not eligible for ${scheme.name}.`);
       parts.push('');
       parts.push('Reasons:');
-      result.reasons.forEach(reason => {
+      result.reasons.forEach((reason) => {
         parts.push(`• ${reason}`);
       });
-      
+
       if (result.alternativeSchemes && result.alternativeSchemes.length > 0) {
         parts.push('');
         parts.push('You may be eligible for these alternative schemes:');
-        result.alternativeSchemes.forEach(altId => {
+        result.alternativeSchemes.forEach((altId) => {
           parts.push(`• Scheme ID: ${altId}`);
         });
       }
     }
-    
+
     return parts.join('\n');
   }
 }

@@ -81,7 +81,9 @@ describe('MarketPriceDisplay', () => {
   });
 
   it('should display current prices', async () => {
-    const { getByText, getAllByText } = render(<MarketPriceDisplay latitude={12.9716} longitude={77.5946} />);
+    const { getByText, getAllByText } = render(
+      <MarketPriceDisplay latitude={12.9716} longitude={77.5946} />
+    );
 
     await waitFor(() => {
       expect(getByText('Current Prices')).toBeTruthy();

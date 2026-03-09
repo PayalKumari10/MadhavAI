@@ -47,11 +47,7 @@ class AuthenticationManager {
    * @param deviceId - Device identifier
    * @returns Login result with auth token if successful
    */
-  async verifyOTP(
-    mobileNumber: string,
-    otp: string,
-    deviceId: string
-  ): Promise<LoginResult> {
+  async verifyOTP(mobileNumber: string, otp: string, deviceId: string): Promise<LoginResult> {
     try {
       // Validate OTP
       const validation = otpService.validateOTP(mobileNumber, otp);
@@ -82,7 +78,7 @@ class AuthenticationManager {
       // 1. Check if user exists in database
       // 2. Create user if first-time registration
       // 3. Get userId from database
-      
+
       // For now, use mobile number as userId (mock)
       const userId = `user_${mobileNumber}`;
 

@@ -38,7 +38,7 @@ class SpeechRecognizer {
    */
   async startListening(
     language: SupportedLanguage,
-    _options?: Partial<VoiceRecognitionOptions>,
+    _options?: Partial<VoiceRecognitionOptions>
   ): Promise<void> {
     if (this.isListening) {
       throw new Error('Already listening');

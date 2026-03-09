@@ -150,7 +150,7 @@ describe('SchemeService', () => {
     it('should filter schemes by state', async () => {
       // Create a fresh service instance for this test
       const testService = new SchemeService();
-      
+
       const mockCache = {
         schemes: mockSchemes,
         lastUpdated: new Date(),
@@ -160,13 +160,13 @@ describe('SchemeService', () => {
       const schemes = await testService.getSchemesByLocation('Maharashtra');
 
       expect(schemes).toHaveLength(2); // PM-KISAN and Crop Insurance (no state restriction)
-      expect(schemes.some(s => s.id === 'scheme-001')).toBe(true);
+      expect(schemes.some((s) => s.id === 'scheme-001')).toBe(true);
     });
 
     it('should filter schemes by state and district', async () => {
       // Create a fresh service instance for this test
       const testService = new SchemeService();
-      
+
       const mockCache = {
         schemes: mockSchemes,
         lastUpdated: new Date(),
@@ -176,13 +176,13 @@ describe('SchemeService', () => {
       const schemes = await testService.getSchemesByLocation('Karnataka', 'Bangalore');
 
       expect(schemes).toHaveLength(2); // Organic Farming and Crop Insurance
-      expect(schemes.some(s => s.id === 'scheme-003')).toBe(true);
+      expect(schemes.some((s) => s.id === 'scheme-003')).toBe(true);
     });
 
     it('should include schemes with no location restriction', async () => {
       // Create a fresh service instance for this test
       const testService = new SchemeService();
-      
+
       const mockCache = {
         schemes: mockSchemes,
         lastUpdated: new Date(),

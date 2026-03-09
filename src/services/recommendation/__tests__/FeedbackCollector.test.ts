@@ -114,14 +114,10 @@ describe('FeedbackCollector', () => {
         {},
         { season: 'kharif', location: 'Punjab' }
       );
-      await collector.collectRejectedFeedback(
-        'user-123',
-        'seed',
-        'rec-2',
-        {},
-        'Not suitable',
-        { season: 'rabi', location: 'Punjab' }
-      );
+      await collector.collectRejectedFeedback('user-123', 'seed', 'rec-2', {}, 'Not suitable', {
+        season: 'rabi',
+        location: 'Punjab',
+      });
       await collector.collectAcceptedFeedback(
         'user-456',
         'crop',
@@ -204,14 +200,10 @@ describe('FeedbackCollector', () => {
         {},
         { season: 'kharif', location: 'Punjab' }
       );
-      await collector.collectRejectedFeedback(
-        'user-3',
-        'crop',
-        'rec-3',
-        {},
-        'Not suitable',
-        { season: 'kharif', location: 'Punjab' }
-      );
+      await collector.collectRejectedFeedback('user-3', 'crop', 'rec-3', {}, 'Not suitable', {
+        season: 'kharif',
+        location: 'Punjab',
+      });
       await collector.collectModifiedFeedback(
         'user-4',
         'crop',

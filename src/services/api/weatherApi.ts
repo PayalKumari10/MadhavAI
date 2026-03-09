@@ -78,7 +78,10 @@ class WeatherAPI {
    * Get current weather for location
    * GET /weather/current
    */
-  async getCurrentWeather(latitude: number, longitude: number): Promise<WeatherForecast['current']> {
+  async getCurrentWeather(
+    latitude: number,
+    longitude: number
+  ): Promise<WeatherForecast['current']> {
     try {
       const request: WeatherRequest = { latitude, longitude };
       const response = await this.client.get<WeatherForecast['current']>('/weather/current', {

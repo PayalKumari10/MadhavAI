@@ -101,8 +101,12 @@ export class ExplainabilityEngine {
       const soilHealth = context.computed.soilHealthRating;
       factors.push({
         name: 'Soil Condition',
-        impact: soilHealth === 'good' || soilHealth === 'excellent' ? 'positive' : 
-                soilHealth === 'poor' ? 'negative' : 'neutral',
+        impact:
+          soilHealth === 'good' || soilHealth === 'excellent'
+            ? 'positive'
+            : soilHealth === 'poor'
+            ? 'negative'
+            : 'neutral',
         weight: 0.25,
         description: `Your soil is in ${soilHealth} condition for this crop`,
       });
@@ -113,14 +117,15 @@ export class ExplainabilityEngine {
       const weatherRisk = context.computed.weatherRisk;
       factors.push({
         name: 'Weather',
-        impact: weatherRisk === 'low' ? 'positive' : 
-                weatherRisk === 'high' ? 'negative' : 'neutral',
-        weight: 0.20,
-        description: weatherRisk === 'low' 
-          ? 'Weather conditions are favorable'
-          : weatherRisk === 'high'
-          ? 'Weather conditions need careful monitoring'
-          : 'Weather conditions are moderate',
+        impact:
+          weatherRisk === 'low' ? 'positive' : weatherRisk === 'high' ? 'negative' : 'neutral',
+        weight: 0.2,
+        description:
+          weatherRisk === 'low'
+            ? 'Weather conditions are favorable'
+            : weatherRisk === 'high'
+            ? 'Weather conditions need careful monitoring'
+            : 'Weather conditions are moderate',
       });
     }
 
@@ -129,14 +134,19 @@ export class ExplainabilityEngine {
       const marketOpp = context.computed.marketOpportunity;
       factors.push({
         name: 'Market Price',
-        impact: marketOpp === 'favorable' ? 'positive' : 
-                marketOpp === 'unfavorable' ? 'negative' : 'neutral',
-        weight: 0.20,
-        description: marketOpp === 'favorable'
-          ? 'Current market prices are good'
-          : marketOpp === 'unfavorable'
-          ? 'Market prices are currently low'
-          : 'Market prices are stable',
+        impact:
+          marketOpp === 'favorable'
+            ? 'positive'
+            : marketOpp === 'unfavorable'
+            ? 'negative'
+            : 'neutral',
+        weight: 0.2,
+        description:
+          marketOpp === 'favorable'
+            ? 'Current market prices are good'
+            : marketOpp === 'unfavorable'
+            ? 'Market prices are currently low'
+            : 'Market prices are stable',
       });
     }
 
@@ -145,7 +155,7 @@ export class ExplainabilityEngine {
     factors.push({
       name: 'Farm Size',
       impact: 'neutral',
-      weight: 0.10,
+      weight: 0.1,
       description: `Suitable for ${farmSize} farms like yours`,
     });
 
@@ -177,14 +187,18 @@ export class ExplainabilityEngine {
         name: 'Nitrogen Level',
         impact: 'negative',
         weight: 0.35,
-        description: `Your soil has low nitrogen (${Math.round(parameters.nitrogen)} kg/ha). Plants need nitrogen for healthy leaf growth`,
+        description: `Your soil has low nitrogen (${Math.round(
+          parameters.nitrogen
+        )} kg/ha). Plants need nitrogen for healthy leaf growth`,
       });
     } else if (parameters.nitrogen > 400) {
       factors.push({
         name: 'Nitrogen Level',
         impact: 'positive',
         weight: 0.35,
-        description: `Your soil has good nitrogen (${Math.round(parameters.nitrogen)} kg/ha). Use fertilizer carefully to avoid excess`,
+        description: `Your soil has good nitrogen (${Math.round(
+          parameters.nitrogen
+        )} kg/ha). Use fertilizer carefully to avoid excess`,
       });
     }
 
@@ -193,14 +207,16 @@ export class ExplainabilityEngine {
       factors.push({
         name: 'Phosphorus Level',
         impact: 'negative',
-        weight: 0.30,
-        description: `Your soil has low phosphorus (${Math.round(parameters.phosphorus)} kg/ha). Plants need phosphorus for strong roots`,
+        weight: 0.3,
+        description: `Your soil has low phosphorus (${Math.round(
+          parameters.phosphorus
+        )} kg/ha). Plants need phosphorus for strong roots`,
       });
     } else if (parameters.phosphorus > 50) {
       factors.push({
         name: 'Phosphorus Level',
         impact: 'positive',
-        weight: 0.30,
+        weight: 0.3,
         description: `Your soil has good phosphorus (${Math.round(parameters.phosphorus)} kg/ha)`,
       });
     }
@@ -211,7 +227,9 @@ export class ExplainabilityEngine {
         name: 'Potassium Level',
         impact: 'negative',
         weight: 0.25,
-        description: `Your soil has low potassium (${Math.round(parameters.potassium)} kg/ha). Plants need potassium for disease resistance`,
+        description: `Your soil has low potassium (${Math.round(
+          parameters.potassium
+        )} kg/ha). Plants need potassium for disease resistance`,
       });
     } else if (parameters.potassium > 400) {
       factors.push({
@@ -227,7 +245,7 @@ export class ExplainabilityEngine {
       factors.push({
         name: 'Soil Health',
         impact: 'negative',
-        weight: 0.10,
+        weight: 0.1,
         description: 'Your soil needs more organic matter. Consider using compost or manure',
       });
     }
@@ -246,7 +264,7 @@ export class ExplainabilityEngine {
     factors.push({
       name: 'Planting Season',
       impact: 'positive',
-      weight: 0.30,
+      weight: 0.3,
       description: `Right time to plant for ${context.currentSeason} season`,
     });
 
@@ -273,7 +291,7 @@ export class ExplainabilityEngine {
     factors.push({
       name: 'Expected Yield',
       impact: 'positive',
-      weight: 0.20,
+      weight: 0.2,
       description: 'Good yield potential for your area',
     });
 
@@ -298,21 +316,25 @@ export class ExplainabilityEngine {
       factors.push({
         name: 'Soil Acidity',
         impact: 'negative',
-        weight: 0.30,
-        description: `Your soil is acidic (pH ${parameters.pH.toFixed(1)}). Add lime to reduce acidity`,
+        weight: 0.3,
+        description: `Your soil is acidic (pH ${parameters.pH.toFixed(
+          1
+        )}). Add lime to reduce acidity`,
       });
     } else if (parameters.pH > 8.0) {
       factors.push({
         name: 'Soil Alkalinity',
         impact: 'negative',
-        weight: 0.30,
-        description: `Your soil is alkaline (pH ${parameters.pH.toFixed(1)}). Add organic matter to balance`,
+        weight: 0.3,
+        description: `Your soil is alkaline (pH ${parameters.pH.toFixed(
+          1
+        )}). Add organic matter to balance`,
       });
     } else {
       factors.push({
         name: 'Soil pH',
         impact: 'positive',
-        weight: 0.30,
+        weight: 0.3,
         description: `Your soil pH (${parameters.pH.toFixed(1)}) is good for most crops`,
       });
     }
@@ -327,14 +349,14 @@ export class ExplainabilityEngine {
       factors.push({
         name: 'Nutrient Levels',
         impact: 'negative',
-        weight: 0.40,
+        weight: 0.4,
         description: `Your soil needs more ${nutrientIssues.join(', ')}`,
       });
     } else {
       factors.push({
         name: 'Nutrient Levels',
         impact: 'positive',
-        weight: 0.40,
+        weight: 0.4,
         description: 'Your soil has good nutrient levels',
       });
     }
@@ -344,14 +366,14 @@ export class ExplainabilityEngine {
       factors.push({
         name: 'Organic Matter',
         impact: 'negative',
-        weight: 0.30,
+        weight: 0.3,
         description: 'Your soil needs more organic matter. Add compost or farmyard manure',
       });
     } else {
       factors.push({
         name: 'Organic Matter',
         impact: 'positive',
-        weight: 0.30,
+        weight: 0.3,
         description: 'Your soil has good organic matter content',
       });
     }
@@ -377,21 +399,25 @@ export class ExplainabilityEngine {
       factors.push({
         name: 'Heavy Rain Expected',
         impact: 'negative',
-        weight: 0.40,
-        description: `Heavy rain (${Math.round(forecast.precipitation.amount)}mm) expected. Delay field work`,
+        weight: 0.4,
+        description: `Heavy rain (${Math.round(
+          forecast.precipitation.amount
+        )}mm) expected. Delay field work`,
       });
     } else if (forecast.precipitation.amount > 10) {
       factors.push({
         name: 'Rain Expected',
         impact: 'neutral',
-        weight: 0.30,
-        description: `Light rain (${Math.round(forecast.precipitation.amount)}mm) expected. Plan accordingly`,
+        weight: 0.3,
+        description: `Light rain (${Math.round(
+          forecast.precipitation.amount
+        )}mm) expected. Plan accordingly`,
       });
     } else {
       factors.push({
         name: 'Dry Weather',
         impact: 'positive',
-        weight: 0.30,
+        weight: 0.3,
         description: 'Good weather for field activities',
       });
     }
@@ -401,15 +427,19 @@ export class ExplainabilityEngine {
       factors.push({
         name: 'High Temperature',
         impact: 'negative',
-        weight: 0.30,
-        description: `Very hot (${Math.round(forecast.temperature.max)}°C). Ensure adequate irrigation`,
+        weight: 0.3,
+        description: `Very hot (${Math.round(
+          forecast.temperature.max
+        )}°C). Ensure adequate irrigation`,
       });
     } else if (forecast.temperature.min < 10) {
       factors.push({
         name: 'Low Temperature',
         impact: 'negative',
-        weight: 0.30,
-        description: `Cold weather (${Math.round(forecast.temperature.min)}°C). Protect sensitive crops`,
+        weight: 0.3,
+        description: `Cold weather (${Math.round(
+          forecast.temperature.min
+        )}°C). Protect sensitive crops`,
       });
     }
 
@@ -418,7 +448,7 @@ export class ExplainabilityEngine {
       factors.push({
         name: 'High Humidity',
         impact: 'negative',
-        weight: 0.20,
+        weight: 0.2,
         description: 'High humidity increases disease risk. Monitor crops closely',
       });
     }
@@ -428,7 +458,7 @@ export class ExplainabilityEngine {
       factors.push({
         name: 'Strong Wind',
         impact: 'negative',
-        weight: 0.20,
+        weight: 0.2,
         description: 'Strong winds expected. Avoid spraying pesticides',
       });
     }
@@ -447,8 +477,8 @@ export class ExplainabilityEngine {
     let confidence = context.computed.recommendationReadiness;
 
     // Adjust based on factor consistency
-    const positiveFactors = factors.filter(f => f.impact === 'positive').length;
-    const negativeFactors = factors.filter(f => f.impact === 'negative').length;
+    const positiveFactors = factors.filter((f) => f.impact === 'positive').length;
+    const negativeFactors = factors.filter((f) => f.impact === 'negative').length;
     const totalFactors = factors.length;
 
     if (totalFactors > 0) {
@@ -466,26 +496,23 @@ export class ExplainabilityEngine {
   /**
    * Generate clear reasoning in simple language
    */
-  private generateReasoning(
-    input: ExplanationInput,
-    factors: ExplanationFactor[]
-  ): string {
+  private generateReasoning(input: ExplanationInput, factors: ExplanationFactor[]): string {
     const parts: string[] = [];
 
     // Start with recommendation statement
     parts.push(`We recommend ${input.recommendationName} for your farm.`);
 
     // Add key positive factors
-    const positiveFactors = factors.filter(f => f.impact === 'positive').slice(0, 2);
+    const positiveFactors = factors.filter((f) => f.impact === 'positive').slice(0, 2);
     if (positiveFactors.length > 0) {
-      const reasons = positiveFactors.map(f => f.description.toLowerCase());
+      const reasons = positiveFactors.map((f) => f.description.toLowerCase());
       parts.push(`This is good because ${reasons.join(' and ')}.`);
     }
 
     // Add key concerns if any
-    const negativeFactors = factors.filter(f => f.impact === 'negative').slice(0, 2);
+    const negativeFactors = factors.filter((f) => f.impact === 'negative').slice(0, 2);
     if (negativeFactors.length > 0) {
-      const concerns = negativeFactors.map(f => f.description);
+      const concerns = negativeFactors.map((f) => f.description);
       parts.push(`Please note: ${concerns.join('. ')}.`);
     }
 
@@ -514,12 +541,9 @@ export class ExplainabilityEngine {
   /**
    * Generate concise summary
    */
-  private generateSummary(
-    input: ExplanationInput,
-    factors: ExplanationFactor[]
-  ): string {
-    const positiveCount = factors.filter(f => f.impact === 'positive').length;
-    const negativeCount = factors.filter(f => f.impact === 'negative').length;
+  private generateSummary(input: ExplanationInput, factors: ExplanationFactor[]): string {
+    const positiveCount = factors.filter((f) => f.impact === 'positive').length;
+    const negativeCount = factors.filter((f) => f.impact === 'negative').length;
 
     if (positiveCount > negativeCount) {
       return `${input.recommendationName} is a good choice for your farm based on current conditions.`;

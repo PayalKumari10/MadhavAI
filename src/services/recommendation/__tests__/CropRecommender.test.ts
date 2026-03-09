@@ -293,9 +293,7 @@ describe('CropRecommender', () => {
       expect(yieldEst.unit).toBeDefined();
       expect(yieldEst.expectedRevenue).toBeDefined();
       expect(yieldEst.expectedRevenue.min).toBeGreaterThan(0);
-      expect(yieldEst.expectedRevenue.max).toBeGreaterThanOrEqual(
-        yieldEst.expectedRevenue.min
-      );
+      expect(yieldEst.expectedRevenue.max).toBeGreaterThanOrEqual(yieldEst.expectedRevenue.min);
     });
 
     it('should order activities by days from sowing', async () => {
@@ -303,9 +301,7 @@ describe('CropRecommender', () => {
       const activities = recommendations[0].cultivationPlan.activities;
 
       for (let i = 0; i < activities.length - 1; i++) {
-        expect(activities[i].daysFromSowing).toBeLessThanOrEqual(
-          activities[i + 1].daysFromSowing
-        );
+        expect(activities[i].daysFromSowing).toBeLessThanOrEqual(activities[i + 1].daysFromSowing);
       }
     });
   });

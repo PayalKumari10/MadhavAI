@@ -88,7 +88,7 @@ describe('EligibilityChecker', () => {
       const result = checker.checkEligibility(scheme, mockUserProfile);
 
       expect(result.isEligible).toBe(false);
-      expect(result.reasons.some(r => r.includes('below minimum'))).toBe(true);
+      expect(result.reasons.some((r) => r.includes('below minimum'))).toBe(true);
     });
 
     it('should check farm size maximum', () => {
@@ -102,7 +102,7 @@ describe('EligibilityChecker', () => {
       const result = checker.checkEligibility(scheme, mockUserProfile);
 
       expect(result.isEligible).toBe(false);
-      expect(result.reasons.some(r => r.includes('exceeds maximum'))).toBe(true);
+      expect(result.reasons.some((r) => r.includes('exceeds maximum'))).toBe(true);
     });
 
     it('should check state eligibility', () => {
@@ -116,7 +116,7 @@ describe('EligibilityChecker', () => {
       const result = checker.checkEligibility(scheme, mockUserProfile);
 
       expect(result.isEligible).toBe(false);
-      expect(result.reasons.some(r => r.includes('not available in Maharashtra'))).toBe(true);
+      expect(result.reasons.some((r) => r.includes('not available in Maharashtra'))).toBe(true);
     });
 
     it('should check district eligibility', () => {
@@ -130,7 +130,7 @@ describe('EligibilityChecker', () => {
       const result = checker.checkEligibility(scheme, mockUserProfile);
 
       expect(result.isEligible).toBe(false);
-      expect(result.reasons.some(r => r.includes('not available in Pune'))).toBe(true);
+      expect(result.reasons.some((r) => r.includes('not available in Pune'))).toBe(true);
     });
 
     it('should check crop eligibility', () => {
@@ -144,7 +144,7 @@ describe('EligibilityChecker', () => {
       const result = checker.checkEligibility(scheme, mockUserProfile);
 
       expect(result.isEligible).toBe(false);
-      expect(result.reasons.some(r => r.includes('None of your crops'))).toBe(true);
+      expect(result.reasons.some((r) => r.includes('None of your crops'))).toBe(true);
     });
 
     it('should check farmer category', () => {
@@ -158,7 +158,7 @@ describe('EligibilityChecker', () => {
       const result = checker.checkEligibility(scheme, mockUserProfile);
 
       expect(result.isEligible).toBe(false);
-      expect(result.reasons.some(r => r.includes('category'))).toBe(true);
+      expect(result.reasons.some((r) => r.includes('category'))).toBe(true);
     });
 
     it('should reduce confidence for missing farm size', () => {
@@ -226,9 +226,9 @@ describe('EligibilityChecker', () => {
       const eligible = checker.getEligibleSchemes(schemes, mockUserProfile);
 
       expect(eligible).toHaveLength(2);
-      expect(eligible.some(s => s.id === 'scheme-001')).toBe(true);
-      expect(eligible.some(s => s.id === 'scheme-003')).toBe(true);
-      expect(eligible.some(s => s.id === 'scheme-002')).toBe(false);
+      expect(eligible.some((s) => s.id === 'scheme-001')).toBe(true);
+      expect(eligible.some((s) => s.id === 'scheme-003')).toBe(true);
+      expect(eligible.some((s) => s.id === 'scheme-002')).toBe(false);
     });
 
     it('should return empty array if no schemes are eligible', () => {
@@ -289,11 +289,7 @@ describe('EligibilityChecker', () => {
     it('should return empty array if user is eligible', () => {
       const allSchemes = [mockScheme];
 
-      const alternatives = checker.getAlternativeSchemes(
-        mockScheme,
-        mockUserProfile,
-        allSchemes
-      );
+      const alternatives = checker.getAlternativeSchemes(mockScheme, mockUserProfile, allSchemes);
 
       expect(alternatives).toHaveLength(0);
     });

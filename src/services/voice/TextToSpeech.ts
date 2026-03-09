@@ -4,7 +4,7 @@
  * Supports voice output in all 10 regional languages
  */
 
-import {SupportedLanguage, TextToSpeechOptions} from '../../types/voice.types';
+import { SupportedLanguage, TextToSpeechOptions } from '../../types/voice.types';
 
 /**
  * Text-to-speech service for voice output
@@ -33,7 +33,11 @@ class TextToSpeech {
   /**
    * Speak the given text
    */
-  async speak(text: string, language: SupportedLanguage, options?: Partial<TextToSpeechOptions>): Promise<void> {
+  async speak(
+    text: string,
+    language: SupportedLanguage,
+    options?: Partial<TextToSpeechOptions>
+  ): Promise<void> {
     if (this.isSpeaking) {
       await this.stop();
     }

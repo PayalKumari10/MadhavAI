@@ -5,18 +5,52 @@ on:
     branches:
       - main
       - develop
+    paths:
+      - 'infrastructure/**'
+      - 'backend/**'
+      - 'lambda/**'
+      - 'amplify/backend/**'
   pull_request:
     branches:
       - main
       - develop
+    paths:
+      - 'infrastructure/**'
+      - 'backend/**'
+      - 'lambda/**'
+      - 'amplify/backend/**'
 
 env:
   NODE_VERSION: '22.11.0'
   AWS_REGION: ap-south-1
 
 jobs:
+  check-backend-exists:
+    name: Check Backend Code
+    runs-on: ubuntu-latest
+    outputs:
+      has_backend: ${{ steps.check.outputs.has_backend }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Check for backend directories
+        id: check
+        run: |
+          if [ -d "infrastructure/terraform" ] || [ -d "backend" ] || [ -d "lambda" ]; then
+            echo "has_backend=true" >> $GITHUB_OUTPUT
+            echo "✅ Backend code found"
+          else
+            echo "has_backend=false" >> $GITHUB_OUTPUT
+            echo "⚠️  No backend infrastructure code found. Skipping backend CI/CD."
+            echo "This is a mobile-only repository. Backend deployment is not applicable."
+          fi
+
   build-and-test:
     name: Build and Test
+    needs: check-backend-exists
+    if: needs.check-backend-exists.outputs.has_backend == 'true'
     runs-on: ubuntu-latest
     
     steps:
@@ -58,6 +92,8 @@ jobs:
 
   security-scan:
     name: Security Scan
+    needs: check-backend-exists
+    if: needs.check-backend-exists.outputs.has_backend == 'true'
     runs-on: ubuntu-latest
     
     steps:
@@ -75,9 +111,9 @@ jobs:
 
   deploy-staging:
     name: Deploy to Staging
-    needs: [build-and-test, security-scan]
+    needs: [check-backend-exists, build-and-test, security-scan]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/develop' && needs.check-backend-exists.outputs.has_backend == 'true'
     environment: staging
     
     steps:
@@ -125,9 +161,9 @@ jobs:
 
   deploy-production:
     name: Deploy to Production
-    needs: [build-and-test, security-scan]
+    needs: [check-backend-exists, build-and-test, security-scan]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && needs.check-backend-exists.outputs.has_backend == 'true'
     environment: production
     
     steps:

@@ -128,7 +128,7 @@ class VoiceService {
 
     // Wait for speech recognition to complete
     // In production, this would be event-driven
-    await new Promise<void>(resolve => setTimeout(resolve, 3000));
+    await new Promise<void>((resolve) => setTimeout(resolve, 3000));
 
     const transcript = await this.stopListening();
 

@@ -3,7 +3,11 @@
  * Loads translation files and initializes translation storage
  */
 
-import {LanguageCode, TranslationCategory, TranslationContent} from '../../types/translation.types';
+import {
+  LanguageCode,
+  TranslationCategory,
+  TranslationContent,
+} from '../../types/translation.types';
 import TranslationStorage from './TranslationStorage';
 import TranslationContentManager from './TranslationContentManager';
 
@@ -22,7 +26,7 @@ class TranslationLoader {
   async loadBundledTranslations(): Promise<void> {
     // Load UI translations
     await this.loadUITranslations();
-    
+
     // Additional categories can be loaded here
     // await this.loadAlertTranslations();
     // await this.loadRecommendationTranslations();
@@ -32,23 +36,23 @@ class TranslationLoader {
    * Load UI translations for all languages
    */
   private async loadUITranslations(): Promise<void> {
-    const uiTranslations: {[key in LanguageCode]?: TranslationContent} = {
+    const uiTranslations: { [key in LanguageCode]?: TranslationContent } = {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       hi: require('./translations/ui.hi.json'),
       // Other languages would be loaded here
     };
 
-    await this.contentManager.bulkImport(
-      TranslationCategory.UI,
-      uiTranslations,
-      '1.0.0'
-    );
+    await this.contentManager.bulkImport(TranslationCategory.UI, uiTranslations, '1.0.0');
   }
 
   /**
    * Check if translations need update
    */
-  async needsUpdate(language: LanguageCode, category: TranslationCategory, version: string): Promise<boolean> {
+  async needsUpdate(
+    language: LanguageCode,
+    category: TranslationCategory,
+    version: string
+  ): Promise<boolean> {
     const currentVersion = await this.storage.getVersion(language, category);
     return !currentVersion || currentVersion !== version;
   }

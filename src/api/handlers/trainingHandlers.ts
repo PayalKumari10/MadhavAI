@@ -19,9 +19,7 @@ const CONTENT_BUCKET = process.env.CONTENT_BUCKET || 'farmer-platform-training-c
 /**
  * Get lessons by category and language
  */
-export async function getLessons(
-  event: APIGatewayProxyEvent
-): Promise<APIGatewayProxyResult> {
+export async function getLessons(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
   try {
     const category = event.queryStringParameters?.category;
     const language = event.queryStringParameters?.language || 'hi';
@@ -66,9 +64,7 @@ export async function getLessons(
 /**
  * Get lesson detail by ID
  */
-export async function getLesson(
-  event: APIGatewayProxyEvent
-): Promise<APIGatewayProxyResult> {
+export async function getLesson(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
   try {
     const lessonId = event.pathParameters?.lessonId;
     const language = event.queryStringParameters?.language || 'hi';
@@ -164,9 +160,7 @@ export async function markLessonComplete(
 /**
  * Get user's learning progress
  */
-export async function getUserProgress(
-  event: APIGatewayProxyEvent
-): Promise<APIGatewayProxyResult> {
+export async function getUserProgress(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
   try {
     const userId = event.pathParameters?.userId;
 
@@ -206,8 +200,9 @@ export async function getUserProgress(
         userId,
         completedLessons,
         totalLessons: totalResult.Count || 0,
-        completionPercentage:
-          ((completedLessons.length / (totalResult.Count || 1)) * 100).toFixed(2),
+        completionPercentage: ((completedLessons.length / (totalResult.Count || 1)) * 100).toFixed(
+          2
+        ),
       }),
     };
   } catch (error) {
@@ -222,9 +217,7 @@ export async function getUserProgress(
 /**
  * Search lessons by keyword
  */
-export async function searchLessons(
-  event: APIGatewayProxyEvent
-): Promise<APIGatewayProxyResult> {
+export async function searchLessons(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
   try {
     const keyword = event.queryStringParameters?.keyword;
     const language = event.queryStringParameters?.language || 'hi';
@@ -270,7 +263,7 @@ export async function searchLessons(
  */
 async function generatePresignedUrl(s3Path: string): Promise<string> {
   const key = s3Path.replace('s3://', '').replace(`${CONTENT_BUCKET}/`, '');
-  
+
   const params = {
     Bucket: CONTENT_BUCKET,
     Key: key,

@@ -3,9 +3,9 @@
  * Type definitions for dashboard module
  */
 
-import {DailyForecast} from './weather.types';
-import {Alert} from './alert.types';
-import {MarketPrice} from './market.types';
+import { DailyForecast } from './weather.types';
+import { Alert } from './alert.types';
+import { MarketPrice } from './market.types';
 
 /**
  * Crop status information

@@ -3,10 +3,10 @@
  * Unit tests for dashboard service
  */
 
-import {DashboardService} from '../DashboardService';
-import {DashboardAggregator} from '../DashboardAggregator';
-import {PriorityEngine} from '../PriorityEngine';
-import {DashboardData} from '../../../types/dashboard.types';
+import { DashboardService } from '../DashboardService';
+import { DashboardAggregator } from '../DashboardAggregator';
+import { PriorityEngine } from '../PriorityEngine';
+import { DashboardData } from '../../../types/dashboard.types';
 
 // Mock dependencies
 jest.mock('../DashboardAggregator');
@@ -125,8 +125,8 @@ describe('DashboardService', () => {
     } as any;
 
     mockPriorityEngine = {
-      prioritizeAlerts: jest.fn(alerts => alerts),
-      prioritizeInsights: jest.fn(insights => insights),
+      prioritizeAlerts: jest.fn((alerts) => alerts),
+      prioritizeInsights: jest.fn((insights) => insights),
     } as any;
 
     dashboardService = new DashboardService(mockAggregator, mockPriorityEngine);
@@ -162,13 +162,9 @@ describe('DashboardService', () => {
     });
 
     it('should handle errors gracefully', async () => {
-      mockAggregator.getDashboardData.mockRejectedValueOnce(
-        new Error('Network error'),
-      );
+      mockAggregator.getDashboardData.mockRejectedValueOnce(new Error('Network error'));
 
-      await expect(
-        dashboardService.getDashboardData('user1'),
-      ).rejects.toThrow();
+      await expect(dashboardService.getDashboardData('user1')).rejects.toThrow();
     });
   });
 

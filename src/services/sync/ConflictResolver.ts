@@ -47,7 +47,9 @@ class ConflictResolver {
       resolution = 'remote';
       resolvedData = conflict.remoteVersion.data;
       reason = 'Remote version is more recent';
-      logger.info(`Conflict resolved: using remote version (${new Date(remoteTime).toISOString()})`);
+      logger.info(
+        `Conflict resolved: using remote version (${new Date(remoteTime).toISOString()})`
+      );
     } else {
       // Same timestamp, prefer remote (server is source of truth)
       resolution = 'remote';
@@ -84,7 +86,8 @@ class ConflictResolver {
    */
   private async logConflict(entry: ConflictLogEntry): Promise<void> {
     try {
-      const existingLog = await encryptedStorage.getItem<ConflictLogEntry[]>(CONFLICT_LOG_KEY) || [];
+      const existingLog =
+        (await encryptedStorage.getItem<ConflictLogEntry[]>(CONFLICT_LOG_KEY)) || [];
       existingLog.push(entry);
 
       // Keep only last 100 conflict entries

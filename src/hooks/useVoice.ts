@@ -3,12 +3,9 @@
  * React hook for voice interface integration
  */
 
-import {useState, useEffect, useCallback} from 'react';
-import {
-  SupportedLanguage,
-  VoiceCommandResult,
-} from '../types/voice.types';
-import {getVoiceIntegrationManager} from '../services/voice/VoiceIntegrationManager';
+import { useState, useEffect, useCallback } from 'react';
+import { SupportedLanguage, VoiceCommandResult } from '../types/voice.types';
+import { getVoiceIntegrationManager } from '../services/voice/VoiceIntegrationManager';
 
 /**
  * Hook for voice interface functionality
@@ -109,7 +106,7 @@ export function useVoice(language: SupportedLanguage = 'hi-IN') {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    []
   );
 
   /**
@@ -150,7 +147,7 @@ export function useVoice(language: SupportedLanguage = 'hi-IN') {
       await startListening();
 
       // Wait for user to speak (in production, this would be event-driven)
-      await new Promise<void>(resolve => setTimeout(resolve, 3000));
+      await new Promise<void>((resolve) => setTimeout(resolve, 3000));
 
       const result = await stopListening();
       if (result) {

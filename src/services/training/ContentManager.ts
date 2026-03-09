@@ -3,12 +3,7 @@
  * Manages training content including lessons, downloads, and offline storage
  */
 
-import {
-  Lesson,
-  LessonDetail,
-  ContentMetadata,
-  LessonCategory,
-} from '../../types/training.types';
+import { Lesson, LessonDetail, ContentMetadata, LessonCategory } from '../../types/training.types';
 import { DatabaseService } from '../storage/DatabaseService';
 
 export class ContentManager {
@@ -23,10 +18,7 @@ export class ContentManager {
   /**
    * Get all lessons for a specific category and language
    */
-  async getLessons(
-    category: LessonCategory,
-    language: string
-  ): Promise<Lesson[]> {
+  async getLessons(category: LessonCategory, language: string): Promise<Lesson[]> {
     const query = `
       SELECT * FROM ${this.CONTENT_TABLE}
       WHERE category = ? AND language = ? AND verified = 1
@@ -38,18 +30,12 @@ export class ContentManager {
   /**
    * Get detailed lesson information
    */
-  async getLesson(
-    lessonId: string,
-    language: string
-  ): Promise<LessonDetail | null> {
+  async getLesson(lessonId: string, language: string): Promise<LessonDetail | null> {
     const query = `
       SELECT * FROM ${this.CONTENT_TABLE}
       WHERE id = ? AND language = ?
     `;
-    const results = await this.databaseService.query(query, [
-      lessonId,
-      language,
-    ]);
+    const results = await this.databaseService.query(query, [lessonId, language]);
     return results.length > 0 ? results[0] : null;
   }
 
@@ -119,20 +105,14 @@ export class ContentManager {
   /**
    * Get all lessons by topic for organization
    */
-  async getLessonsByTopic(
-    topic: LessonCategory,
-    language: string
-  ): Promise<Lesson[]> {
+  async getLessonsByTopic(topic: LessonCategory, language: string): Promise<Lesson[]> {
     return this.getLessons(topic, language);
   }
 
   /**
    * Search lessons by keyword
    */
-  async searchLessons(
-    keyword: string,
-    language: string
-  ): Promise<Lesson[]> {
+  async searchLessons(keyword: string, language: string): Promise<Lesson[]> {
     const query = `
       SELECT * FROM ${this.CONTENT_TABLE}
       WHERE (title LIKE ? OR transcript LIKE ?) 
@@ -140,11 +120,7 @@ export class ContentManager {
       ORDER BY title
     `;
     const searchTerm = `%${keyword}%`;
-    return this.databaseService.query(query, [
-      searchTerm,
-      searchTerm,
-      language,
-    ]);
+    return this.databaseService.query(query, [searchTerm, searchTerm, language]);
   }
 
   /**
@@ -164,25 +140,18 @@ export class ContentManager {
       ORDER BY RANDOM()
       LIMIT ?
     `;
-    return this.databaseService.query(query, [
-      lesson.category,
-      language,
-      lessonId,
-      limit,
-    ]);
+    return this.databaseService.query(query, [lesson.category, language, lessonId, limit]);
   }
 
   /**
    * Delete lesson content to free up storage
    */
   async deleteLesson(lessonId: string): Promise<void> {
-    await this.databaseService.execute(
-      `DELETE FROM ${this.CONTENT_TABLE} WHERE id = ?`,
-      [lessonId]
-    );
-    await this.databaseService.execute(
-      `DELETE FROM ${this.METADATA_TABLE} WHERE lessonId = ?`,
-      [lessonId]
-    );
+    await this.databaseService.execute(`DELETE FROM ${this.CONTENT_TABLE} WHERE id = ?`, [
+      lessonId,
+    ]);
+    await this.databaseService.execute(`DELETE FROM ${this.METADATA_TABLE} WHERE lessonId = ?`, [
+      lessonId,
+    ]);
   }
 }

@@ -16,16 +16,16 @@ export default function WeatherScreen() {
     try {
       setLoading(true);
       const profile = await profileManager.getProfile();
-      
+
       if (profile?.location?.coordinates) {
         // Build location name from profile
         const locationParts = [];
         if (profile.location.village) locationParts.push(profile.location.village);
         if (profile.location.district) locationParts.push(profile.location.district);
         if (profile.location.state) locationParts.push(profile.location.state);
-        
+
         const fullLocationName = locationParts.join(', ') || 'Your Location';
-        
+
         setWeatherData({
           latitude: profile.location.coordinates.latitude,
           longitude: profile.location.coordinates.longitude,

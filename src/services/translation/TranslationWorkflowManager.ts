@@ -9,7 +9,7 @@ import {
   TranslationContent,
   TranslationValidationResult,
 } from '../../types/translation.types';
-import {SUPPORTED_LANGUAGES} from '../../config/constants';
+import { SUPPORTED_LANGUAGES } from '../../config/constants';
 import TranslationContentManager from './TranslationContentManager';
 import TranslationStorage from './TranslationStorage';
 
@@ -45,16 +45,12 @@ class TranslationWorkflowManager {
    */
   async submitForTranslation(request: ContentReleaseRequest): Promise<string> {
     const releaseId = `release_${Date.now()}_${request.contentId}`;
-    
+
     // Store in pending releases
     this.pendingReleases.set(releaseId, request);
 
     // Store base language content immediately
-    await this.storage.storeTranslations(
-      request.baseLanguage,
-      request.category,
-      request.content
-    );
+    await this.storage.storeTranslations(request.baseLanguage, request.category, request.content);
 
     return releaseId;
   }
@@ -68,17 +64,13 @@ class TranslationWorkflowManager {
     translatedContent: TranslationContent
   ): Promise<void> {
     const request = this.pendingReleases.get(releaseId);
-    
+
     if (!request) {
       throw new Error(`Release ${releaseId} not found`);
     }
 
     // Store the translation
-    await this.storage.storeTranslations(
-      language,
-      request.category,
-      translatedContent
-    );
+    await this.storage.storeTranslations(language, request.category, translatedContent);
   }
 
   /**
@@ -86,13 +78,13 @@ class TranslationWorkflowManager {
    */
   async validateForRelease(releaseId: string): Promise<TranslationValidationResult> {
     const request = this.pendingReleases.get(releaseId);
-    
+
     if (!request) {
       throw new Error(`Release ${releaseId} not found`);
     }
 
-    const requiredLanguages = request.requiredLanguages || 
-      SUPPORTED_LANGUAGES.map(lang => lang.code as LanguageCode);
+    const requiredLanguages =
+      request.requiredLanguages || SUPPORTED_LANGUAGES.map((lang) => lang.code as LanguageCode);
 
     const result: TranslationValidationResult = {
       isValid: true,
@@ -103,10 +95,7 @@ class TranslationWorkflowManager {
 
     // Check each required language
     for (const language of requiredLanguages) {
-      const hasTranslations = await this.storage.hasTranslations(
-        language,
-        request.category
-      );
+      const hasTranslations = await this.storage.hasTranslations(language, request.category);
 
       if (!hasTranslations) {
         result.isValid = false;
@@ -123,7 +112,7 @@ class TranslationWorkflowManager {
    */
   async releaseContent(releaseId: string): Promise<ContentReleaseResult> {
     const request = this.pendingReleases.get(releaseId);
-    
+
     if (!request) {
       return {
         success: false,
@@ -175,7 +164,7 @@ class TranslationWorkflowManager {
    */
   async cancelRelease(releaseId: string): Promise<void> {
     const request = this.pendingReleases.get(releaseId);
-    
+
     if (!request) {
       throw new Error(`Release ${releaseId} not found`);
     }
@@ -197,7 +186,7 @@ class TranslationWorkflowManager {
     missingLanguages: LanguageCode[];
   }> {
     const request = this.pendingReleases.get(releaseId);
-    
+
     if (!request) {
       return {
         exists: false,
@@ -207,17 +196,14 @@ class TranslationWorkflowManager {
       };
     }
 
-    const requiredLanguages = request.requiredLanguages || 
-      SUPPORTED_LANGUAGES.map(lang => lang.code as LanguageCode);
+    const requiredLanguages =
+      request.requiredLanguages || SUPPORTED_LANGUAGES.map((lang) => lang.code as LanguageCode);
 
     const completedLanguages: LanguageCode[] = [];
     const missingLanguages: LanguageCode[] = [];
 
     for (const language of requiredLanguages) {
-      const hasTranslations = await this.storage.hasTranslations(
-        language,
-        request.category
-      );
+      const hasTranslations = await this.storage.hasTranslations(language, request.category);
 
       if (hasTranslations) {
         completedLanguages.push(language);

@@ -103,9 +103,7 @@ export class RecommendationImprover {
   /**
    * Get improvement suggestions based on feedback analysis
    */
-  async getImprovementSuggestions(
-    feedbackData: FeedbackData[]
-  ): Promise<ImprovementSuggestion[]> {
+  async getImprovementSuggestions(feedbackData: FeedbackData[]): Promise<ImprovementSuggestion[]> {
     const suggestions: ImprovementSuggestion[] = [];
 
     // Analyze each recommendation type
@@ -178,16 +176,11 @@ export class RecommendationImprover {
   /**
    * Group feedback by context
    */
-  private groupFeedbackByContext(
-    feedbackData: FeedbackData[]
-  ): Record<string, FeedbackData[]> {
+  private groupFeedbackByContext(feedbackData: FeedbackData[]): Record<string, FeedbackData[]> {
     const grouped: Record<string, FeedbackData[]> = {};
 
     feedbackData.forEach((feedback) => {
-      const key = this.createContextKey(
-        feedback.recommendationType,
-        feedback.contextSnapshot
-      );
+      const key = this.createContextKey(feedback.recommendationType, feedback.contextSnapshot);
       if (!grouped[key]) {
         grouped[key] = [];
       }
@@ -204,7 +197,9 @@ export class RecommendationImprover {
     type: RecommendationType,
     context: FeedbackData['contextSnapshot']
   ): string {
-    return `${type}:${context.season || 'any'}:${context.soilType || 'any'}:${context.location || 'any'}`;
+    return `${type}:${context.season || 'any'}:${context.soilType || 'any'}:${
+      context.location || 'any'
+    }`;
   }
 
   /**

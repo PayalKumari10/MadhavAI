@@ -5,20 +5,17 @@
  */
 
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
-import {QuickAction} from '../../types/dashboard.types';
-import {useTranslation} from '../../hooks/useTranslation';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { QuickAction } from '../../types/dashboard.types';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface QuickActionsWidgetProps {
   actions: QuickAction[];
   navigation: any;
 }
 
-const QuickActionsWidget: React.FC<QuickActionsWidgetProps> = ({
-  actions,
-  navigation,
-}) => {
-  const {translate} = useTranslation();
+const QuickActionsWidget: React.FC<QuickActionsWidgetProps> = ({ actions, navigation }) => {
+  const { translate } = useTranslation();
 
   const handlePress = (route: string) => {
     if (navigation && navigation.navigate) {
@@ -26,11 +23,12 @@ const QuickActionsWidget: React.FC<QuickActionsWidgetProps> = ({
     }
   };
 
-  const renderAction = ({item}: {item: QuickAction}) => (
+  const renderAction = ({ item }: { item: QuickAction }) => (
     <TouchableOpacity
       style={styles.actionCard}
       onPress={() => handlePress(item.route)}
-      activeOpacity={0.7}>
+      activeOpacity={0.7}
+    >
       <View style={styles.iconContainer}>
         <Text style={styles.actionIcon}>{getIconEmoji(item.icon)}</Text>
       </View>
@@ -46,7 +44,7 @@ const QuickActionsWidget: React.FC<QuickActionsWidgetProps> = ({
   );
 
   const getIconEmoji = (iconName: string): string => {
-    const iconMap: {[key: string]: string} = {
+    const iconMap: { [key: string]: string } = {
       'weather-partly-cloudy': '🌤️',
       'file-document': '📄',
       'currency-inr': '💰',
@@ -66,7 +64,7 @@ const QuickActionsWidget: React.FC<QuickActionsWidgetProps> = ({
       <FlatList
         data={actions}
         renderItem={renderAction}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         numColumns={4}
         scrollEnabled={false}
         columnWrapperStyle={styles.row}
@@ -83,7 +81,7 @@ const styles = StyleSheet.create({
     padding: 16,
     elevation: 2,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },

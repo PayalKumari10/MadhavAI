@@ -4,12 +4,7 @@
  */
 
 import { logger } from '../../utils/logger';
-import {
-  Alert,
-  AlertScheduleRequest,
-  AlertType,
-  AlertPriority,
-} from '../../types/alert.types';
+import { Alert, AlertScheduleRequest, AlertType, AlertPriority } from '../../types/alert.types';
 import { DatabaseService, databaseService } from '../storage/DatabaseService';
 
 export class AlertScheduler {
@@ -124,11 +119,7 @@ export class AlertScheduler {
   /**
    * Get alerts for a user within a date range
    */
-  async getUserAlerts(
-    userId: string,
-    startDate: Date,
-    endDate: Date
-  ): Promise<Alert[]> {
+  async getUserAlerts(userId: string, startDate: Date, endDate: Date): Promise<Alert[]> {
     try {
       logger.info(`Fetching alerts for user ${userId}`);
 
@@ -209,10 +200,11 @@ export class AlertScheduler {
   async markAlertAsRead(alertId: string): Promise<void> {
     try {
       const now = new Date();
-      await this.db.execute(
-        `UPDATE alerts SET status = ?, updatedAt = ? WHERE id = ?`,
-        ['read', now.toISOString(), alertId]
-      );
+      await this.db.execute(`UPDATE alerts SET status = ?, updatedAt = ? WHERE id = ?`, [
+        'read',
+        now.toISOString(),
+        alertId,
+      ]);
       logger.info(`Alert marked as read: ${alertId}`);
     } catch (error) {
       logger.error('Failed to mark alert as read', error);
@@ -244,7 +236,9 @@ export class AlertScheduler {
         userId,
         type: activity.type,
         title: `Upcoming: ${activity.activityName}`,
-        message: `Reminder: ${activity.activityName} for ${activity.cropName} is scheduled for ${activity.activityDate.toLocaleDateString()}`,
+        message: `Reminder: ${activity.activityName} for ${
+          activity.cropName
+        } is scheduled for ${activity.activityDate.toLocaleDateString()}`,
         scheduledTime: alertDate,
         priority: this.getPriorityForActivityType(activity.type),
         actionable: true,

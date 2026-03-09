@@ -4,10 +4,10 @@
  * Requirements: 14.1, 14.2, 14.3, 14.4, 14.5, 14.8, 14.9
  */
 
-import {DashboardData, Action, Insight} from '../../types/dashboard.types';
-import {DashboardAggregator} from './DashboardAggregator';
-import {PriorityEngine} from './PriorityEngine';
-import {DASHBOARD_LOAD_TIMEOUT_MS} from '../../config/constants';
+import { DashboardData, Action, Insight } from '../../types/dashboard.types';
+import { DashboardAggregator } from './DashboardAggregator';
+import { PriorityEngine } from './PriorityEngine';
+import { DASHBOARD_LOAD_TIMEOUT_MS } from '../../config/constants';
 
 /**
  * Main dashboard service with performance optimization
@@ -15,7 +15,7 @@ import {DASHBOARD_LOAD_TIMEOUT_MS} from '../../config/constants';
 export class DashboardService {
   private aggregator: DashboardAggregator;
   private priorityEngine: PriorityEngine;
-  private cache: Map<string, {data: DashboardData; timestamp: number}>;
+  private cache: Map<string, { data: DashboardData; timestamp: number }>;
   private cacheTimeout: number = 60000; // 1 minute cache
 
   constructor(aggregator: DashboardAggregator, priorityEngine: PriorityEngine) {
@@ -75,7 +75,7 @@ export class DashboardService {
       const data = await this.getDashboardData(userId);
 
       // Convert alerts to actions
-      const actions: Action[] = data.upcomingAlerts.map(alert => ({
+      const actions: Action[] = data.upcomingAlerts.map((alert) => ({
         id: alert.id,
         type: alert.type,
         title: alert.title,
@@ -89,7 +89,7 @@ export class DashboardService {
       const cutoffDate = new Date();
       cutoffDate.setDate(cutoffDate.getDate() + days);
 
-      return actions.filter(action => action.dueDate <= cutoffDate);
+      return actions.filter((action) => action.dueDate <= cutoffDate);
     } catch (error) {
       console.error('Error fetching upcoming actions:', error);
       return [];
@@ -116,14 +116,10 @@ export class DashboardService {
    */
   private prioritizeData(data: DashboardData): DashboardData {
     // Prioritize alerts - time-sensitive first
-    const prioritizedAlerts = this.priorityEngine.prioritizeAlerts(
-      data.upcomingAlerts,
-    );
+    const prioritizedAlerts = this.priorityEngine.prioritizeAlerts(data.upcomingAlerts);
 
     // Prioritize insights
-    const prioritizedInsights = this.priorityEngine.prioritizeInsights(
-      data.insights,
-    );
+    const prioritizedInsights = this.priorityEngine.prioritizeInsights(data.insights);
 
     return {
       ...data,
@@ -169,7 +165,7 @@ export class DashboardService {
    * Create timeout promise
    */
   private createTimeout(ms: number): Promise<null> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       setTimeout(() => resolve(null), ms);
     });
   }

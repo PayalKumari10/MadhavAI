@@ -2,7 +2,7 @@
  * Authentication API Client
  * Handles API calls for authentication endpoints
  * Requirements: 1.1, 1.2
- * 
+ *
  * Note: This is a client-side API layer for the mobile app.
  * The actual backend Lambda functions would be implemented separately.
  */

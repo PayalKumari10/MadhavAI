@@ -3,7 +3,7 @@
  * Provides voice-based navigation for major features
  */
 
-import {VoiceNavigationItem, SupportedLanguage} from '../../types/voice.types';
+import { VoiceNavigationItem, SupportedLanguage } from '../../types/voice.types';
 import TextToSpeech from './TextToSpeech';
 
 /**
@@ -106,7 +106,7 @@ class VoiceNavigation {
    */
   async listNavigationOptions(): Promise<void> {
     const options = this.navigationItems
-      .map(item => `${item.screen}: ${item.description}`)
+      .map((item) => `${item.screen}: ${item.description}`)
       .join('. ');
 
     await this.tts.speak(`Available options: ${options}`, this.currentLanguage);

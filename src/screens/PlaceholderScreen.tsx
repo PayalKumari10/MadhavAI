@@ -23,10 +23,8 @@ const PlaceholderScreen: React.FC<PlaceholderScreenProps> = ({ route, navigation
       <Text style={styles.icon}>🚧</Text>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.subtitle}>This feature is coming soon!</Text>
-      
-      <TouchableOpacity 
-        style={styles.button}
-        onPress={() => navigation.goBack()}>
+
+      <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
         <Text style={styles.buttonText}>← Back to Dashboard</Text>
       </TouchableOpacity>
     </View>

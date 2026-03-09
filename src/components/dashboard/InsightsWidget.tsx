@@ -5,20 +5,17 @@
  */
 
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
-import {Insight} from '../../types/dashboard.types';
-import {useTranslation} from '../../hooks/useTranslation';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { Insight } from '../../types/dashboard.types';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface InsightsWidgetProps {
   insights: Insight[];
   navigation: any;
 }
 
-const InsightsWidget: React.FC<InsightsWidgetProps> = ({
-  insights,
-  navigation,
-}) => {
-  const {translate} = useTranslation();
+const InsightsWidget: React.FC<InsightsWidgetProps> = ({ insights, navigation }) => {
+  const { translate } = useTranslation();
 
   const getPriorityColor = (priority: string): string => {
     switch (priority) {
@@ -34,7 +31,7 @@ const InsightsWidget: React.FC<InsightsWidgetProps> = ({
   };
 
   const getTypeIcon = (type: string): string => {
-    const iconMap: {[key: string]: string} = {
+    const iconMap: { [key: string]: string } = {
       seasonal: '🌱',
       harvest: '🌾',
       weather: '🌤️',
@@ -46,22 +43,20 @@ const InsightsWidget: React.FC<InsightsWidgetProps> = ({
     return iconMap[type] || '💡';
   };
 
-  const renderInsight = ({item}: {item: Insight}) => (
+  const renderInsight = ({ item }: { item: Insight }) => (
     <TouchableOpacity
-      style={[
-        styles.insightItem,
-        {borderLeftColor: getPriorityColor(item.priority)},
-      ]}
-      onPress={() => item.actionUrl && navigation && navigation.navigate && navigation.navigate(item.actionUrl)}
+      style={[styles.insightItem, { borderLeftColor: getPriorityColor(item.priority) }]}
+      onPress={() =>
+        item.actionUrl && navigation && navigation.navigate && navigation.navigate(item.actionUrl)
+      }
       activeOpacity={item.actionable ? 0.7 : 1}
-      disabled={!item.actionable}>
+      disabled={!item.actionable}
+    >
       <Text style={styles.insightIcon}>{getTypeIcon(item.type)}</Text>
       <View style={styles.insightContent}>
         <Text style={styles.insightMessage}>{item.message}</Text>
         {item.actionable && (
-          <Text style={styles.actionHint}>
-            {translate('common.tap_to_view')} →
-          </Text>
+          <Text style={styles.actionHint}>{translate('common.tap_to_view')} →</Text>
         )}
       </View>
     </TouchableOpacity>
@@ -92,7 +87,7 @@ const styles = StyleSheet.create({
     padding: 16,
     elevation: 2,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },

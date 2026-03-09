@@ -3,7 +3,7 @@
  * Defines common voice command actions across modules
  */
 
-import {VoiceCommandType} from '../../types/voice.types';
+import { VoiceCommandType } from '../../types/voice.types';
 
 /**
  * Voice command action definitions
@@ -113,7 +113,7 @@ export const COMMON_VOICE_COMMANDS: VoiceAction[] = [
   {
     command: VoiceCommandType.ALERTS,
     keywords: ['today alerts', 'aaj ki chetavani'],
-    description: 'View today\'s alerts',
+    description: "View today's alerts",
     handler: 'handleTodayAlerts',
   },
 
@@ -158,7 +158,7 @@ export const COMMON_VOICE_COMMANDS: VoiceAction[] = [
  * Get voice commands for a specific module
  */
 export function getModuleCommands(commandType: VoiceCommandType): VoiceAction[] {
-  return COMMON_VOICE_COMMANDS.filter(cmd => cmd.command === commandType);
+  return COMMON_VOICE_COMMANDS.filter((cmd) => cmd.command === commandType);
 }
 
 /**
@@ -173,7 +173,7 @@ export function getAllVoiceCommands(): VoiceAction[] {
  */
 export function findCommandByKeyword(keyword: string): VoiceAction | undefined {
   const normalizedKeyword = keyword.toLowerCase().trim();
-  return COMMON_VOICE_COMMANDS.find(cmd =>
-    cmd.keywords.some(k => normalizedKeyword.includes(k.toLowerCase())),
+  return COMMON_VOICE_COMMANDS.find((cmd) =>
+    cmd.keywords.some((k) => normalizedKeyword.includes(k.toLowerCase()))
   );
 }

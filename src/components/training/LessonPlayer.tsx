@@ -37,11 +37,7 @@ export const LessonPlayer: React.FC<LessonPlayerProps> = ({
             <Text style={styles.duration}>
               Duration: {Math.floor(duration / 60)}:{(duration % 60).toString().padStart(2, '0')}
             </Text>
-            {isOffline && (
-              <Text style={styles.offlineIndicator}>
-                Playing from offline storage
-              </Text>
-            )}
+            {isOffline && <Text style={styles.offlineIndicator}>Playing from offline storage</Text>}
           </View>
 
           <View style={styles.transcriptContainer}>

@@ -38,10 +38,7 @@ describe('Translation Integration', () => {
 
     translationStorage = new TranslationStorage(mockDb);
     translationService = new TranslationService(translationStorage);
-    preferenceManager = new LanguagePreferenceManager(
-      mockEncryptedStorage,
-      mockProfileManager
-    );
+    preferenceManager = new LanguagePreferenceManager(mockEncryptedStorage, mockProfileManager);
   });
 
   afterEach(() => {
@@ -80,10 +77,7 @@ describe('Translation Integration', () => {
       await preferenceManager.setLanguagePreference('user123', 'ta');
 
       // Verify preference was stored
-      expect(mockEncryptedStorage.setItem).toHaveBeenCalledWith(
-        'user_language_preference',
-        'ta'
-      );
+      expect(mockEncryptedStorage.setItem).toHaveBeenCalledWith('user_language_preference', 'ta');
 
       // Get preference back
       mockEncryptedStorage.getItem.mockResolvedValue('ta');
@@ -131,19 +125,19 @@ describe('Translation Integration', () => {
   describe('multi-language support', () => {
     it('should support switching between languages', async () => {
       const hindiTranslations = {
-        common: {greeting: 'नमस्ते'},
+        common: { greeting: 'नमस्ते' },
       };
 
       const tamilTranslations = {
-        common: {greeting: 'வணக்கம்'},
+        common: { greeting: 'வணக்கம்' },
       };
 
       mockDb.query.mockImplementation((_query: string, params?: any[]) => {
         const [language] = params || [];
         if (language === 'hi') {
-          return Promise.resolve([{content: JSON.stringify(hindiTranslations)}]);
+          return Promise.resolve([{ content: JSON.stringify(hindiTranslations) }]);
         } else if (language === 'ta') {
-          return Promise.resolve([{content: JSON.stringify(tamilTranslations)}]);
+          return Promise.resolve([{ content: JSON.stringify(tamilTranslations) }]);
         }
         return Promise.resolve([]);
       });
@@ -168,10 +162,7 @@ describe('Translation Integration', () => {
       await preferenceManager.setRegistrationLanguage('ta');
 
       // Verify it was stored
-      expect(mockEncryptedStorage.setItem).toHaveBeenCalledWith(
-        'user_language_preference',
-        'ta'
-      );
+      expect(mockEncryptedStorage.setItem).toHaveBeenCalledWith('user_language_preference', 'ta');
 
       // Later, get the registration language
       mockEncryptedStorage.getItem.mockResolvedValue('ta');
@@ -190,14 +181,10 @@ describe('Translation Integration', () => {
 
     it('should handle profile update errors gracefully', async () => {
       mockEncryptedStorage.setItem.mockResolvedValue(undefined);
-      mockProfileManager.updateProfile.mockRejectedValue(
-        new Error('Network error')
-      );
+      mockProfileManager.updateProfile.mockRejectedValue(new Error('Network error'));
 
       // Should continue even if profile update fails
-      await expect(
-        preferenceManager.setLanguagePreference('user123', 'ta')
-      ).resolves.not.toThrow();
+      await expect(preferenceManager.setLanguagePreference('user123', 'ta')).resolves.not.toThrow();
 
       // Local preference should still be saved
       expect(mockEncryptedStorage.setItem).toHaveBeenCalled();

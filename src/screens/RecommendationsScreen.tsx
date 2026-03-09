@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, StyleSheet, ActivityIndicator, Text, TouchableOpacity } from 'react-native';
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  ActivityIndicator,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import { CropRecommender } from '../services/recommendation/CropRecommender';
 import { FertilizerRecommender } from '../services/recommendation/FertilizerRecommender';
 import { SeedRecommender } from '../services/recommendation/SeedRecommender';
@@ -38,7 +45,7 @@ export default function RecommendationsScreen() {
       }
 
       setRecommendations(data);
-      
+
       // Log for debugging
       if (data && data.length === 0) {
         console.log('No recommendations generated for', activeTab);
@@ -95,9 +102,7 @@ export default function RecommendationsScreen() {
           </View>
           <View style={styles.scoreItem}>
             <Text style={styles.scoreItemLabel}>Risk</Text>
-            <Text style={[styles.scoreItemValue, { color: '#FF9800' }]}>
-              {rec.riskScore}%
-            </Text>
+            <Text style={[styles.scoreItemValue, { color: '#FF9800' }]}>{rec.riskScore}%</Text>
           </View>
         </View>
 
@@ -107,14 +112,14 @@ export default function RecommendationsScreen() {
           <View style={styles.planSection}>
             <Text style={styles.planTitle}>Cultivation Plan</Text>
             <View style={styles.planDetails}>
+              <Text style={styles.planDetail}>Duration: {rec.cultivationPlan.duration} days</Text>
               <Text style={styles.planDetail}>
-                Duration: {rec.cultivationPlan.duration} days
+                Est. Cost: ₹{rec.cultivationPlan.estimatedCost.min} - ₹
+                {rec.cultivationPlan.estimatedCost.max}
               </Text>
               <Text style={styles.planDetail}>
-                Est. Cost: ₹{rec.cultivationPlan.estimatedCost.min} - ₹{rec.cultivationPlan.estimatedCost.max}
-              </Text>
-              <Text style={styles.planDetail}>
-                Est. Yield: {rec.cultivationPlan.estimatedYield.min}-{rec.cultivationPlan.estimatedYield.max} {rec.cultivationPlan.estimatedYield.unit}
+                Est. Yield: {rec.cultivationPlan.estimatedYield.min}-
+                {rec.cultivationPlan.estimatedYield.max} {rec.cultivationPlan.estimatedYield.unit}
               </Text>
             </View>
           </View>
@@ -134,7 +139,12 @@ export default function RecommendationsScreen() {
       <View key={index} style={styles.card}>
         <View style={styles.cardHeader}>
           <Text style={styles.fertilizerName}>{rec.nutrient || 'Unknown Nutrient'}</Text>
-          <View style={[styles.typeBadge, rec.type === 'organic' ? styles.organicBadge : styles.chemicalBadge]}>
+          <View
+            style={[
+              styles.typeBadge,
+              rec.type === 'organic' ? styles.organicBadge : styles.chemicalBadge,
+            ]}
+          >
             <Text style={styles.typeBadgeText}>{rec.type || 'N/A'}</Text>
           </View>
         </View>
@@ -145,7 +155,8 @@ export default function RecommendationsScreen() {
           <View style={styles.dosageSection}>
             <Text style={styles.sectionTitle}>Dosage</Text>
             <Text style={styles.dosageText}>
-              {rec.dosage.amount || 0} {rec.dosage.unit || 'kg'} {rec.dosage.perArea || 'per hectare'}
+              {rec.dosage.amount || 0} {rec.dosage.unit || 'kg'}{' '}
+              {rec.dosage.perArea || 'per hectare'}
             </Text>
           </View>
         )}
@@ -173,9 +184,7 @@ export default function RecommendationsScreen() {
           </View>
         )}
 
-        {rec.explanation && (
-          <Text style={styles.explanation}>{rec.explanation}</Text>
-        )}
+        {rec.explanation && <Text style={styles.explanation}>{rec.explanation}</Text>}
 
         {rec.alternatives && rec.alternatives.length > 0 && (
           <View style={styles.alternativesSection}>
@@ -185,7 +194,8 @@ export default function RecommendationsScreen() {
                 <Text style={styles.alternativeName}>{alt.name || 'Unknown'}</Text>
                 {alt.dosage && alt.cost && (
                   <Text style={styles.alternativeDetails}>
-                    {alt.dosage.amount || 0} {alt.dosage.unit || 'kg'} • ₹{alt.cost.min || 0}-₹{alt.cost.max || 0}
+                    {alt.dosage.amount || 0} {alt.dosage.unit || 'kg'} • ₹{alt.cost.min || 0}-₹
+                    {alt.cost.max || 0}
                   </Text>
                 )}
               </View>
@@ -211,9 +221,7 @@ export default function RecommendationsScreen() {
           )}
         </View>
 
-        {rec.cropName && (
-          <Text style={styles.seedType}>Crop: {rec.cropName}</Text>
-        )}
+        {rec.cropName && <Text style={styles.seedType}>Crop: {rec.cropName}</Text>}
 
         {rec.diseaseResistance && rec.diseaseResistance.length > 0 && (
           <View style={styles.characteristicsSection}>
@@ -230,7 +238,8 @@ export default function RecommendationsScreen() {
           <View style={styles.yieldSection}>
             <Text style={styles.sectionTitle}>Yield Potential</Text>
             <Text style={styles.yieldText}>
-              {rec.yieldPotential.min || 0}-{rec.yieldPotential.max || 0} {rec.yieldPotential.unit || 'kg/ha'}
+              {rec.yieldPotential.min || 0}-{rec.yieldPotential.max || 0}{' '}
+              {rec.yieldPotential.unit || 'kg/ha'}
             </Text>
           </View>
         )}
@@ -255,14 +264,13 @@ export default function RecommendationsScreen() {
           <View style={styles.sowingSection}>
             <Text style={styles.sectionTitle}>Sowing Window</Text>
             <Text style={styles.sowingText}>
-              {new Date(rec.sowingWindow.start).toLocaleDateString()} - {new Date(rec.sowingWindow.end).toLocaleDateString()}
+              {new Date(rec.sowingWindow.start).toLocaleDateString()} -{' '}
+              {new Date(rec.sowingWindow.end).toLocaleDateString()}
             </Text>
           </View>
         )}
 
-        {rec.explanation && (
-          <Text style={styles.explanation}>{rec.explanation}</Text>
-        )}
+        {rec.explanation && <Text style={styles.explanation}>{rec.explanation}</Text>}
 
         {rec.sources && rec.sources.length > 0 && (
           <View style={styles.sourcesSection}>
@@ -299,24 +307,23 @@ export default function RecommendationsScreen() {
       <View style={styles.tabBar}>
         <TouchableOpacity
           style={[styles.tab, activeTab === 'crop' && styles.activeTab]}
-          onPress={() => setActiveTab('crop')}>
-          <Text style={[styles.tabText, activeTab === 'crop' && styles.activeTabText]}>
-            Crops
-          </Text>
+          onPress={() => setActiveTab('crop')}
+        >
+          <Text style={[styles.tabText, activeTab === 'crop' && styles.activeTabText]}>Crops</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.tab, activeTab === 'fertilizer' && styles.activeTab]}
-          onPress={() => setActiveTab('fertilizer')}>
+          onPress={() => setActiveTab('fertilizer')}
+        >
           <Text style={[styles.tabText, activeTab === 'fertilizer' && styles.activeTabText]}>
             Fertilizer
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.tab, activeTab === 'seed' && styles.activeTab]}
-          onPress={() => setActiveTab('seed')}>
-          <Text style={[styles.tabText, activeTab === 'seed' && styles.activeTabText]}>
-            Seeds
-          </Text>
+          onPress={() => setActiveTab('seed')}
+        >
+          <Text style={[styles.tabText, activeTab === 'seed' && styles.activeTabText]}>Seeds</Text>
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.content}>

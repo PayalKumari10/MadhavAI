@@ -161,9 +161,9 @@ describe('SoilApi', () => {
     it('should handle analysis errors', async () => {
       mockAxiosInstance.post.mockRejectedValue(new Error('Analysis failed'));
 
-      await expect(
-        soilApi.analyzeSoilHealth({ soilHealthId: 'soil-001' })
-      ).rejects.toThrow('Analysis failed');
+      await expect(soilApi.analyzeSoilHealth({ soilHealthId: 'soil-001' })).rejects.toThrow(
+        'Analysis failed'
+      );
     });
   });
 

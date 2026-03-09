@@ -11,9 +11,7 @@ interface ProgressDisplayProps {
   progress: LearningProgress;
 }
 
-export const ProgressDisplay: React.FC<ProgressDisplayProps> = ({
-  progress,
-}) => {
+export const ProgressDisplay: React.FC<ProgressDisplayProps> = ({ progress }) => {
   const completionPercentage =
     progress.totalLessons > 0
       ? (progress.completedLessons.length / progress.totalLessons) * 100
@@ -35,23 +33,15 @@ export const ProgressDisplay: React.FC<ProgressDisplayProps> = ({
       <View style={styles.overallProgress}>
         <View style={styles.progressHeader}>
           <Text style={styles.progressLabel}>Overall Progress</Text>
-          <Text style={styles.progressPercentage}>
-            {completionPercentage.toFixed(0)}%
-          </Text>
+          <Text style={styles.progressPercentage}>{completionPercentage.toFixed(0)}%</Text>
         </View>
 
         <View style={styles.progressBarContainer}>
-          <View
-            style={[
-              styles.progressBarFill,
-              { width: `${completionPercentage}%` },
-            ]}
-          />
+          <View style={[styles.progressBarFill, { width: `${completionPercentage}%` }]} />
         </View>
 
         <Text style={styles.progressStats}>
-          {progress.completedLessons.length} of {progress.totalLessons} lessons
-          completed
+          {progress.completedLessons.length} of {progress.totalLessons} lessons completed
         </Text>
       </View>
 

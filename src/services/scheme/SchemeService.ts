@@ -1,7 +1,7 @@
 /**
  * Scheme Service
  * Requirements: 2.1, 2.7
- * 
+ *
  * Manages government scheme data including fetching, caching, and local storage
  */
 
@@ -33,25 +33,25 @@ export class SchemeService {
       // If not in cache, fetch from API
       logger.info('Fetching schemes from API');
       const schemes = await this.fetchSchemesFromAPI();
-      
+
       logger.info(`Fetched ${schemes.length} schemes from API`);
-      
+
       // Cache the results
       if (schemes.length > 0) {
         await this.cacheSchemes(schemes);
       }
-      
+
       return schemes;
     } catch (error) {
       logger.error('Failed to get schemes', error);
-      
+
       // Try to return cached data even if expired
       const cached = await this.getCachedSchemes(true);
       if (cached && cached.length > 0) {
         logger.warn('Returning expired cached schemes due to API failure');
         return cached;
       }
-      
+
       // Return empty array instead of throwing
       logger.warn('Returning empty schemes array');
       return [];
@@ -63,23 +63,23 @@ export class SchemeService {
    */
   async getSchemesByLocation(state: string, district?: string): Promise<Scheme[]> {
     const allSchemes = await this.getAllSchemes();
-    
-    return allSchemes.filter(scheme => {
+
+    return allSchemes.filter((scheme) => {
       // Include schemes with no location restriction
       if (!scheme.state) {
         return true;
       }
-      
+
       // Check state match
       if (scheme.state !== state) {
         return false;
       }
-      
+
       // If district is specified, check district match
       if (district && scheme.district && scheme.district !== district) {
         return false;
       }
-      
+
       return true;
     });
   }
@@ -89,7 +89,7 @@ export class SchemeService {
    */
   async getSchemesByCategory(category: string): Promise<Scheme[]> {
     const allSchemes = await this.getAllSchemes();
-    return allSchemes.filter(scheme => scheme.category === category);
+    return allSchemes.filter((scheme) => scheme.category === category);
   }
 
   /**
@@ -97,7 +97,7 @@ export class SchemeService {
    */
   async getSchemeById(schemeId: string): Promise<Scheme | null> {
     const allSchemes = await this.getAllSchemes();
-    return allSchemes.find(scheme => scheme.id === schemeId) || null;
+    return allSchemes.find((scheme) => scheme.id === schemeId) || null;
   }
 
   /**
@@ -107,12 +107,12 @@ export class SchemeService {
     const allSchemes = await this.getAllSchemes();
     const now = new Date();
     const futureDate = new Date(now.getTime() + daysAhead * 24 * 60 * 60 * 1000);
-    
-    return allSchemes.filter(scheme => {
+
+    return allSchemes.filter((scheme) => {
       if (!scheme.applicationDeadline) {
         return false;
       }
-      
+
       const deadline = new Date(scheme.applicationDeadline);
       return deadline >= now && deadline <= futureDate;
     });
@@ -124,12 +124,12 @@ export class SchemeService {
   async searchSchemes(keyword: string): Promise<Scheme[]> {
     const allSchemes = await this.getAllSchemes();
     const lowerKeyword = keyword.toLowerCase();
-    
-    return allSchemes.filter(scheme => {
+
+    return allSchemes.filter((scheme) => {
       return (
         scheme.name.toLowerCase().includes(lowerKeyword) ||
         scheme.description.toLowerCase().includes(lowerKeyword) ||
-        scheme.benefits.some(benefit => benefit.toLowerCase().includes(lowerKeyword))
+        scheme.benefits.some((benefit) => benefit.toLowerCase().includes(lowerKeyword))
       );
     });
   }
@@ -141,13 +141,14 @@ export class SchemeService {
     // TODO: Implement actual API call to government schemes API
     // For now, return realistic mock data for demonstration
     logger.info('Using mock government scheme data');
-    
+
     // Return mock data directly - no API call needed
     const mockSchemes: Scheme[] = [
       {
         id: 'pm-kisan-2024',
         name: 'PM-KISAN (Pradhan Mantri Kisan Samman Nidhi)',
-        description: 'Direct income support of ₹6,000 per year to all farmer families across the country in three equal installments of ₹2,000 each.',
+        description:
+          'Direct income support of ₹6,000 per year to all farmer families across the country in three equal installments of ₹2,000 each.',
         category: 'subsidy',
         eligibilityCriteria: {
           maxFarmSize: 10,
@@ -171,7 +172,8 @@ export class SchemeService {
           {
             stepNumber: 1,
             title: 'Visit PM-KISAN Portal',
-            description: 'Go to the official PM-KISAN website or visit your nearest Common Service Center (CSC).',
+            description:
+              'Go to the official PM-KISAN website or visit your nearest Common Service Center (CSC).',
             estimatedTime: '10 minutes',
           },
           {
@@ -184,13 +186,15 @@ export class SchemeService {
           {
             stepNumber: 3,
             title: 'Submit Application',
-            description: 'Submit the form online or at CSC. You will receive a registration number.',
+            description:
+              'Submit the form online or at CSC. You will receive a registration number.',
             estimatedTime: '5 minutes',
           },
           {
             stepNumber: 4,
             title: 'Verification',
-            description: 'Your application will be verified by local authorities within 15-30 days.',
+            description:
+              'Your application will be verified by local authorities within 15-30 days.',
             estimatedTime: '15-30 days',
           },
         ],
@@ -206,7 +210,8 @@ export class SchemeService {
       {
         id: 'pmfby-2024',
         name: 'PMFBY (Pradhan Mantri Fasal Bima Yojana)',
-        description: 'Comprehensive crop insurance scheme providing financial support to farmers in case of crop loss due to natural calamities, pests, and diseases.',
+        description:
+          'Comprehensive crop insurance scheme providing financial support to farmers in case of crop loss due to natural calamities, pests, and diseases.',
         category: 'insurance',
         eligibilityCriteria: {
           farmerCategory: ['small', 'marginal', 'medium', 'large'],
@@ -230,7 +235,8 @@ export class SchemeService {
           {
             stepNumber: 1,
             title: 'Visit Bank or CSC',
-            description: 'Visit your bank branch, CSC, or insurance company office before sowing season.',
+            description:
+              'Visit your bank branch, CSC, or insurance company office before sowing season.',
             estimatedTime: '30 minutes',
           },
           {
@@ -266,7 +272,8 @@ export class SchemeService {
       {
         id: 'kcc-2024',
         name: 'Kisan Credit Card (KCC)',
-        description: 'Credit facility for farmers to meet their agricultural needs including crop cultivation, post-harvest expenses, and maintenance of farm assets.',
+        description:
+          'Credit facility for farmers to meet their agricultural needs including crop cultivation, post-harvest expenses, and maintenance of farm assets.',
         category: 'loan',
         eligibilityCriteria: {
           farmerCategory: ['small', 'marginal', 'medium', 'large'],
@@ -324,7 +331,8 @@ export class SchemeService {
       {
         id: 'pkvy-2024',
         name: 'PKVY (Paramparagat Krishi Vikas Yojana)',
-        description: 'Scheme to promote organic farming and certification. Provides financial assistance of ₹50,000 per hectare for 3 years for organic farming.',
+        description:
+          'Scheme to promote organic farming and certification. Provides financial assistance of ₹50,000 per hectare for 3 years for organic farming.',
         category: 'organic_farming',
         eligibilityCriteria: {
           farmerCategory: ['small', 'marginal', 'medium'],
@@ -383,7 +391,8 @@ export class SchemeService {
       {
         id: 'smam-2024',
         name: 'SMAM (Sub-Mission on Agricultural Mechanization)',
-        description: 'Provides financial assistance for purchase of agricultural machinery and equipment. Subsidy of 40-50% on farm equipment.',
+        description:
+          'Provides financial assistance for purchase of agricultural machinery and equipment. Subsidy of 40-50% on farm equipment.',
         category: 'equipment',
         eligibilityCriteria: {
           farmerCategory: ['small', 'marginal', 'medium', 'large'],
@@ -413,7 +422,8 @@ export class SchemeService {
           {
             stepNumber: 2,
             title: 'Select Equipment',
-            description: 'Choose equipment from approved list and get quotation from authorized dealer.',
+            description:
+              'Choose equipment from approved list and get quotation from authorized dealer.',
             estimatedTime: '1-2 days',
           },
           {
@@ -444,7 +454,8 @@ export class SchemeService {
       {
         id: 'pmksy-2024',
         name: 'PMKSY (Pradhan Mantri Krishi Sinchayee Yojana)',
-        description: 'Scheme to expand cultivable area under irrigation, improve water use efficiency, and promote precision irrigation (drip/sprinkler).',
+        description:
+          'Scheme to expand cultivable area under irrigation, improve water use efficiency, and promote precision irrigation (drip/sprinkler).',
         category: 'irrigation',
         eligibilityCriteria: {
           farmerCategory: ['small', 'marginal', 'medium', 'large'],
@@ -501,7 +512,7 @@ export class SchemeService {
         updatedAt: new Date('2024-01-01'),
       },
     ];
-    
+
     logger.info(`Returning ${mockSchemes.length} mock schemes`);
     return mockSchemes;
   }
@@ -512,23 +523,23 @@ export class SchemeService {
   private async getCachedSchemes(ignoreExpiry: boolean = false): Promise<Scheme[] | null> {
     try {
       const cached = await encryptedStorage.getItem<SchemeCache>(this.CACHE_KEY);
-      
+
       if (!cached) {
         logger.info('No cached schemes found');
         return null;
       }
-      
+
       // Check if cache is expired
       if (!ignoreExpiry) {
         const now = new Date();
         const cacheAge = now.getTime() - new Date(cached.lastUpdated).getTime();
-        
+
         if (cacheAge > this.CACHE_DURATION_MS) {
           logger.info('Scheme cache expired');
           return null;
         }
       }
-      
+
       logger.info(`Retrieved ${cached.schemes.length} schemes from cache`);
       return cached.schemes;
     } catch (error) {
@@ -546,7 +557,7 @@ export class SchemeService {
         schemes,
         lastUpdated: new Date(),
       };
-      
+
       await encryptedStorage.setItem(this.CACHE_KEY, cache);
       logger.info(`Cached ${schemes.length} schemes`);
     } catch (error) {

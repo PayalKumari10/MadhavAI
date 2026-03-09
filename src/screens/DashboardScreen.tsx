@@ -4,7 +4,7 @@
  * Requirements: 14.1, 14.2, 14.3, 14.4, 14.5, 14.10
  */
 
-import React, {useEffect, useState, useCallback} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
   ScrollView,
@@ -14,8 +14,8 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import {DashboardData} from '../types/dashboard.types';
-import {DashboardService} from '../services/dashboard/DashboardService';
+import { DashboardData } from '../types/dashboard.types';
+import { DashboardService } from '../services/dashboard/DashboardService';
 import {
   WeatherWidget,
   AlertsWidget,
@@ -26,8 +26,8 @@ import {
   InsightsWidget,
   UpcomingActivitiesWidget,
 } from '../components/dashboard';
-import {useVoice} from '../hooks/useVoice';
-import {useTranslation} from '../hooks/useTranslation';
+import { useVoice } from '../hooks/useVoice';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface DashboardScreenProps {
   userId: string;
@@ -43,15 +43,13 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({
   dashboardService,
   navigation,
 }) => {
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(
-    null,
-  );
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const {speak, isAvailable: voiceSupported} = useVoice();
-  const {translate} = useTranslation();
+  const { speak, isAvailable: voiceSupported } = useVoice();
+  const { translate } = useTranslation();
 
   /**
    * Load dashboard data
@@ -101,14 +99,18 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({
     // Weather
     if (data.weather) {
       parts.push(
-        `${translate('dashboard.weather')}: ${data.weather.temperature.current}°C, ${data.weather.description}`,
+        `${translate('dashboard.weather')}: ${data.weather.temperature.current}°C, ${
+          data.weather.description
+        }`
       );
     }
 
     // Alerts
     if (data.upcomingAlerts.length > 0) {
       parts.push(
-        `${translate('dashboard.alerts')}: ${data.upcomingAlerts.length} ${translate('dashboard.pending')}`,
+        `${translate('dashboard.alerts')}: ${data.upcomingAlerts.length} ${translate(
+          'dashboard.pending'
+        )}`
       );
     }
 
@@ -116,7 +118,9 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({
     if (data.cropStatus.length > 0) {
       const crop = data.cropStatus[0];
       parts.push(
-        `${crop.cropName}: ${crop.stage}, ${translate('dashboard.next_activity')} ${crop.nextActivity}`,
+        `${crop.cropName}: ${crop.stage}, ${translate('dashboard.next_activity')} ${
+          crop.nextActivity
+        }`
       );
     }
 
@@ -142,9 +146,7 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#4CAF50" />
-        <Text style={styles.loadingText}>
-          {translate('dashboard.loading')}
-        </Text>
+        <Text style={styles.loadingText}>{translate('dashboard.loading')}</Text>
       </View>
     );
   }
@@ -157,9 +159,7 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({
       <View style={styles.centerContainer}>
         <Text style={styles.errorText}>{error}</Text>
         <TouchableOpacity style={styles.retryButton} onPress={loadDashboard}>
-          <Text style={styles.retryButtonText}>
-            {translate('common.retry')}
-          </Text>
+          <Text style={styles.retryButtonText}>{translate('common.retry')}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -171,25 +171,21 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({
   return (
     <ScrollView
       style={styles.container}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }>
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+    >
       {/* Header with voice button */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>
-          {translate('dashboard.title')}
-        </Text>
+        <Text style={styles.headerTitle}>{translate('dashboard.title')}</Text>
         <View style={styles.headerButtons}>
           {voiceSupported && (
-            <TouchableOpacity
-              style={styles.voiceButton}
-              onPress={speakDashboardSummary}>
+            <TouchableOpacity style={styles.voiceButton} onPress={speakDashboardSummary}>
               <Text style={styles.voiceButtonText}>🔊</Text>
             </TouchableOpacity>
           )}
           <TouchableOpacity
             style={styles.settingsButton}
-            onPress={() => navigation.navigate('Settings')}>
+            onPress={() => navigation.navigate('Settings')}
+          >
             <Text style={styles.settingsButtonText}>⚙️</Text>
           </TouchableOpacity>
         </View>
@@ -198,53 +194,32 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({
       {dashboardData && (
         <>
           {/* Quick Actions - Requirement 14.6 */}
-          <QuickActionsWidget
-            actions={dashboardData.quickActions}
-            navigation={navigation}
-          />
+          <QuickActionsWidget actions={dashboardData.quickActions} navigation={navigation} />
 
           {/* Insights - Requirement 14.5, 14.7 */}
           {dashboardData.insights.length > 0 && (
-            <InsightsWidget
-              insights={dashboardData.insights}
-              navigation={navigation}
-            />
+            <InsightsWidget insights={dashboardData.insights} navigation={navigation} />
           )}
 
           {/* Weather - Requirement 14.1 */}
-          <WeatherWidget
-            weather={dashboardData.weather}
-            navigation={navigation}
-          />
+          <WeatherWidget weather={dashboardData.weather} navigation={navigation} />
 
           {/* Alerts - Requirement 14.2 */}
           {dashboardData.upcomingAlerts.length > 0 && (
-            <AlertsWidget
-              alerts={dashboardData.upcomingAlerts}
-              navigation={navigation}
-            />
+            <AlertsWidget alerts={dashboardData.upcomingAlerts} navigation={navigation} />
           )}
 
           {/* Upcoming Activities Timeline */}
-          <UpcomingActivitiesWidget
-            alerts={dashboardData.upcomingAlerts}
-            navigation={navigation}
-          />
+          <UpcomingActivitiesWidget alerts={dashboardData.upcomingAlerts} navigation={navigation} />
 
           {/* Crop Status - Requirement 14.3 */}
           {dashboardData.cropStatus.length > 0 && (
-            <CropStatusWidget
-              cropStatus={dashboardData.cropStatus}
-              navigation={navigation}
-            />
+            <CropStatusWidget cropStatus={dashboardData.cropStatus} navigation={navigation} />
           )}
 
           {/* Market Prices - Requirement 14.4 */}
           {dashboardData.marketPrices.length > 0 && (
-            <MarketPricesWidget
-              prices={dashboardData.marketPrices}
-              navigation={navigation}
-            />
+            <MarketPricesWidget prices={dashboardData.marketPrices} navigation={navigation} />
           )}
 
           {/* Recommendations - Requirement 14.5 */}

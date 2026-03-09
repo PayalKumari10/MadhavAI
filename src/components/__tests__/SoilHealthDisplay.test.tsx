@@ -77,12 +77,12 @@ describe('SoilHealthDisplay', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     // Mock storage to return empty by default
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { soilHealthStorage } = require('../../services/soil/SoilHealthStorage');
     soilHealthStorage.getUserSoilHealthRecords.mockResolvedValue([]);
-    
+
     // Setup default mock implementations
     mockAnalyzeSoilHealth.mockReturnValue({
       overallRating: 'good',
@@ -94,7 +94,7 @@ describe('SoilHealthDisplay', () => {
       },
       nutrientAnalysis: [],
     });
-    
+
     mockGenerateRecommendations.mockReturnValue([
       {
         deficiency: 'Nitrogen',
@@ -110,7 +110,7 @@ describe('SoilHealthDisplay', () => {
         ],
       },
     ]);
-    
+
     mockGetTopMatches.mockReturnValue([
       {
         crop: 'Rice',
@@ -126,9 +126,7 @@ describe('SoilHealthDisplay', () => {
   });
 
   it('should render loading state initially', () => {
-    (soilApi.getSoilHealthByUser as jest.Mock).mockImplementation(
-      () => new Promise(() => {})
-    );
+    (soilApi.getSoilHealthByUser as jest.Mock).mockImplementation(() => new Promise(() => {}));
 
     const { getByText } = render(<SoilHealthDisplay userId="user-001" />);
 
@@ -162,9 +160,7 @@ describe('SoilHealthDisplay', () => {
   });
 
   it('should render error state on API failure', async () => {
-    (soilApi.getSoilHealthByUser as jest.Mock).mockRejectedValue(
-      new Error('API Error')
-    );
+    (soilApi.getSoilHealthByUser as jest.Mock).mockRejectedValue(new Error('API Error'));
 
     const { getByText } = render(<SoilHealthDisplay userId="user-001" />);
 
@@ -175,13 +171,13 @@ describe('SoilHealthDisplay', () => {
   });
 
   it('should render retry button in error state', async () => {
-    (soilApi.getSoilHealthByUser as jest.Mock).mockRejectedValue(
-      new Error('API Error')
-    );
-    
+    (soilApi.getSoilHealthByUser as jest.Mock).mockRejectedValue(new Error('API Error'));
+
     const onUploadPress = jest.fn();
 
-    const { getByText } = render(<SoilHealthDisplay userId="user-001" onUploadPress={onUploadPress} />);
+    const { getByText } = render(
+      <SoilHealthDisplay userId="user-001" onUploadPress={onUploadPress} />
+    );
 
     // Component now shows empty state with upload button instead of retry
     await waitFor(() => {
@@ -209,9 +205,12 @@ describe('SoilHealthDisplay', () => {
 
     const { getByText } = render(<SoilHealthDisplay userId="user-001" />);
 
-    await waitFor(() => {
-      expect(getByText('Test Lab')).toBeTruthy();
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(getByText('Test Lab')).toBeTruthy();
+      },
+      { timeout: 3000 }
+    );
   });
 
   it('should render soil parameters', async () => {
@@ -221,12 +220,15 @@ describe('SoilHealthDisplay', () => {
 
     const { getByText, getAllByText } = render(<SoilHealthDisplay userId="user-001" />);
 
-    await waitFor(() => {
-      expect(getByText('pH')).toBeTruthy();
-      expect(getByText('6.5')).toBeTruthy();
-      expect(getAllByText('Nitrogen').length).toBeGreaterThan(0);
-      expect(getByText('300 kg/ha')).toBeTruthy();
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(getByText('pH')).toBeTruthy();
+        expect(getByText('6.5')).toBeTruthy();
+        expect(getAllByText('Nitrogen').length).toBeGreaterThan(0);
+        expect(getByText('300 kg/ha')).toBeTruthy();
+      },
+      { timeout: 3000 }
+    );
   });
 
   it('should render section titles', async () => {
@@ -236,10 +238,13 @@ describe('SoilHealthDisplay', () => {
 
     const { getByText } = render(<SoilHealthDisplay userId="user-001" />);
 
-    await waitFor(() => {
-      expect(getByText('Soil Health Records')).toBeTruthy();
-      expect(getByText('Soil Parameters')).toBeTruthy();
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(getByText('Soil Health Records')).toBeTruthy();
+        expect(getByText('Soil Parameters')).toBeTruthy();
+      },
+      { timeout: 3000 }
+    );
   });
 
   it('should call API with correct userId', async () => {
@@ -255,20 +260,20 @@ describe('SoilHealthDisplay', () => {
   });
 
   it('should render multiple soil records', async () => {
-    const mockRecords = [
-      mockSoilData,
-      { ...mockSoilData, id: 'soil-002', labName: 'Lab 2' },
-    ];
+    const mockRecords = [mockSoilData, { ...mockSoilData, id: 'soil-002', labName: 'Lab 2' }];
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { soilHealthStorage } = require('../../services/soil/SoilHealthStorage');
     soilHealthStorage.getUserSoilHealthRecords.mockResolvedValue(mockRecords);
 
     const { getByText } = render(<SoilHealthDisplay userId="user-001" />);
 
-    await waitFor(() => {
-      expect(getByText('Test Lab')).toBeTruthy();
-      expect(getByText('Lab 2')).toBeTruthy();
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(getByText('Test Lab')).toBeTruthy();
+        expect(getByText('Lab 2')).toBeTruthy();
+      },
+      { timeout: 3000 }
+    );
   });
 
   it('should render upload button at bottom when records exist', async () => {
@@ -281,8 +286,11 @@ describe('SoilHealthDisplay', () => {
       <SoilHealthDisplay userId="user-001" onUploadPress={onUploadPress} />
     );
 
-    await waitFor(() => {
-      expect(getByText('Upload New Soil Health Card')).toBeTruthy();
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(getByText('Upload New Soil Health Card')).toBeTruthy();
+      },
+      { timeout: 3000 }
+    );
   });
 });

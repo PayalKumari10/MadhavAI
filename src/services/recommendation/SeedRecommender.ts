@@ -1,7 +1,7 @@
 /**
  * Seed Recommender Service
  * Requirements: 4.1, 4.2, 4.3, 4.4
- * 
+ *
  * Generates seed recommendations based on:
  * - Location and climate
  * - Soil conditions
@@ -130,14 +130,14 @@ export class SeedRecommender {
   ): Promise<SeedRecommendation[]> {
     // Filter varieties by crop if specified
     let varieties = cropName
-      ? this.seedDatabase.filter(v => v.cropName === cropName)
+      ? this.seedDatabase.filter((v) => v.cropName === cropName)
       : this.seedDatabase;
 
     // Filter by season
-    varieties = varieties.filter(v => v.suitableSeasons.includes(context.currentSeason));
+    varieties = varieties.filter((v) => v.suitableSeasons.includes(context.currentSeason));
 
     // Score and rank varieties
-    const scoredVarieties = varieties.map(variety => ({
+    const scoredVarieties = varieties.map((variety) => ({
       variety,
       score: this.calculateVarietyScore(variety, context),
     }));
@@ -164,7 +164,7 @@ export class SeedRecommender {
     // Soil type match (30 points)
     if (context.soilData) {
       const soilType = context.soilData.soilType.toLowerCase();
-      if (variety.suitableSoilTypes.some(st => soilType.includes(st))) {
+      if (variety.suitableSoilTypes.some((st) => soilType.includes(st))) {
         score += 30;
       }
     }
@@ -239,7 +239,7 @@ export class SeedRecommender {
     const currentYear = currentDate.getFullYear();
 
     // Find next sowing month
-    let nextSowingMonth = variety.sowingMonths.find(m => m >= currentMonth);
+    let nextSowingMonth = variety.sowingMonths.find((m) => m >= currentMonth);
     let sowingYear = currentYear;
 
     if (!nextSowingMonth) {
@@ -311,7 +311,7 @@ export class SeedRecommender {
     // Soil compatibility
     if (context.soilData) {
       const soilType = context.soilData.soilType.toLowerCase();
-      if (variety.suitableSoilTypes.some(st => soilType.includes(st))) {
+      if (variety.suitableSoilTypes.some((st) => soilType.includes(st))) {
         reasons.push(`Compatible with ${context.soilData.soilType} soil`);
       }
     }

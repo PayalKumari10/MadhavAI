@@ -4,11 +4,7 @@
  */
 
 import { logger } from '../../utils/logger';
-import {
-  Alert,
-  AlertChannel,
-  NotificationDelivery,
-} from '../../types/alert.types';
+import { Alert, AlertChannel, NotificationDelivery } from '../../types/alert.types';
 import { DatabaseService, databaseService } from '../storage/DatabaseService';
 import { alertManager } from './AlertManager';
 
@@ -100,7 +96,13 @@ export class NotificationService {
 
       if (!this.snsClient) {
         logger.warn('SNS client not configured, skipping SMS');
-        await this.recordDelivery(alert.id, alert.userId, 'sms', 'failed', 'SNS client not configured');
+        await this.recordDelivery(
+          alert.id,
+          alert.userId,
+          'sms',
+          'failed',
+          'SNS client not configured'
+        );
         return;
       }
 
@@ -122,14 +124,9 @@ export class NotificationService {
       logger.info(`SMS sent successfully: ${result.MessageId}`);
 
       // Record successful delivery
-      await this.recordDelivery(
-        alert.id,
-        alert.userId,
-        'sms',
-        'sent',
-        undefined,
-        { messageId: result.MessageId }
-      );
+      await this.recordDelivery(alert.id, alert.userId, 'sms', 'sent', undefined, {
+        messageId: result.MessageId,
+      });
     } catch (error) {
       logger.error('Failed to send SMS', error);
       await this.recordDelivery(
@@ -152,16 +149,12 @@ export class NotificationService {
 
       // In a real implementation, this would use a push notification service
       // like Firebase Cloud Messaging (FCM) or Apple Push Notification Service (APNS)
-      
+
       // For now, we'll just record the delivery
-      await this.recordDelivery(
-        alert.id,
-        alert.userId,
-        'push',
-        'sent',
-        undefined,
-        { title: alert.title, message: alert.message }
-      );
+      await this.recordDelivery(alert.id, alert.userId, 'push', 'sent', undefined, {
+        title: alert.title,
+        message: alert.message,
+      });
 
       logger.info(`Push notification sent for alert ${alert.id}`);
     } catch (error) {
@@ -186,16 +179,11 @@ export class NotificationService {
 
       // In a real implementation, this would use text-to-speech
       // to read the alert message in the user's preferred language
-      
+
       // For now, we'll just record the delivery
-      await this.recordDelivery(
-        alert.id,
-        alert.userId,
-        'voice',
-        'sent',
-        undefined,
-        { message: alert.message }
-      );
+      await this.recordDelivery(alert.id, alert.userId, 'voice', 'sent', undefined, {
+        message: alert.message,
+      });
 
       logger.info(`Voice notification sent for alert ${alert.id}`);
     } catch (error) {
@@ -221,9 +209,7 @@ export class NotificationService {
     logger.info(`Sending batch notifications for ${alerts.length} alerts`);
 
     const results = await Promise.allSettled(
-      alerts.map((alert) =>
-        this.sendNotification(alert, userPhoneNumbers.get(alert.userId))
-      )
+      alerts.map((alert) => this.sendNotification(alert, userPhoneNumbers.get(alert.userId)))
     );
 
     const successful = results.filter((r) => r.status === 'fulfilled').length;
@@ -250,10 +236,9 @@ export class NotificationService {
       for (const delivery of failedDeliveries) {
         try {
           // Get the original alert
-          const alertResults = await this.db.query(
-            `SELECT * FROM alerts WHERE id = ?`,
-            [delivery.alertId]
-          );
+          const alertResults = await this.db.query(`SELECT * FROM alerts WHERE id = ?`, [
+            delivery.alertId,
+          ]);
 
           if (alertResults.length === 0) {
             logger.warn(`Alert ${delivery.alertId} not found, skipping retry`);

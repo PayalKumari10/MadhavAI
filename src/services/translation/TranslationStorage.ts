@@ -8,7 +8,7 @@ import {
   TranslationContent,
   TranslationCategory,
 } from '../../types/translation.types';
-import {DatabaseService} from '../storage/DatabaseService';
+import { DatabaseService } from '../storage/DatabaseService';
 
 class TranslationStorage {
   private db: DatabaseService;
@@ -75,14 +75,7 @@ class TranslationStorage {
       VALUES (?, ?, ?, ?, ?, ?)
     `;
 
-    await this.db.execute(query, [
-      language,
-      category,
-      contentJson,
-      version,
-      now,
-      now,
-    ]);
+    await this.db.execute(query, [language, category, contentJson, version, now, now]);
   }
 
   /**
@@ -97,7 +90,7 @@ class TranslationStorage {
       WHERE language = ? AND category = ?
     `;
 
-    const results = await this.db.query<{content: string}>(query, [language, category]);
+    const results = await this.db.query<{ content: string }>(query, [language, category]);
 
     if (results.length > 0) {
       return JSON.parse(results[0].content);
@@ -117,7 +110,7 @@ class TranslationStorage {
       WHERE language = ?
     `;
 
-    const results = await this.db.query<{category: string; content: string}>(query, [language]);
+    const results = await this.db.query<{ category: string; content: string }>(query, [language]);
     const translations = new Map<TranslationCategory, TranslationContent>();
 
     for (const row of results) {
@@ -136,7 +129,7 @@ class TranslationStorage {
       WHERE language = ? AND category = ?
     `;
 
-    const results = await this.db.query<{version: string}>(query, [language, category]);
+    const results = await this.db.query<{ version: string }>(query, [language, category]);
 
     if (results.length > 0) {
       return results[0].version;
@@ -154,7 +147,7 @@ class TranslationStorage {
       WHERE language = ? AND category = ?
     `;
 
-    const results = await this.db.query<{count: number}>(query, [language, category]);
+    const results = await this.db.query<{ count: number }>(query, [language, category]);
 
     if (results.length > 0) {
       return results[0].count > 0;
@@ -195,7 +188,7 @@ class TranslationStorage {
       SELECT DISTINCT language FROM ${this.TABLE_NAME}
     `;
 
-    const results = await this.db.query<{language: string}>(query);
+    const results = await this.db.query<{ language: string }>(query);
     const languages: LanguageCode[] = [];
 
     for (const row of results) {
@@ -247,7 +240,7 @@ class TranslationStorage {
       WHERE language = ? AND category = ?
     `;
 
-    const results = await this.db.query<{updated_at: number}>(query, [language, category]);
+    const results = await this.db.query<{ updated_at: number }>(query, [language, category]);
 
     if (results.length > 0) {
       return new Date(results[0].updated_at);

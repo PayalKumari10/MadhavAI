@@ -3,7 +3,7 @@
  * Reads recommendations aloud using text-to-speech
  */
 
-import {SupportedLanguage} from '../../types/voice.types';
+import { SupportedLanguage } from '../../types/voice.types';
 import TextToSpeech from './TextToSpeech';
 
 /**
@@ -45,7 +45,9 @@ class VoiceRecommendationReader {
       return;
     }
 
-    const intro = `You have ${recommendations.length} recommendation${recommendations.length > 1 ? 's' : ''}`;
+    const intro = `You have ${recommendations.length} recommendation${
+      recommendations.length > 1 ? 's' : ''
+    }`;
     await this.tts.speak(intro, this.currentLanguage);
 
     for (let i = 0; i < recommendations.length; i++) {

@@ -473,7 +473,7 @@ export class CropRecommender {
       const suitabilityScore = this.calculateSuitability(crop, context);
       const profitabilityScore = this.calculateProfitability(crop, context);
       const riskScore = this.calculateRisk(crop, context);
-      
+
       // Overall score: weighted average
       const overallScore =
         suitabilityScore * 0.4 + profitabilityScore * 0.35 + (100 - riskScore) * 0.25;
@@ -494,12 +494,10 @@ export class CropRecommender {
     const topCrops = scoredCrops.slice(0, limit);
 
     // Generate recommendations
-    const recommendations = topCrops.map((scored) =>
-      this.createRecommendation(scored, context)
-    );
+    const recommendations = topCrops.map((scored) => this.createRecommendation(scored, context));
 
     const elapsedTime = Date.now() - startTime;
-    
+
     // Ensure completion within 5 seconds (requirement 17.2)
     if (elapsedTime > 5000) {
       console.warn(`Crop recommendation took ${elapsedTime}ms, exceeding 5s limit`);

@@ -11,7 +11,12 @@ class TrendAnalyzer {
   /**
    * Analyze price trend for a crop over specified period
    */
-  analyzeTrend(prices: MarketPrice[], crop: string, variety?: string, days: number = 30): PriceTrend | null {
+  analyzeTrend(
+    prices: MarketPrice[],
+    crop: string,
+    variety?: string,
+    days: number = 30
+  ): PriceTrend | null {
     logger.info(`Analyzing price trend for ${crop}${variety ? ` (${variety})` : ''}`);
 
     // Filter prices for the specific crop and variety
@@ -91,7 +96,12 @@ class TrendAnalyzer {
   /**
    * Get price statistics for a crop
    */
-  getPriceStatistics(prices: MarketPrice[], crop: string, variety?: string, days: number = 30): {
+  getPriceStatistics(
+    prices: MarketPrice[],
+    crop: string,
+    variety?: string,
+    days: number = 30
+  ): {
     min: number;
     max: number;
     average: number;
@@ -131,7 +141,9 @@ class TrendAnalyzer {
   /**
    * Determine trend direction using linear regression
    */
-  private determineTrend(pricePoints: Array<{ date: Date; price: number }>): 'rising' | 'falling' | 'stable' {
+  private determineTrend(
+    pricePoints: Array<{ date: Date; price: number }>
+  ): 'rising' | 'falling' | 'stable' {
     if (pricePoints.length < 2) return 'stable';
 
     // Convert dates to numeric values (days since first date)

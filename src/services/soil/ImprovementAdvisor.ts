@@ -67,7 +67,8 @@ class ImprovementAdvisor {
         {
           type: 'organic',
           title: 'Apply Farmyard Manure (FYM)',
-          description: 'Well-decomposed farmyard manure is rich in nitrogen and improves soil structure',
+          description:
+            'Well-decomposed farmyard manure is rich in nitrogen and improves soil structure',
           materials: ['Farmyard manure', 'Cow dung compost'],
           application: {
             rate: '10-15 tons per hectare',

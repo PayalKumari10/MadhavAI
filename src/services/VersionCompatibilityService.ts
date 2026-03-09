@@ -1,6 +1,6 @@
 /**
  * Version Compatibility Service
- * 
+ *
  * Ensures backward compatibility for 2 previous versions
  * Handles API versioning and graceful degradation
  */
@@ -102,16 +102,16 @@ export class VersionCompatibilityService {
    */
   isFeatureSupported(feature: string): boolean {
     const featureVersions: { [key: string]: string } = {
-      'voice_interface': '1.0.0',
-      'offline_mode': '1.0.0',
-      'crop_recommendations': '1.0.0',
-      'market_prices': '1.0.0',
-      'weather_forecast': '1.0.0',
-      'government_schemes': '1.0.0',
-      'training_lessons': '1.0.0',
-      'soil_health': '1.1.0',
-      'pest_detection': '1.2.0',
-      'yield_prediction': '2.0.0',
+      voice_interface: '1.0.0',
+      offline_mode: '1.0.0',
+      crop_recommendations: '1.0.0',
+      market_prices: '1.0.0',
+      weather_forecast: '1.0.0',
+      government_schemes: '1.0.0',
+      training_lessons: '1.0.0',
+      soil_health: '1.1.0',
+      pest_detection: '1.2.0',
+      yield_prediction: '2.0.0',
     };
 
     const requiredVersion = featureVersions[feature];
@@ -127,9 +127,9 @@ export class VersionCompatibilityService {
    */
   getFallbackBehavior(feature: string): string {
     const fallbacks: { [key: string]: string } = {
-      'soil_health': 'Show basic soil information without advanced analysis',
-      'pest_detection': 'Redirect to training lessons on pest management',
-      'yield_prediction': 'Show historical yield data instead of predictions',
+      soil_health: 'Show basic soil information without advanced analysis',
+      pest_detection: 'Redirect to training lessons on pest management',
+      yield_prediction: 'Show historical yield data instead of predictions',
     };
 
     return fallbacks[feature] || 'Feature not available in this version';
@@ -260,7 +260,7 @@ export class VersionCompatibilityService {
       });
 
       const versionInfo: VersionInfo = response.data;
-      
+
       // Update required if current version is below minimum
       return this.compareVersions(this.currentVersion, versionInfo.minimum) < 0;
     } catch (error) {
@@ -282,7 +282,7 @@ export class VersionCompatibilityService {
       });
 
       const versionInfo: VersionInfo = response.data;
-      
+
       // Update recommended if current version is below recommended
       return this.compareVersions(this.currentVersion, versionInfo.recommended) < 0;
     } catch (error) {

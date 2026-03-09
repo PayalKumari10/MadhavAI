@@ -24,7 +24,7 @@ export type SupportedLanguage =
 export interface VoiceCommandResult {
   understood: boolean;
   action: string;
-  parameters: {[key: string]: any};
+  parameters: { [key: string]: any };
   response: string;
 }
 

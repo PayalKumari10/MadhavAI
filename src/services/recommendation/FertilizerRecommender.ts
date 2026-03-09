@@ -4,10 +4,7 @@
  * Requirements: 3.1, 3.2, 3.3, 3.4
  */
 
-import {
-  FertilizerRecommendation,
-  FertilizerAlternative,
-} from '../../types/recommendation.types';
+import { FertilizerRecommendation, FertilizerAlternative } from '../../types/recommendation.types';
 import { EnhancedFarmingContext } from './FarmingContextBuilder';
 
 /**
@@ -173,12 +170,7 @@ export class FertilizerRecommender {
 
     // Generate recommendations for each deficiency
     for (const deficiency of deficiencies) {
-      const recommendation = this.createRecommendation(
-        deficiency,
-        cropName,
-        growthStage,
-        context
-      );
+      const recommendation = this.createRecommendation(deficiency, cropName, growthStage, context);
       recommendations.push(recommendation);
     }
 
@@ -235,7 +227,7 @@ export class FertilizerRecommender {
   ): FertilizerRecommendation {
     // Find best fertilizer for this nutrient
     const fertilizers = this.fertilizerDatabase.filter((f) => f.nutrient === nutrient);
-    
+
     // Prefer chemical for faster results, but include organic alternatives
     const primaryFertilizer = fertilizers.find((f) => f.type === 'chemical') || fertilizers[0];
     const alternatives = fertilizers
@@ -258,12 +250,7 @@ export class FertilizerRecommender {
     };
 
     // Generate explanation
-    const explanation = this.generateExplanation(
-      nutrient,
-      primaryFertilizer,
-      context,
-      growthStage
-    );
+    const explanation = this.generateExplanation(nutrient, primaryFertilizer, context, growthStage);
 
     // Calculate confidence
     const confidence = context.computed.recommendationReadiness;
@@ -318,7 +305,7 @@ export class FertilizerRecommender {
 
     if (context.soilData) {
       const { parameters } = context.soilData;
-      
+
       // Adjust based on deficiency severity
       if (nutrient === 'nitrogen') {
         if (parameters.nitrogen < 200) {
@@ -406,7 +393,7 @@ export class FertilizerRecommender {
 
     if (context.soilData) {
       const { parameters } = context.soilData;
-      
+
       if (nutrient === 'nitrogen' && parameters.nitrogen < 280) {
         parts.push(
           `Your soil has low nitrogen (${parameters.nitrogen} kg/ha). Nitrogen is essential for leaf growth and overall plant vigor.`
@@ -427,7 +414,7 @@ export class FertilizerRecommender {
     }
 
     parts.push(`${fertilizer.name} is recommended for ${growthStage.replace('_', ' ')} stage.`);
-    
+
     if (fertilizer.type === 'organic') {
       parts.push('Organic option provides slow-release nutrients and improves soil health.');
     } else {
@@ -464,13 +451,16 @@ export class FertilizerRecommender {
     // Check if soil already has high nutrient levels
     recommendations.forEach((rec) => {
       if (rec.nutrient.includes('Nitrogen') && parameters.nitrogen > 400) {
-        rec.explanation += ' WARNING: Soil already has high nitrogen. Excessive use may cause lodging and reduce grain quality.';
+        rec.explanation +=
+          ' WARNING: Soil already has high nitrogen. Excessive use may cause lodging and reduce grain quality.';
       }
       if (rec.nutrient.includes('Phosphorus') && parameters.phosphorus > 50) {
-        rec.explanation += ' WARNING: Soil already has high phosphorus. Excessive use may reduce micronutrient availability.';
+        rec.explanation +=
+          ' WARNING: Soil already has high phosphorus. Excessive use may reduce micronutrient availability.';
       }
       if (rec.nutrient.includes('Potassium') && parameters.potassium > 400) {
-        rec.explanation += ' WARNING: Soil already has high potassium. Excessive use may affect calcium and magnesium uptake.';
+        rec.explanation +=
+          ' WARNING: Soil already has high potassium. Excessive use may affect calcium and magnesium uptake.';
       }
     });
   }

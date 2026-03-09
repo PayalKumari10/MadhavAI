@@ -20,12 +20,15 @@ class SessionManager {
     const array = new Uint8Array(32);
     // Check if crypto API is available (works in both browser and React Native)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (typeof (globalThis as any).crypto !== 'undefined' && (globalThis as any).crypto.getRandomValues) {
+    if (
+      typeof (globalThis as any).crypto !== 'undefined' &&
+      (globalThis as any).crypto.getRandomValues
+    ) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (globalThis as any).crypto.getRandomValues(array);
       return Array.from(array, (byte) => byte.toString(16).padStart(2, '0')).join('');
     }
-    
+
     // Fallback
     return Math.random().toString(36).substring(2) + Date.now().toString(36);
   }
@@ -131,7 +134,7 @@ class SessionManager {
    */
   invalidateSession(token: string): void {
     const session = this.sessions.get(token);
-    
+
     if (session) {
       this.sessions.delete(token);
       logger.info(`Session invalidated for user ${session.userId}`);

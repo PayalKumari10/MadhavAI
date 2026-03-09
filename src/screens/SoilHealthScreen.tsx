@@ -16,7 +16,7 @@ export default function SoilHealthScreen() {
   const handleUploadComplete = () => {
     setShowUpload(false);
     // Trigger refresh by changing the key
-    setRefreshKey(prev => prev + 1);
+    setRefreshKey((prev) => prev + 1);
   };
 
   const handleUploadPress = () => {
@@ -34,9 +34,9 @@ export default function SoilHealthScreen() {
   return (
     <>
       <ScrollView style={styles.container}>
-        <SoilHealthDisplay 
+        <SoilHealthDisplay
           key={refreshKey}
-          userId="demo-user-001" 
+          userId="demo-user-001"
           onUploadPress={handleUploadPress}
         />
       </ScrollView>

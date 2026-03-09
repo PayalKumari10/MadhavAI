@@ -15,7 +15,7 @@ interface RemoteTranslationSource {
   fetchTranslations(
     language: LanguageCode,
     category: TranslationCategory
-  ): Promise<{content: TranslationContent; version: string} | null>;
+  ): Promise<{ content: TranslationContent; version: string } | null>;
 }
 
 interface SyncResult {
@@ -68,7 +68,7 @@ class TranslationSyncService {
         for (const category of categories) {
           try {
             const synced = await this.syncTranslation(language, category);
-            
+
             if (synced) {
               if (!result.syncedLanguages.includes(language)) {
                 result.syncedLanguages.push(language);
@@ -80,7 +80,9 @@ class TranslationSyncService {
           } catch (error) {
             result.success = false;
             result.errors.push(
-              `Failed to sync ${language}/${category}: ${error instanceof Error ? error.message : 'Unknown error'}`
+              `Failed to sync ${language}/${category}: ${
+                error instanceof Error ? error.message : 'Unknown error'
+              }`
             );
           }
         }
@@ -118,12 +120,7 @@ class TranslationSyncService {
       }
 
       // Store updated translation
-      await this.storage.storeTranslations(
-        language,
-        category,
-        remote.content,
-        remote.version
-      );
+      await this.storage.storeTranslations(language, category, remote.content, remote.version);
 
       return true;
     } catch (error) {
@@ -164,14 +161,16 @@ class TranslationSyncService {
       for (const language of languages) {
         try {
           const synced = await this.syncTranslation(language, category);
-          
+
           if (synced && !result.syncedLanguages.includes(language)) {
             result.syncedLanguages.push(language);
           }
         } catch (error) {
           result.success = false;
           result.errors.push(
-            `Failed to sync ${language}: ${error instanceof Error ? error.message : 'Unknown error'}`
+            `Failed to sync ${language}: ${
+              error instanceof Error ? error.message : 'Unknown error'
+            }`
           );
         }
       }
@@ -212,7 +211,7 @@ class TranslationSyncService {
    */
   async getSyncStatistics() {
     const stats = await this.storage.getStatistics();
-    
+
     return {
       storedLanguages: stats.length,
       totalSize: stats.reduce((sum, stat) => sum + stat.total_size, 0),

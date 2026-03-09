@@ -59,9 +59,7 @@ describe('SoilAnalyzer', () => {
 
       expect(analysis.deficiencies).toContain('Nitrogen');
       expect(analysis.recommendations).toEqual(
-        expect.arrayContaining([
-          expect.stringContaining('nutrient deficiencies'),
-        ])
+        expect.arrayContaining([expect.stringContaining('nutrient deficiencies')])
       );
 
       const nitrogenStatus = analysis.nutrientStatus.find((n) => n.nutrient === 'Nitrogen');
@@ -122,9 +120,7 @@ describe('SoilAnalyzer', () => {
 
       expect(analysis.excesses).toContain('Nitrogen');
       expect(analysis.recommendations).toEqual(
-        expect.arrayContaining([
-          expect.stringContaining('Reduce application'),
-        ])
+        expect.arrayContaining([expect.stringContaining('Reduce application')])
       );
     });
 
@@ -143,9 +139,7 @@ describe('SoilAnalyzer', () => {
       const analysis = soilAnalyzer.analyzeSoilHealth(soilData);
 
       expect(analysis.recommendations).toEqual(
-        expect.arrayContaining([
-          expect.stringContaining('lime'),
-        ])
+        expect.arrayContaining([expect.stringContaining('lime')])
       );
 
       const pHStatus = analysis.nutrientStatus.find((n) => n.nutrient === 'pH');
@@ -167,9 +161,7 @@ describe('SoilAnalyzer', () => {
       const analysis = soilAnalyzer.analyzeSoilHealth(soilData);
 
       expect(analysis.recommendations).toEqual(
-        expect.arrayContaining([
-          expect.stringContaining('sulfur'),
-        ])
+        expect.arrayContaining([expect.stringContaining('sulfur')])
       );
 
       const pHStatus = analysis.nutrientStatus.find((n) => n.nutrient === 'pH');
@@ -191,9 +183,7 @@ describe('SoilAnalyzer', () => {
       const analysis = soilAnalyzer.analyzeSoilHealth(soilData);
 
       expect(analysis.recommendations).toEqual(
-        expect.arrayContaining([
-          expect.stringContaining('organic matter'),
-        ])
+        expect.arrayContaining([expect.stringContaining('organic matter')])
       );
 
       const ocStatus = analysis.nutrientStatus.find((n) => n.nutrient === 'Organic Carbon');
@@ -300,9 +290,7 @@ describe('SoilAnalyzer', () => {
 
       expect(analysis.interpretation.details.length).toBeGreaterThan(0);
       expect(analysis.interpretation.details).toEqual(
-        expect.arrayContaining([
-          expect.stringContaining('Soil Type'),
-        ])
+        expect.arrayContaining([expect.stringContaining('Soil Type')])
       );
     });
   });

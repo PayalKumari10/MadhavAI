@@ -1,19 +1,12 @@
 /**
  * Scheme Detail Component
  * Requirements: 2.1, 2.3, 2.5
- * 
+ *
  * Displays detailed information about a government scheme
  */
 
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  Linking,
-} from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import { Scheme } from '../../types/scheme.types';
 import { EligibilityResult } from '../../types/scheme.types';
 
@@ -178,9 +171,7 @@ export const SchemeDetail: React.FC<SchemeDetailProps> = ({
                   </View>
                 )}
 
-                {step.estimatedTime && (
-                  <Text style={styles.stepTime}>⏱️ {step.estimatedTime}</Text>
-                )}
+                {step.estimatedTime && <Text style={styles.stepTime}>⏱️ {step.estimatedTime}</Text>}
               </View>
             )}
           </TouchableOpacity>

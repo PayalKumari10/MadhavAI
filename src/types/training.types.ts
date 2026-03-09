@@ -67,4 +67,4 @@ export const LESSON_CATEGORIES = [
   'government_schemes',
 ] as const;
 
-export type LessonCategory = typeof LESSON_CATEGORIES[number];
+export type LessonCategory = (typeof LESSON_CATEGORIES)[number];

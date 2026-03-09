@@ -4,13 +4,7 @@
  */
 
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { Lesson } from '../../types/training.types';
 
 interface RelatedLessonsProps {
@@ -18,15 +12,9 @@ interface RelatedLessonsProps {
   onLessonSelect: (lessonId: string) => void;
 }
 
-export const RelatedLessons: React.FC<RelatedLessonsProps> = ({
-  lessons,
-  onLessonSelect,
-}) => {
+export const RelatedLessons: React.FC<RelatedLessonsProps> = ({ lessons, onLessonSelect }) => {
   const renderLesson = ({ item }: { item: Lesson }) => (
-    <TouchableOpacity
-      style={styles.lessonCard}
-      onPress={() => onLessonSelect(item.id)}
-    >
+    <TouchableOpacity style={styles.lessonCard} onPress={() => onLessonSelect(item.id)}>
       <View style={styles.lessonInfo}>
         <Text style={styles.lessonTitle}>{item.title}</Text>
         <Text style={styles.lessonMeta}>

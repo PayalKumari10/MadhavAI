@@ -135,9 +135,7 @@ export class FarmingContextBuilder {
     let riskScore = 0;
 
     // Check for extreme temperatures
-    const hasExtremeTemp = daily.some(
-      (day) => day.temperature.max > 40 || day.temperature.min < 5
-    );
+    const hasExtremeTemp = daily.some((day) => day.temperature.max > 40 || day.temperature.min < 5);
     if (hasExtremeTemp) riskScore += 2;
 
     // Check for heavy rainfall
@@ -159,7 +157,11 @@ export class FarmingContextBuilder {
   private assessMarketOpportunity(
     context: FarmingContext
   ): 'favorable' | 'neutral' | 'unfavorable' | 'unknown' {
-    if (!context.marketData || !context.marketData.trends || context.marketData.trends.length === 0) {
+    if (
+      !context.marketData ||
+      !context.marketData.trends ||
+      context.marketData.trends.length === 0
+    ) {
       return 'unknown';
     }
 
@@ -192,7 +194,11 @@ export class FarmingContextBuilder {
     if (context.userProfile.location) score += 15;
 
     // Farm data (15 points)
-    if (context.userProfile.farmSize && context.userProfile.primaryCrops && context.userProfile.primaryCrops.length > 0) {
+    if (
+      context.userProfile.farmSize &&
+      context.userProfile.primaryCrops &&
+      context.userProfile.primaryCrops.length > 0
+    ) {
       score += 15;
     }
 
@@ -218,18 +224,24 @@ export class FarmingContextBuilder {
       recommendations.push('Upload your soil health card for better crop recommendations');
     }
 
-    if (!context.userProfile.location || !context.userProfile.location.state || !context.userProfile.location.district) {
+    if (
+      !context.userProfile.location ||
+      !context.userProfile.location.state ||
+      !context.userProfile.location.district
+    ) {
       recommendations.push('Add your farm location for weather and market insights');
     }
 
-    if (!context.userProfile.farmSize || !context.userProfile.primaryCrops || context.userProfile.primaryCrops.length === 0) {
+    if (
+      !context.userProfile.farmSize ||
+      !context.userProfile.primaryCrops ||
+      context.userProfile.primaryCrops.length === 0
+    ) {
       recommendations.push('Complete your farm profile with size and current crops');
     }
 
     if (context.computed.recommendationReadiness < 70) {
-      recommendations.push(
-        'Complete your profile to get personalized recommendations'
-      );
+      recommendations.push('Complete your profile to get personalized recommendations');
     }
 
     return recommendations;

@@ -127,7 +127,7 @@ class SyncQueue {
 
     const initialLength = this.queue.length;
     this.queue = this.queue.filter((item) => item.id !== itemId);
-    
+
     if (this.queue.length < initialLength) {
       await this.persist();
       logger.info(`Item removed from sync queue: ${itemId}`);

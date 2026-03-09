@@ -7,11 +7,7 @@ import { alertScheduler } from '../../services/alert/AlertScheduler';
 import { alertManager } from '../../services/alert/AlertManager';
 import { notificationService } from '../../services/alert/NotificationService';
 import { logger } from '../../utils/logger';
-import {
-  AlertScheduleRequest,
-  AlertPreferences,
-  AlertType,
-} from '../../types/alert.types';
+import { AlertScheduleRequest, AlertPreferences, AlertType } from '../../types/alert.types';
 
 type APIEvent = {
   body?: string;
@@ -32,7 +28,13 @@ export async function scheduleAlert(event: APIEvent): Promise<APIResponse> {
     const request: AlertScheduleRequest = JSON.parse(event.body || '{}');
 
     // Validate request
-    if (!request.userId || !request.type || !request.title || !request.message || !request.scheduledTime) {
+    if (
+      !request.userId ||
+      !request.type ||
+      !request.title ||
+      !request.message ||
+      !request.scheduledTime
+    ) {
       return {
         statusCode: 400,
         body: JSON.stringify({

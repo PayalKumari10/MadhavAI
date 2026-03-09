@@ -5,17 +5,17 @@
  */
 
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {DailyForecast} from '../../types/weather.types';
-import {useTranslation} from '../../hooks/useTranslation';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { DailyForecast } from '../../types/weather.types';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface WeatherWidgetProps {
   weather: DailyForecast;
   navigation: any;
 }
 
-const WeatherWidget: React.FC<WeatherWidgetProps> = ({weather, navigation}) => {
-  const {translate} = useTranslation();
+const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, navigation }) => {
+  const { translate } = useTranslation();
 
   const navigateToWeather = () => {
     if (navigation && navigation.navigate) {
@@ -24,10 +24,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({weather, navigation}) => {
   };
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={navigateToWeather}
-      activeOpacity={0.7}>
+    <TouchableOpacity style={styles.container} onPress={navigateToWeather} activeOpacity={0.7}>
       <View style={styles.header}>
         <Text style={styles.icon}>🌤️</Text>
         <Text style={styles.title}>{translate('dashboard.weather')}</Text>
@@ -41,15 +38,11 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({weather, navigation}) => {
 
         <View style={styles.details}>
           <View style={styles.detailItem}>
-            <Text style={styles.detailLabel}>
-              {translate('weather.humidity')}
-            </Text>
+            <Text style={styles.detailLabel}>{translate('weather.humidity')}</Text>
             <Text style={styles.detailValue}>{weather.humidity}%</Text>
           </View>
           <View style={styles.detailItem}>
-            <Text style={styles.detailLabel}>
-              {translate('weather.wind')}
-            </Text>
+            <Text style={styles.detailLabel}>{translate('weather.wind')}</Text>
             <Text style={styles.detailValue}>{weather.wind.speed} km/h</Text>
           </View>
         </View>
@@ -68,7 +61,7 @@ const styles = StyleSheet.create({
     padding: 16,
     elevation: 2,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },

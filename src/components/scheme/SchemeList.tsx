@@ -1,7 +1,7 @@
 /**
  * Scheme List Component
  * Requirements: 2.1, 2.5
- * 
+ *
  * Displays list of government schemes with filtering and search
  */
 
@@ -73,14 +73,14 @@ export const SchemeList: React.FC<SchemeListProps> = ({
 
     // Filter by category
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter(scheme => scheme.category === selectedCategory);
+      filtered = filtered.filter((scheme) => scheme.category === selectedCategory);
     }
 
     // Filter by search query
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
-        scheme =>
+        (scheme) =>
           scheme.name.toLowerCase().includes(query) ||
           scheme.description.toLowerCase().includes(query)
       );
@@ -179,14 +179,11 @@ export const SchemeList: React.FC<SchemeListProps> = ({
         <FlatList
           horizontal
           data={categories}
-          keyExtractor={item => item}
+          keyExtractor={(item) => item}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => (
             <TouchableOpacity
-              style={[
-                styles.categoryChip,
-                selectedCategory === item && styles.categoryChipActive,
-              ]}
+              style={[styles.categoryChip, selectedCategory === item && styles.categoryChipActive]}
               onPress={() => setSelectedCategory(item)}
               accessibilityLabel={`Filter by ${item}`}
               accessibilityRole="button"
@@ -208,14 +205,12 @@ export const SchemeList: React.FC<SchemeListProps> = ({
       {filteredSchemes.length === 0 ? (
         <View style={styles.centerContainer}>
           <Text style={styles.emptyText}>No schemes found</Text>
-          <Text style={styles.emptySubtext}>
-            Try adjusting your search or filters
-          </Text>
+          <Text style={styles.emptySubtext}>Try adjusting your search or filters</Text>
         </View>
       ) : (
         <FlatList
           data={filteredSchemes}
-          keyExtractor={item => item.id}
+          keyExtractor={(item) => item.id}
           renderItem={renderSchemeCard}
           contentContainerStyle={styles.listContainer}
           showsVerticalScrollIndicator={false}

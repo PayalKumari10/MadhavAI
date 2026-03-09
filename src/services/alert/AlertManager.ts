@@ -21,10 +21,9 @@ export class AlertManager {
     try {
       logger.info(`Fetching alert preferences for user ${userId}`);
 
-      const results = await this.db.query(
-        `SELECT * FROM alert_preferences WHERE userId = ?`,
-        [userId]
-      );
+      const results = await this.db.query(`SELECT * FROM alert_preferences WHERE userId = ?`, [
+        userId,
+      ]);
 
       if (results.length === 0) {
         // Return default preferences if none exist
@@ -75,11 +74,7 @@ export class AlertManager {
   /**
    * Enable/disable specific alert type
    */
-  async setAlertTypeEnabled(
-    userId: string,
-    alertType: AlertType,
-    enabled: boolean
-  ): Promise<void> {
+  async setAlertTypeEnabled(userId: string, alertType: AlertType, enabled: boolean): Promise<void> {
     try {
       logger.info(`Setting ${alertType} alert to ${enabled} for user ${userId}`);
 
@@ -132,13 +127,7 @@ export class AlertManager {
         `UPDATE alert_preferences 
          SET quietHoursEnabled = ?, quietHoursStart = ?, quietHoursEnd = ?, updatedAt = ?
          WHERE userId = ?`,
-        [
-          enabled ? 1 : 0,
-          start || null,
-          end || null,
-          new Date().toISOString(),
-          userId,
-        ]
+        [enabled ? 1 : 0, start || null, end || null, new Date().toISOString(), userId]
       );
 
       logger.info(`Quiet hours updated for user ${userId}`);

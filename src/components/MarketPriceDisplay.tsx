@@ -5,7 +5,14 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
 import { marketService } from '../services/market/MarketService';
 import { trendAnalyzer } from '../services/market/TrendAnalyzer';
 import { sellingAdvisor } from '../services/market/SellingAdvisor';
@@ -154,7 +161,10 @@ export const MarketPriceDisplay: React.FC<MarketPriceDisplayProps> = ({
               onPress={() => setSelectedCrop(crop)}
             >
               <Text
-                style={[styles.cropButtonText, selectedCrop === crop && styles.cropButtonTextActive]}
+                style={[
+                  styles.cropButtonText,
+                  selectedCrop === crop && styles.cropButtonTextActive,
+                ]}
               >
                 {crop}
               </Text>
@@ -190,12 +200,7 @@ export const MarketPriceDisplay: React.FC<MarketPriceDisplayProps> = ({
             </View>
             <View style={styles.recommendationRow}>
               <Text style={styles.recommendationLabel}>Price Advantage:</Text>
-              <Text
-                style={[
-                  styles.recommendationValue,
-                  styles.priceAdvantageColor,
-                ]}
-              >
+              <Text style={[styles.recommendationValue, styles.priceAdvantageColor]}>
                 {recommendation.priceAdvantage > 0 ? '+' : ''}
                 {recommendation.priceAdvantage.toFixed(1)}%
               </Text>
@@ -220,12 +225,7 @@ export const MarketPriceDisplay: React.FC<MarketPriceDisplayProps> = ({
               <Text style={[styles.trendType, { color: getTrendColor(trend.trend) }]}>
                 {trend.trend.toUpperCase()}
               </Text>
-              <Text
-                style={[
-                  styles.trendChange,
-                  styles.trendChangeColor,
-                ]}
-              >
+              <Text style={[styles.trendChange, styles.trendChangeColor]}>
                 {trend.changePercent > 0 ? '+' : ''}
                 {trend.changePercent.toFixed(1)}%
               </Text>

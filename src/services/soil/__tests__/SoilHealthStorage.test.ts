@@ -51,10 +51,7 @@ describe('SoilHealthStorage', () => {
 
       await soilHealthStorage.saveSoilHealth(mockSoilData);
 
-      expect(encryptedStorage.setItem).toHaveBeenCalledWith(
-        'soil_health_soil123',
-        mockSoilData
-      );
+      expect(encryptedStorage.setItem).toHaveBeenCalledWith('soil_health_soil123', mockSoilData);
       expect(encryptedStorage.setItem).toHaveBeenCalledWith(
         'soil_health_index',
         expect.any(Object)

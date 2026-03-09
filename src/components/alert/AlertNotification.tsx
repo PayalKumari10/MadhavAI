@@ -4,14 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Modal,
-  Animated,
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Modal, Animated } from 'react-native';
 import { Alert, AlertPriority } from '../../types/alert.types';
 
 interface AlertNotificationProps {
@@ -90,18 +83,10 @@ export const AlertNotification: React.FC<AlertNotificationProps> = ({
   const priorityIcon = getPriorityIcon(alert.priority);
 
   return (
-    <Modal
-      transparent
-      visible={visible}
-      animationType="none"
-      onRequestClose={onDismiss}
-    >
+    <Modal transparent visible={visible} animationType="none" onRequestClose={onDismiss}>
       <View style={styles.overlay}>
         <Animated.View
-          style={[
-            styles.notificationCard,
-            { opacity: fadeAnim, borderLeftColor: priorityColor },
-          ]}
+          style={[styles.notificationCard, { opacity: fadeAnim, borderLeftColor: priorityColor }]}
         >
           <View style={styles.header}>
             <View style={styles.iconContainer}>
@@ -109,9 +94,7 @@ export const AlertNotification: React.FC<AlertNotificationProps> = ({
             </View>
             <View style={styles.headerText}>
               <Text style={styles.title}>{alert.title}</Text>
-              <Text style={styles.priority}>
-                {alert.priority.toUpperCase()} PRIORITY
-              </Text>
+              <Text style={styles.priority}>{alert.priority.toUpperCase()} PRIORITY</Text>
             </View>
             <TouchableOpacity onPress={onDismiss} style={styles.closeButton}>
               <Text style={styles.closeText}>✕</Text>
@@ -131,18 +114,12 @@ export const AlertNotification: React.FC<AlertNotificationProps> = ({
             )}
 
             {alert.actionable && onAction && (
-              <TouchableOpacity
-                style={[styles.button, styles.actionButton]}
-                onPress={onAction}
-              >
+              <TouchableOpacity style={[styles.button, styles.actionButton]} onPress={onAction}>
                 <Text style={styles.actionButtonText}>Take Action</Text>
               </TouchableOpacity>
             )}
 
-            <TouchableOpacity
-              style={[styles.button, styles.dismissButton]}
-              onPress={onDismiss}
-            >
+            <TouchableOpacity style={[styles.button, styles.dismissButton]} onPress={onDismiss}>
               <Text style={styles.dismissButtonText}>Dismiss</Text>
             </TouchableOpacity>
           </View>

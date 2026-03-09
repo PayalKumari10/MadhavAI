@@ -25,10 +25,7 @@ interface SoilHealthDisplayProps {
   onUploadPress?: () => void;
 }
 
-export const SoilHealthDisplay: React.FC<SoilHealthDisplayProps> = ({
-  userId,
-  onUploadPress,
-}) => {
+export const SoilHealthDisplay: React.FC<SoilHealthDisplayProps> = ({ userId, onUploadPress }) => {
   const [loading, setLoading] = useState(true);
   const [soilRecords, setSoilRecords] = useState<SoilHealthData[]>([]);
   const [selectedRecord, setSelectedRecord] = useState<SoilHealthData | null>(null);
@@ -52,10 +49,10 @@ export const SoilHealthDisplay: React.FC<SoilHealthDisplayProps> = ({
     try {
       setLoading(true);
       setError(null);
-      
+
       // Get records from local storage
       const localRecords = await soilHealthStorage.getUserSoilHealthRecords(userId);
-      
+
       // Only try API if ENABLE_API is true
       let apiRecords: SoilHealthData[] = [];
       if (config.ENABLE_API) {
@@ -65,10 +62,10 @@ export const SoilHealthDisplay: React.FC<SoilHealthDisplayProps> = ({
           // API error - silently continue with local data
         }
       }
-      
+
       // Combine local and API records
       const allRecords = [...localRecords, ...apiRecords];
-      
+
       if (allRecords.length === 0) {
         // No records found - show empty state
         setSoilRecords([]);
@@ -76,12 +73,12 @@ export const SoilHealthDisplay: React.FC<SoilHealthDisplayProps> = ({
       } else {
         // Remove duplicates based on ID
         const uniqueRecords = Array.from(
-          new Map(allRecords.map(record => [record.id, record])).values()
+          new Map(allRecords.map((record) => [record.id, record])).values()
         );
-        
+
         // Sort by test date (most recent first)
         uniqueRecords.sort((a, b) => b.testDate.getTime() - a.testDate.getTime());
-        
+
         setSoilRecords(uniqueRecords);
         setSelectedRecord(uniqueRecords[0]);
       }
@@ -206,9 +203,7 @@ export const SoilHealthDisplay: React.FC<SoilHealthDisplayProps> = ({
                 { backgroundColor: getRatingColor(analysis.overallRating) },
               ]}
             >
-              <Text style={styles.ratingText}>
-                {analysis.overallRating.toUpperCase()}
-              </Text>
+              <Text style={styles.ratingText}>{analysis.overallRating.toUpperCase()}</Text>
             </View>
             <Text style={styles.scoreText}>Score: {analysis.score}/100</Text>
             <Text style={styles.summaryText}>{analysis.interpretation.summary}</Text>
@@ -223,15 +218,11 @@ export const SoilHealthDisplay: React.FC<SoilHealthDisplayProps> = ({
           <View style={styles.parametersGrid}>
             <View style={styles.parameterCard}>
               <Text style={styles.parameterLabel}>pH</Text>
-              <Text style={styles.parameterValue}>
-                {selectedRecord.parameters.pH.toFixed(1)}
-              </Text>
+              <Text style={styles.parameterValue}>{selectedRecord.parameters.pH.toFixed(1)}</Text>
             </View>
             <View style={styles.parameterCard}>
               <Text style={styles.parameterLabel}>Nitrogen</Text>
-              <Text style={styles.parameterValue}>
-                {selectedRecord.parameters.nitrogen} kg/ha
-              </Text>
+              <Text style={styles.parameterValue}>{selectedRecord.parameters.nitrogen} kg/ha</Text>
             </View>
             <View style={styles.parameterCard}>
               <Text style={styles.parameterLabel}>Phosphorus</Text>
@@ -241,9 +232,7 @@ export const SoilHealthDisplay: React.FC<SoilHealthDisplayProps> = ({
             </View>
             <View style={styles.parameterCard}>
               <Text style={styles.parameterLabel}>Potassium</Text>
-              <Text style={styles.parameterValue}>
-                {selectedRecord.parameters.potassium} kg/ha
-              </Text>
+              <Text style={styles.parameterValue}>{selectedRecord.parameters.potassium} kg/ha</Text>
             </View>
             <View style={styles.parameterCard}>
               <Text style={styles.parameterLabel}>Organic Carbon</Text>
@@ -293,32 +282,22 @@ export const SoilHealthDisplay: React.FC<SoilHealthDisplayProps> = ({
           {improvements.map((improvement, index) => (
             <View key={index} style={styles.improvementCard}>
               <View style={styles.improvementHeader}>
-                <Text style={styles.improvementDeficiency}>
-                  {improvement.deficiency}
-                </Text>
+                <Text style={styles.improvementDeficiency}>{improvement.deficiency}</Text>
                 <View
                   style={[
                     styles.severityBadge,
                     { backgroundColor: getSeverityColor(improvement.severity) },
                   ]}
                 >
-                  <Text style={styles.severityText}>
-                    {improvement.severity.toUpperCase()}
-                  </Text>
+                  <Text style={styles.severityText}>{improvement.severity.toUpperCase()}</Text>
                 </View>
               </View>
-              <Text style={styles.improvementTimeline}>
-                Timeline: {improvement.timeline}
-              </Text>
+              <Text style={styles.improvementTimeline}>Timeline: {improvement.timeline}</Text>
               {improvement.recommendations.slice(0, 2).map((rec, idx) => (
                 <View key={idx} style={styles.recommendationOption}>
                   <Text style={styles.recommendationTitle}>{rec.title}</Text>
-                  <Text style={styles.recommendationDescription}>
-                    {rec.description}
-                  </Text>
-                  <Text style={styles.recommendationRate}>
-                    Rate: {rec.application.rate}
-                  </Text>
+                  <Text style={styles.recommendationDescription}>{rec.description}</Text>
+                  <Text style={styles.recommendationRate}>Rate: {rec.application.rate}</Text>
                   {rec.cost && (
                     <Text style={styles.recommendationCost}>
                       Cost: ₹{rec.cost.min} - ₹{rec.cost.max}

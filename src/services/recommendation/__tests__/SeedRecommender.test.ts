@@ -117,7 +117,7 @@ describe('SeedRecommender', () => {
     it('should include all required fields in recommendations', async () => {
       const recommendations = await recommender.generateRecommendations(mockContext);
 
-      recommendations.forEach(rec => {
+      recommendations.forEach((rec) => {
         expect(rec.cropName).toBeDefined();
         expect(rec.variety).toBeDefined();
         expect(rec.yieldPotential).toBeDefined();
@@ -143,7 +143,7 @@ describe('SeedRecommender', () => {
       const recommendations = await recommender.generateRecommendations(mockContext, 'Wheat');
 
       expect(recommendations.length).toBeGreaterThan(0);
-      recommendations.forEach(rec => {
+      recommendations.forEach((rec) => {
         expect(rec.cropName).toBe('Wheat');
       });
     });
@@ -154,7 +154,7 @@ describe('SeedRecommender', () => {
 
       expect(recommendations.length).toBeGreaterThan(0);
       // Should include rice and cotton varieties for kharif
-      const cropNames = recommendations.map(r => r.cropName);
+      const cropNames = recommendations.map((r) => r.cropName);
       expect(cropNames).toContain('Rice');
     });
 
@@ -181,7 +181,7 @@ describe('SeedRecommender', () => {
     it('should include yield potential with min, max, and unit', async () => {
       const recommendations = await recommender.generateRecommendations(mockContext);
 
-      recommendations.forEach(rec => {
+      recommendations.forEach((rec) => {
         expect(rec.yieldPotential.min).toBeGreaterThan(0);
         expect(rec.yieldPotential.max).toBeGreaterThan(rec.yieldPotential.min);
         expect(rec.yieldPotential.unit).toBe('kg/ha');
@@ -191,7 +191,7 @@ describe('SeedRecommender', () => {
     it('should have realistic yield ranges', async () => {
       const recommendations = await recommender.generateRecommendations(mockContext);
 
-      recommendations.forEach(rec => {
+      recommendations.forEach((rec) => {
         const range = rec.yieldPotential.max - rec.yieldPotential.min;
         const avgYield = (rec.yieldPotential.min + rec.yieldPotential.max) / 2;
         // Range should be reasonable (not more than 50% of average)
@@ -204,7 +204,7 @@ describe('SeedRecommender', () => {
     it('should include disease resistance information', async () => {
       const recommendations = await recommender.generateRecommendations(mockContext);
 
-      recommendations.forEach(rec => {
+      recommendations.forEach((rec) => {
         expect(Array.isArray(rec.diseaseResistance)).toBe(true);
         expect(rec.diseaseResistance.length).toBeGreaterThan(0);
       });
@@ -213,8 +213,8 @@ describe('SeedRecommender', () => {
     it('should list specific diseases', async () => {
       const recommendations = await recommender.generateRecommendations(mockContext);
 
-      recommendations.forEach(rec => {
-        rec.diseaseResistance.forEach(disease => {
+      recommendations.forEach((rec) => {
+        rec.diseaseResistance.forEach((disease) => {
           expect(typeof disease).toBe('string');
           expect(disease.length).toBeGreaterThan(0);
         });
@@ -226,12 +226,10 @@ describe('SeedRecommender', () => {
     it('should calculate optimal sowing window', async () => {
       const recommendations = await recommender.generateRecommendations(mockContext);
 
-      recommendations.forEach(rec => {
+      recommendations.forEach((rec) => {
         expect(rec.sowingWindow.start).toBeInstanceOf(Date);
         expect(rec.sowingWindow.end).toBeInstanceOf(Date);
-        expect(rec.sowingWindow.end.getTime()).toBeGreaterThan(
-          rec.sowingWindow.start.getTime()
-        );
+        expect(rec.sowingWindow.end.getTime()).toBeGreaterThan(rec.sowingWindow.start.getTime());
       });
     });
 
@@ -239,7 +237,7 @@ describe('SeedRecommender', () => {
       const recommendations = await recommender.generateRecommendations(mockContext);
       const currentDate = mockContext.timestamp;
 
-      recommendations.forEach(rec => {
+      recommendations.forEach((rec) => {
         // Sowing window should be current or future
         expect(rec.sowingWindow.start.getTime()).toBeGreaterThanOrEqual(
           new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getTime()
@@ -256,7 +254,7 @@ describe('SeedRecommender', () => {
       const recommendations = await recommender.generateRecommendations(lateYearContext);
 
       expect(recommendations.length).toBeGreaterThan(0);
-      recommendations.forEach(rec => {
+      recommendations.forEach((rec) => {
         expect(rec.sowingWindow.start).toBeInstanceOf(Date);
         expect(rec.sowingWindow.end).toBeInstanceOf(Date);
       });
@@ -267,7 +265,7 @@ describe('SeedRecommender', () => {
     it('should include trusted seed sources', async () => {
       const recommendations = await recommender.generateRecommendations(mockContext);
 
-      recommendations.forEach(rec => {
+      recommendations.forEach((rec) => {
         expect(rec.sources.length).toBeGreaterThan(0);
         expect(rec.sources.length).toBeGreaterThanOrEqual(3);
       });
@@ -276,8 +274,8 @@ describe('SeedRecommender', () => {
     it('should include government, cooperative, and private sources', async () => {
       const recommendations = await recommender.generateRecommendations(mockContext);
 
-      recommendations.forEach(rec => {
-        const sourceTypes = rec.sources.map(s => s.type);
+      recommendations.forEach((rec) => {
+        const sourceTypes = rec.sources.map((s) => s.type);
         expect(sourceTypes).toContain('government');
         expect(sourceTypes).toContain('cooperative');
         expect(sourceTypes).toContain('private');
@@ -287,8 +285,8 @@ describe('SeedRecommender', () => {
     it('should include all required source information', async () => {
       const recommendations = await recommender.generateRecommendations(mockContext);
 
-      recommendations.forEach(rec => {
-        rec.sources.forEach(source => {
+      recommendations.forEach((rec) => {
+        rec.sources.forEach((source) => {
           expect(source.name).toBeDefined();
           expect(source.type).toBeDefined();
           expect(['government', 'private', 'cooperative']).toContain(source.type);
@@ -306,8 +304,8 @@ describe('SeedRecommender', () => {
     it('should mark all sources as certified', async () => {
       const recommendations = await recommender.generateRecommendations(mockContext);
 
-      recommendations.forEach(rec => {
-        rec.sources.forEach(source => {
+      recommendations.forEach((rec) => {
+        rec.sources.forEach((source) => {
           expect(source.certified).toBe(true);
         });
       });
@@ -318,7 +316,7 @@ describe('SeedRecommender', () => {
     it('should provide clear explanation for each recommendation', async () => {
       const recommendations = await recommender.generateRecommendations(mockContext);
 
-      recommendations.forEach(rec => {
+      recommendations.forEach((rec) => {
         expect(rec.explanation).toBeDefined();
         expect(rec.explanation.length).toBeGreaterThan(0);
       });
@@ -327,7 +325,7 @@ describe('SeedRecommender', () => {
     it('should mention key factors in explanation', async () => {
       const recommendations = await recommender.generateRecommendations(mockContext);
 
-      recommendations.forEach(rec => {
+      recommendations.forEach((rec) => {
         const explanation = rec.explanation.toLowerCase();
         // Should mention at least one key factor
         const hasKeyFactor =
@@ -345,7 +343,7 @@ describe('SeedRecommender', () => {
     it('should calculate confidence based on data completeness', async () => {
       const recommendations = await recommender.generateRecommendations(mockContext);
 
-      recommendations.forEach(rec => {
+      recommendations.forEach((rec) => {
         expect(rec.confidence).toBeGreaterThanOrEqual(0);
         expect(rec.confidence).toBeLessThanOrEqual(100);
       });
@@ -381,7 +379,7 @@ describe('SeedRecommender', () => {
       const recommendations = await recommender.generateRecommendations(incompleteContext);
 
       if (recommendations.length > 0) {
-        recommendations.forEach(rec => {
+        recommendations.forEach((rec) => {
           expect(rec.confidence).toBeGreaterThanOrEqual(40);
         });
       }
@@ -392,7 +390,7 @@ describe('SeedRecommender', () => {
     it('should include seed rate information', async () => {
       const recommendations = await recommender.generateRecommendations(mockContext);
 
-      recommendations.forEach(rec => {
+      recommendations.forEach((rec) => {
         expect(rec.seedRate).toBeDefined();
         expect(rec.seedRate.amount).toBeGreaterThan(0);
         expect(rec.seedRate.unit).toBeDefined();
@@ -403,7 +401,7 @@ describe('SeedRecommender', () => {
     it('should have realistic seed rates', async () => {
       const recommendations = await recommender.generateRecommendations(mockContext);
 
-      recommendations.forEach(rec => {
+      recommendations.forEach((rec) => {
         expect(rec.seedRate.amount).toBeGreaterThan(0);
         expect(rec.seedRate.perArea).toBe('hectare');
       });
@@ -436,7 +434,7 @@ describe('SeedRecommender', () => {
     it('should include crop duration in days', async () => {
       const recommendations = await recommender.generateRecommendations(mockContext);
 
-      recommendations.forEach(rec => {
+      recommendations.forEach((rec) => {
         expect(rec.duration).toBeGreaterThan(0);
         expect(rec.duration).toBeLessThan(400); // Reasonable max duration
       });

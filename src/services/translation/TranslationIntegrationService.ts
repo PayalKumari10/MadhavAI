@@ -3,10 +3,10 @@
  * Integrates translations across all modules (alerts, recommendations, training, schemes)
  */
 
-import {LanguageCode} from '../../types/translation.types';
+import { LanguageCode } from '../../types/translation.types';
 import TranslationService from './TranslationService';
-import {getVoiceIntegrationManager} from '../voice/VoiceIntegrationManager';
-import {languageToVoiceCode} from '../../utils/languageMapper';
+import { getVoiceIntegrationManager } from '../voice/VoiceIntegrationManager';
+import { languageToVoiceCode } from '../../utils/languageMapper';
 
 class TranslationIntegrationService {
   private translationService: TranslationService;
@@ -43,7 +43,7 @@ class TranslationIntegrationService {
   /**
    * Translate alert message
    */
-  translateAlert(alertType: string, params?: {[key: string]: string | number}): string {
+  translateAlert(alertType: string, params?: { [key: string]: string | number }): string {
     const key = `alerts.${alertType}`;
     return this.translationService.translate(key, params);
   }
@@ -54,7 +54,7 @@ class TranslationIntegrationService {
   translateRecommendation(
     recommendationType: string,
     field: string,
-    params?: {[key: string]: string | number}
+    params?: { [key: string]: string | number }
   ): string {
     const key = `recommendations.${recommendationType}.${field}`;
     return this.translationService.translate(key, params);
@@ -66,7 +66,7 @@ class TranslationIntegrationService {
   translateScheme(
     schemeId: string,
     field: string,
-    params?: {[key: string]: string | number}
+    params?: { [key: string]: string | number }
   ): string {
     const key = `schemes.${schemeId}.${field}`;
     return this.translationService.translate(key, params);
@@ -78,7 +78,7 @@ class TranslationIntegrationService {
   translateTraining(
     contentId: string,
     field: string,
-    params?: {[key: string]: string | number}
+    params?: { [key: string]: string | number }
   ): string {
     const key = `training.${contentId}.${field}`;
     return this.translationService.translate(key, params);
@@ -87,7 +87,7 @@ class TranslationIntegrationService {
   /**
    * Translate weather information
    */
-  translateWeather(field: string, params?: {[key: string]: string | number}): string {
+  translateWeather(field: string, params?: { [key: string]: string | number }): string {
     const key = `weather.${field}`;
     return this.translationService.translate(key, params);
   }
@@ -95,7 +95,7 @@ class TranslationIntegrationService {
   /**
    * Translate market information
    */
-  translateMarket(field: string, params?: {[key: string]: string | number}): string {
+  translateMarket(field: string, params?: { [key: string]: string | number }): string {
     const key = `market.${field}`;
     return this.translationService.translate(key, params);
   }
@@ -103,7 +103,7 @@ class TranslationIntegrationService {
   /**
    * Translate soil health information
    */
-  translateSoil(field: string, params?: {[key: string]: string | number}): string {
+  translateSoil(field: string, params?: { [key: string]: string | number }): string {
     const key = `soil.${field}`;
     return this.translationService.translate(key, params);
   }
@@ -111,7 +111,7 @@ class TranslationIntegrationService {
   /**
    * Translate error message
    */
-  translateError(errorCode: string, params?: {[key: string]: string | number}): string {
+  translateError(errorCode: string, params?: { [key: string]: string | number }): string {
     const key = `errors.${errorCode}`;
     return this.translationService.translate(key, params);
   }
@@ -119,7 +119,7 @@ class TranslationIntegrationService {
   /**
    * Translate common UI element
    */
-  translateUI(field: string, params?: {[key: string]: string | number}): string {
+  translateUI(field: string, params?: { [key: string]: string | number }): string {
     const key = `ui.${field}`;
     return this.translationService.translate(key, params);
   }

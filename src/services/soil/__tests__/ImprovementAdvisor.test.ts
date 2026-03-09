@@ -64,7 +64,7 @@ describe('ImprovementAdvisor', () => {
       const recommendations = improvementAdvisor.generateRecommendations(soilData);
 
       expect(recommendations.length).toBeGreaterThan(0);
-      const nitrogenRec = recommendations.find(r => r.deficiency === 'Nitrogen');
+      const nitrogenRec = recommendations.find((r) => r.deficiency === 'Nitrogen');
       expect(nitrogenRec).toBeDefined();
       expect(nitrogenRec!.recommendations.length).toBeGreaterThan(0);
     });
@@ -83,7 +83,7 @@ describe('ImprovementAdvisor', () => {
 
       const recommendations = improvementAdvisor.generateRecommendations(soilData);
 
-      const phosphorusRec = recommendations.find(r => r.deficiency === 'Phosphorus');
+      const phosphorusRec = recommendations.find((r) => r.deficiency === 'Phosphorus');
       expect(phosphorusRec).toBeDefined();
       expect(phosphorusRec!.recommendations.length).toBeGreaterThan(0);
     });
@@ -102,7 +102,7 @@ describe('ImprovementAdvisor', () => {
 
       const recommendations = improvementAdvisor.generateRecommendations(soilData);
 
-      const potassiumRec = recommendations.find(r => r.deficiency === 'Potassium');
+      const potassiumRec = recommendations.find((r) => r.deficiency === 'Potassium');
       expect(potassiumRec).toBeDefined();
       expect(potassiumRec!.recommendations.length).toBeGreaterThan(0);
     });
@@ -121,9 +121,9 @@ describe('ImprovementAdvisor', () => {
 
       const recommendations = improvementAdvisor.generateRecommendations(soilData);
 
-      const pHRec = recommendations.find(r => r.deficiency === 'pH (Too Acidic)');
+      const pHRec = recommendations.find((r) => r.deficiency === 'pH (Too Acidic)');
       expect(pHRec).toBeDefined();
-      expect(pHRec!.recommendations.some(r => r.title.includes('Lime'))).toBe(true);
+      expect(pHRec!.recommendations.some((r) => r.title.includes('Lime'))).toBe(true);
     });
 
     it('should identify alkaline pH issue', () => {
@@ -140,9 +140,9 @@ describe('ImprovementAdvisor', () => {
 
       const recommendations = improvementAdvisor.generateRecommendations(soilData);
 
-      const pHRec = recommendations.find(r => r.deficiency === 'pH (Too Alkaline)');
+      const pHRec = recommendations.find((r) => r.deficiency === 'pH (Too Alkaline)');
       expect(pHRec).toBeDefined();
-      expect(pHRec!.recommendations.some(r => r.title.includes('Sulfur'))).toBe(true);
+      expect(pHRec!.recommendations.some((r) => r.title.includes('Sulfur'))).toBe(true);
     });
 
     it('should identify organic matter deficiency', () => {
@@ -159,7 +159,7 @@ describe('ImprovementAdvisor', () => {
 
       const recommendations = improvementAdvisor.generateRecommendations(soilData);
 
-      const organicRec = recommendations.find(r => r.deficiency === 'Organic Matter');
+      const organicRec = recommendations.find((r) => r.deficiency === 'Organic Matter');
       expect(organicRec).toBeDefined();
       expect(organicRec!.recommendations.length).toBeGreaterThan(0);
     });
@@ -179,10 +179,10 @@ describe('ImprovementAdvisor', () => {
       const recommendations = improvementAdvisor.generateRecommendations(soilData);
 
       expect(recommendations.length).toBeGreaterThanOrEqual(4);
-      expect(recommendations.some(r => r.deficiency === 'Nitrogen')).toBe(true);
-      expect(recommendations.some(r => r.deficiency === 'Phosphorus')).toBe(true);
-      expect(recommendations.some(r => r.deficiency === 'Potassium')).toBe(true);
-      expect(recommendations.some(r => r.deficiency.includes('pH'))).toBe(true);
+      expect(recommendations.some((r) => r.deficiency === 'Nitrogen')).toBe(true);
+      expect(recommendations.some((r) => r.deficiency === 'Phosphorus')).toBe(true);
+      expect(recommendations.some((r) => r.deficiency === 'Potassium')).toBe(true);
+      expect(recommendations.some((r) => r.deficiency.includes('pH'))).toBe(true);
     });
 
     it('should sort recommendations by priority', () => {
@@ -199,7 +199,7 @@ describe('ImprovementAdvisor', () => {
 
       const recommendations = improvementAdvisor.generateRecommendations(soilData);
 
-      const priorities = recommendations.map(r => r.priority);
+      const priorities = recommendations.map((r) => r.priority);
       const priorityOrder = ['high', 'medium', 'low'];
 
       for (let i = 0; i < priorities.length - 1; i++) {
@@ -247,7 +247,7 @@ describe('ImprovementAdvisor', () => {
       });
 
       const recommendations = improvementAdvisor.generateRecommendations(soilData);
-      const nitrogenRec = recommendations.find(r => r.deficiency === 'Nitrogen');
+      const nitrogenRec = recommendations.find((r) => r.deficiency === 'Nitrogen');
 
       expect(nitrogenRec!.recommendations.length).toBeGreaterThanOrEqual(2);
     });
@@ -265,9 +265,9 @@ describe('ImprovementAdvisor', () => {
       });
 
       const recommendations = improvementAdvisor.generateRecommendations(soilData);
-      const nitrogenRec = recommendations.find(r => r.deficiency === 'Nitrogen');
+      const nitrogenRec = recommendations.find((r) => r.deficiency === 'Nitrogen');
 
-      const types = nitrogenRec!.recommendations.map(r => r.type);
+      const types = nitrogenRec!.recommendations.map((r) => r.type);
       expect(types).toContain('organic');
       expect(types).toContain('chemical');
       expect(types).toContain('practice');
@@ -286,7 +286,7 @@ describe('ImprovementAdvisor', () => {
       });
 
       const recommendations = improvementAdvisor.generateRecommendations(soilData);
-      const nitrogenRec = recommendations.find(r => r.deficiency === 'Nitrogen');
+      const nitrogenRec = recommendations.find((r) => r.deficiency === 'Nitrogen');
       const option = nitrogenRec!.recommendations[0];
 
       expect(option.title).toBeTruthy();
@@ -311,7 +311,7 @@ describe('ImprovementAdvisor', () => {
       });
 
       const recommendations = improvementAdvisor.generateRecommendations(soilData);
-      const nitrogenRec = recommendations.find(r => r.deficiency === 'Nitrogen');
+      const nitrogenRec = recommendations.find((r) => r.deficiency === 'Nitrogen');
       const option = nitrogenRec!.recommendations[0];
 
       expect(option.cost).toBeDefined();
@@ -335,7 +335,7 @@ describe('ImprovementAdvisor', () => {
       });
 
       const recommendations = improvementAdvisor.generateRecommendations(soilData);
-      const nitrogenRec = recommendations.find(r => r.deficiency === 'Nitrogen');
+      const nitrogenRec = recommendations.find((r) => r.deficiency === 'Nitrogen');
 
       expect(nitrogenRec!.severity).toBe('high');
       expect(nitrogenRec!.priority).toBe('high');
@@ -354,7 +354,7 @@ describe('ImprovementAdvisor', () => {
       });
 
       const recommendations = improvementAdvisor.generateRecommendations(soilData);
-      const nitrogenRec = recommendations.find(r => r.deficiency === 'Nitrogen');
+      const nitrogenRec = recommendations.find((r) => r.deficiency === 'Nitrogen');
 
       expect(nitrogenRec!.severity).toBe('medium');
     });
@@ -372,7 +372,7 @@ describe('ImprovementAdvisor', () => {
       });
 
       const recommendations = improvementAdvisor.generateRecommendations(soilData);
-      const nitrogenRec = recommendations.find(r => r.deficiency === 'Nitrogen');
+      const nitrogenRec = recommendations.find((r) => r.deficiency === 'Nitrogen');
 
       expect(nitrogenRec!.severity).toBe('low');
     });
@@ -392,7 +392,7 @@ describe('ImprovementAdvisor', () => {
       });
 
       const recommendations = improvementAdvisor.generateRecommendations(soilData);
-      const nitrogenRec = recommendations.find(r => r.deficiency === 'Nitrogen');
+      const nitrogenRec = recommendations.find((r) => r.deficiency === 'Nitrogen');
 
       expect(nitrogenRec!.timeline).toMatch(/week/i);
     });
@@ -410,7 +410,7 @@ describe('ImprovementAdvisor', () => {
       });
 
       const recommendations = improvementAdvisor.generateRecommendations(soilData);
-      const organicRec = recommendations.find(r => r.deficiency === 'Organic Matter');
+      const organicRec = recommendations.find((r) => r.deficiency === 'Organic Matter');
 
       expect(organicRec!.timeline).toMatch(/month/i);
     });
@@ -432,7 +432,7 @@ describe('ImprovementAdvisor', () => {
       const recommendations = improvementAdvisor.generateRecommendations(soilData);
 
       expect(recommendations.length).toBeGreaterThanOrEqual(4);
-      expect(recommendations.every(r => r.severity === 'high')).toBe(true);
+      expect(recommendations.every((r) => r.severity === 'high')).toBe(true);
     });
 
     it('should handle extreme pH values', () => {
@@ -461,8 +461,8 @@ describe('ImprovementAdvisor', () => {
       const acidicRecs = improvementAdvisor.generateRecommendations(acidicSoil);
       const alkalineRecs = improvementAdvisor.generateRecommendations(alkalineSoil);
 
-      expect(acidicRecs.some(r => r.deficiency === 'pH (Too Acidic)')).toBe(true);
-      expect(alkalineRecs.some(r => r.deficiency === 'pH (Too Alkaline)')).toBe(true);
+      expect(acidicRecs.some((r) => r.deficiency === 'pH (Too Acidic)')).toBe(true);
+      expect(alkalineRecs.some((r) => r.deficiency === 'pH (Too Alkaline)')).toBe(true);
     });
   });
 });

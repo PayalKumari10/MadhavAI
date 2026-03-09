@@ -134,9 +134,7 @@ class SyncManager {
       await syncQueue.clearCompleted();
 
       result.success = result.failedItems === 0;
-      logger.info(
-        `Sync completed: ${result.syncedItems} synced, ${result.failedItems} failed`
-      );
+      logger.info(`Sync completed: ${result.syncedItems} synced, ${result.failedItems} failed`);
     } catch (error) {
       result.success = false;
       logger.error('Sync operation failed', error);
@@ -178,7 +176,9 @@ class SyncManager {
       } else {
         // Reset to pending for retry
         await syncQueue.updateItemStatus(item.id, 'pending');
-        logger.warn(`Item sync failed, will retry (${retryCount}/${this.config.maxRetries}): ${item.id}`);
+        logger.warn(
+          `Item sync failed, will retry (${retryCount}/${this.config.maxRetries}): ${item.id}`
+        );
       }
 
       throw error;

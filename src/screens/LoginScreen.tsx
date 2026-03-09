@@ -36,7 +36,7 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
     const interval = setInterval(() => {
       const now = new Date();
       const remaining = Math.floor((expirationDate.getTime() - now.getTime()) / 1000);
-      
+
       if (remaining <= 0) {
         clearInterval(interval);
         setTimer(0);
@@ -94,7 +94,7 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
         onLoginSuccess(result.authToken.userId, result.authToken.token);
       } else {
         Alert.alert('Verification Failed', result.message);
-        
+
         // Update attempts remaining
         if (result.message.includes('attempts remaining')) {
           const match = result.message.match(/(\d+) attempts remaining/);
@@ -126,7 +126,8 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
     return (
       <KeyboardAvoidingView
         style={styles.container}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
         <View style={styles.content}>
           <View style={styles.header}>
             <Text style={styles.logo}>🌾</Text>
@@ -153,7 +154,8 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
             <TouchableOpacity
               style={[styles.button, loading && styles.buttonDisabled]}
               onPress={handleSendOTP}
-              disabled={loading}>
+              disabled={loading}
+            >
               {loading ? (
                 <ActivityIndicator color="#fff" />
               ) : (
@@ -161,9 +163,7 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
               )}
             </TouchableOpacity>
 
-            <Text style={styles.infoText}>
-              We'll send you a 6-digit verification code via SMS
-            </Text>
+            <Text style={styles.infoText}>We'll send you a 6-digit verification code via SMS</Text>
           </View>
         </View>
       </KeyboardAvoidingView>
@@ -173,14 +173,13 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
       <View style={styles.content}>
         <View style={styles.header}>
           <Text style={styles.logo}>🌾</Text>
           <Text style={styles.title}>Verify OTP</Text>
-          <Text style={styles.subtitle}>
-            Enter the code sent to +91 {mobileNumber}
-          </Text>
+          <Text style={styles.subtitle}>Enter the code sent to +91 {mobileNumber}</Text>
         </View>
 
         <View style={styles.form}>
@@ -199,24 +198,21 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
 
           {timer > 0 && (
             <View style={styles.timerContainer}>
-              <Text style={styles.timerText}>
-                ⏱️ Code expires in {formatTime(timer)}
-              </Text>
+              <Text style={styles.timerText}>⏱️ Code expires in {formatTime(timer)}</Text>
             </View>
           )}
 
           {attemptsRemaining < 3 && (
             <View style={styles.attemptsContainer}>
-              <Text style={styles.attemptsText}>
-                {attemptsRemaining} attempts remaining
-              </Text>
+              <Text style={styles.attemptsText}>{attemptsRemaining} attempts remaining</Text>
             </View>
           )}
 
           <TouchableOpacity
             style={[styles.button, loading && styles.buttonDisabled]}
             onPress={handleVerifyOTP}
-            disabled={loading}>
+            disabled={loading}
+          >
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
@@ -227,7 +223,9 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
           <View style={styles.resendContainer}>
             <Text style={styles.resendText}>Didn't receive the code?</Text>
             <TouchableOpacity onPress={handleResendOTP} disabled={loading || timer > 240}>
-              <Text style={[styles.resendLink, (loading || timer > 240) && styles.resendLinkDisabled]}>
+              <Text
+                style={[styles.resendLink, (loading || timer > 240) && styles.resendLinkDisabled]}
+              >
                 Resend OTP
               </Text>
             </TouchableOpacity>
@@ -239,7 +237,8 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
               setStep('phone');
               setOtp('');
               setTimer(0);
-            }}>
+            }}
+          >
             <Text style={styles.backButtonText}>← Change Number</Text>
           </TouchableOpacity>
         </View>

@@ -3,7 +3,7 @@
  * Defines interfaces for the alert and reminder system
  */
 
-export type AlertType = 
+export type AlertType =
   | 'sowing'
   | 'fertilizer'
   | 'irrigation'

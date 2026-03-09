@@ -3,7 +3,7 @@
  * Provides voice-based dashboard summary
  */
 
-import {SupportedLanguage} from '../../types/voice.types';
+import { SupportedLanguage } from '../../types/voice.types';
 import TextToSpeech from './TextToSpeech';
 
 /**
@@ -125,10 +125,14 @@ class DashboardVoiceSummary {
   private getAlertsSummary(alerts: DashboardData['alerts']): string {
     if (!alerts || alerts.length === 0) return '';
 
-    const highPriorityAlerts = alerts.filter(a => a.priority === 'high' || a.priority === 'critical');
+    const highPriorityAlerts = alerts.filter(
+      (a) => a.priority === 'high' || a.priority === 'critical'
+    );
 
     if (highPriorityAlerts.length > 0) {
-      return `You have ${highPriorityAlerts.length} important alert${highPriorityAlerts.length > 1 ? 's' : ''}: ${highPriorityAlerts.map(a => a.title).join(', ')}`;
+      return `You have ${highPriorityAlerts.length} important alert${
+        highPriorityAlerts.length > 1 ? 's' : ''
+      }: ${highPriorityAlerts.map((a) => a.title).join(', ')}`;
     }
 
     return `You have ${alerts.length} alert${alerts.length > 1 ? 's' : ''}`;
@@ -149,7 +153,9 @@ class DashboardVoiceSummary {
   private getMarketPricesSummary(prices: DashboardData['marketPrices']): string {
     if (!prices || prices.length === 0) return '';
 
-    const priceStrings = prices.slice(0, 3).map(p => `${p.crop} at ${p.price} rupees per quintal`);
+    const priceStrings = prices
+      .slice(0, 3)
+      .map((p) => `${p.crop} at ${p.price} rupees per quintal`);
 
     return `Current market prices: ${priceStrings.join(', ')}`;
   }

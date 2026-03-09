@@ -5,17 +5,17 @@
  */
 
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
-import {Alert} from '../../types/alert.types';
-import {useTranslation} from '../../hooks/useTranslation';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { Alert } from '../../types/alert.types';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface AlertsWidgetProps {
   alerts: Alert[];
   navigation: any;
 }
 
-const AlertsWidget: React.FC<AlertsWidgetProps> = ({alerts, navigation}) => {
-  const {translate} = useTranslation();
+const AlertsWidget: React.FC<AlertsWidgetProps> = ({ alerts, navigation }) => {
+  const { translate } = useTranslation();
 
   const navigateToAlerts = () => {
     if (navigation && navigation.navigate) {
@@ -76,7 +76,7 @@ const AlertsWidget: React.FC<AlertsWidgetProps> = ({alerts, navigation}) => {
     }
   };
 
-  const renderAlert = ({item}: {item: Alert}) => (
+  const renderAlert = ({ item }: { item: Alert }) => (
     <View style={styles.alertItem}>
       <View style={styles.alertIcon}>
         <Text style={styles.alertIconText}>{getAlertIcon(item.type)}</Text>
@@ -88,19 +88,13 @@ const AlertsWidget: React.FC<AlertsWidgetProps> = ({alerts, navigation}) => {
         <Text style={styles.alertTime}>{formatDate(item.scheduledTime)}</Text>
       </View>
       <View
-        style={[
-          styles.priorityIndicator,
-          {backgroundColor: getPriorityColor(item.priority)},
-        ]}
+        style={[styles.priorityIndicator, { backgroundColor: getPriorityColor(item.priority) }]}
       />
     </View>
   );
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={navigateToAlerts}
-      activeOpacity={0.7}>
+    <TouchableOpacity style={styles.container} onPress={navigateToAlerts} activeOpacity={0.7}>
       <View style={styles.header}>
         <Text style={styles.icon}>🔔</Text>
         <Text style={styles.title}>{translate('dashboard.alerts')}</Text>
@@ -112,7 +106,7 @@ const AlertsWidget: React.FC<AlertsWidgetProps> = ({alerts, navigation}) => {
       <FlatList
         data={alerts.slice(0, 3)}
         renderItem={renderAlert}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         scrollEnabled={false}
       />
 
@@ -133,7 +127,7 @@ const styles = StyleSheet.create({
     padding: 16,
     elevation: 2,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },

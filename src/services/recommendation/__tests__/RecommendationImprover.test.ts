@@ -151,11 +151,7 @@ describe('RecommendationImprover', () => {
         timing: 'Standard',
       };
 
-      const adjusted = await improver.applyAdjustments(
-        recommendation,
-        'crop',
-        createMockContext()
-      );
+      const adjusted = await improver.applyAdjustments(recommendation, 'crop', createMockContext());
 
       expect(adjusted.dosage).not.toBe(100);
       expect(adjusted.dosage).toBeLessThan(100); // Should be adjusted towards 82.4
@@ -168,22 +164,33 @@ describe('RecommendationImprover', () => {
         timing: 'Standard',
       };
 
-      const adjusted = await improver.applyAdjustments(
-        recommendation,
-        'crop',
-        createMockContext()
-      );
+      const adjusted = await improver.applyAdjustments(recommendation, 'crop', createMockContext());
 
       expect(adjusted).toEqual(recommendation);
     });
 
     it('should apply context-specific rules', async () => {
       const kharifFeedback: FeedbackData[] = [
-        { ...createMockFeedback('modified', { dosage: 80 }), contextSnapshot: { season: 'kharif', location: 'Punjab' } },
-        { ...createMockFeedback('modified', { dosage: 85 }), contextSnapshot: { season: 'kharif', location: 'Punjab' } },
-        { ...createMockFeedback('modified', { dosage: 90 }), contextSnapshot: { season: 'kharif', location: 'Punjab' } },
-        { ...createMockFeedback('modified', { dosage: 75 }), contextSnapshot: { season: 'kharif', location: 'Punjab' } },
-        { ...createMockFeedback('modified', { dosage: 82 }), contextSnapshot: { season: 'kharif', location: 'Punjab' } },
+        {
+          ...createMockFeedback('modified', { dosage: 80 }),
+          contextSnapshot: { season: 'kharif', location: 'Punjab' },
+        },
+        {
+          ...createMockFeedback('modified', { dosage: 85 }),
+          contextSnapshot: { season: 'kharif', location: 'Punjab' },
+        },
+        {
+          ...createMockFeedback('modified', { dosage: 90 }),
+          contextSnapshot: { season: 'kharif', location: 'Punjab' },
+        },
+        {
+          ...createMockFeedback('modified', { dosage: 75 }),
+          contextSnapshot: { season: 'kharif', location: 'Punjab' },
+        },
+        {
+          ...createMockFeedback('modified', { dosage: 82 }),
+          contextSnapshot: { season: 'kharif', location: 'Punjab' },
+        },
       ];
 
       await improver.learnFromFeedback(kharifFeedback);
@@ -228,9 +235,7 @@ describe('RecommendationImprover', () => {
       const suggestions = await improver.getImprovementSuggestions(feedbackData);
 
       expect(suggestions.length).toBeGreaterThan(0);
-      const modificationSuggestion = suggestions.find((s) =>
-        s.issue.includes('frequently modify')
-      );
+      const modificationSuggestion = suggestions.find((s) => s.issue.includes('frequently modify'));
       expect(modificationSuggestion).toBeDefined();
     });
 
@@ -245,9 +250,7 @@ describe('RecommendationImprover', () => {
       const suggestions = await improver.getImprovementSuggestions(feedbackData);
 
       expect(suggestions.length).toBeGreaterThan(0);
-      const rejectionSuggestion = suggestions.find((s) =>
-        s.issue.includes('Too expensive')
-      );
+      const rejectionSuggestion = suggestions.find((s) => s.issue.includes('Too expensive'));
       expect(rejectionSuggestion).toBeDefined();
       expect(rejectionSuggestion!.priority).toBe('high');
     });

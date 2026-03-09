@@ -23,10 +23,10 @@ export default function SchemesScreen() {
   const handleCheckEligibility = async () => {
     try {
       logger.info('Checking eligibility for scheme', selectedScheme.id);
-      
+
       // Get user profile
       const profile = await profileManager.getProfile();
-      
+
       if (!profile) {
         logger.warn('No user profile found');
         return;
@@ -35,7 +35,7 @@ export default function SchemesScreen() {
       // Check eligibility
       const result = eligibilityChecker.checkEligibility(selectedScheme, profile);
       setEligibilityResult(result);
-      
+
       logger.info('Eligibility check complete', result);
     } catch (error) {
       logger.error('Failed to check eligibility', error);

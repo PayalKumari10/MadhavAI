@@ -7,7 +7,14 @@ export type SyncStatus = 'pending' | 'in_progress' | 'completed' | 'failed';
 
 export type SyncOperation = 'create' | 'update' | 'delete';
 
-export type SyncEntityType = 'profile' | 'scheme' | 'weather' | 'market' | 'soil' | 'training' | 'alert';
+export type SyncEntityType =
+  | 'profile'
+  | 'scheme'
+  | 'weather'
+  | 'market'
+  | 'soil'
+  | 'training'
+  | 'alert';
 
 export interface SyncQueueItem {
   id: string;

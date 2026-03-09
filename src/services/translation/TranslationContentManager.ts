@@ -10,7 +10,7 @@ import {
   TranslationValidationResult,
   TranslationUpdateRequest,
 } from '../../types/translation.types';
-import {SUPPORTED_LANGUAGES} from '../../config/constants';
+import { SUPPORTED_LANGUAGES } from '../../config/constants';
 import TranslationStorage from './TranslationStorage';
 
 class TranslationContentManager {
@@ -19,7 +19,7 @@ class TranslationContentManager {
 
   constructor(storage: TranslationStorage) {
     this.storage = storage;
-    this.requiredLanguages = SUPPORTED_LANGUAGES.map(lang => lang.code as LanguageCode);
+    this.requiredLanguages = SUPPORTED_LANGUAGES.map((lang) => lang.code as LanguageCode);
   }
 
   /**
@@ -61,14 +61,12 @@ class TranslationContentManager {
 
       // Check if all keys exist
       const languageKeys = this.extractKeys(translations);
-      const missingKeys = allKeys.filter(key => !languageKeys.includes(key));
+      const missingKeys = allKeys.filter((key) => !languageKeys.includes(key));
 
       if (missingKeys.length > 0) {
         result.isValid = false;
-        result.missingKeys.push(...missingKeys.map(key => `${language}.${key}`));
-        result.errors.push(
-          `Language ${language} is missing keys: ${missingKeys.join(', ')}`
-        );
+        result.missingKeys.push(...missingKeys.map((key) => `${language}.${key}`));
+        result.errors.push(`Language ${language} is missing keys: ${missingKeys.join(', ')}`);
       }
     }
 
@@ -98,18 +96,16 @@ class TranslationContentManager {
    * Update translations for a specific key across all languages
    */
   async updateTranslation(request: TranslationUpdateRequest): Promise<void> {
-    const {category, key, translations} = request;
+    const { category, key, translations } = request;
 
     // Validate that all required languages are provided
     const providedLanguages = Object.keys(translations) as LanguageCode[];
     const missingLanguages = this.requiredLanguages.filter(
-      lang => !providedLanguages.includes(lang)
+      (lang) => !providedLanguages.includes(lang)
     );
 
     if (missingLanguages.length > 0) {
-      throw new Error(
-        `Missing translations for languages: ${missingLanguages.join(', ')}`
-      );
+      throw new Error(`Missing translations for languages: ${missingLanguages.join(', ')}`);
     }
 
     // Update each language
@@ -121,30 +117,18 @@ class TranslationContentManager {
         category
       );
 
-      const updatedContent = this.setNestedValue(
-        existingContent || {},
-        key,
-        translation
-      );
+      const updatedContent = this.setNestedValue(existingContent || {}, key, translation);
 
-      await this.storage.storeTranslations(
-        language as LanguageCode,
-        category,
-        updatedContent
-      );
+      await this.storage.storeTranslations(language as LanguageCode, category, updatedContent);
     }
   }
 
   /**
    * Set nested value in translation content
    */
-  private setNestedValue(
-    obj: TranslationContent,
-    path: string,
-    value: string
-  ): TranslationContent {
+  private setNestedValue(obj: TranslationContent, path: string, value: string): TranslationContent {
     const keys = path.split('.');
-    const result = {...obj};
+    const result = { ...obj };
     let current: any = result;
 
     for (let i = 0; i < keys.length - 1; i++) {
@@ -152,7 +136,7 @@ class TranslationContentManager {
       if (!(key in current) || typeof current[key] !== 'object') {
         current[key] = {};
       } else {
-        current[key] = {...current[key]};
+        current[key] = { ...current[key] };
       }
       current = current[key];
     }
@@ -166,7 +150,7 @@ class TranslationContentManager {
    */
   async bulkImport(
     category: TranslationCategory,
-    translations: {[language in LanguageCode]?: TranslationContent},
+    translations: { [language in LanguageCode]?: TranslationContent },
     version: string = '1.0.0'
   ): Promise<void> {
     const importPromises: Promise<void>[] = [];
@@ -174,12 +158,7 @@ class TranslationContentManager {
     for (const [language, content] of Object.entries(translations)) {
       if (content) {
         importPromises.push(
-          this.storage.storeTranslations(
-            language as LanguageCode,
-            category,
-            content,
-            version
-          )
+          this.storage.storeTranslations(language as LanguageCode, category, content, version)
         );
       }
     }
@@ -192,8 +171,8 @@ class TranslationContentManager {
    */
   async exportTranslations(
     category: TranslationCategory
-  ): Promise<{[language in LanguageCode]?: TranslationContent}> {
-    const exported: {[language in LanguageCode]?: TranslationContent} = {};
+  ): Promise<{ [language in LanguageCode]?: TranslationContent }> {
+    const exported: { [language in LanguageCode]?: TranslationContent } = {};
 
     for (const language of this.requiredLanguages) {
       const content = await this.storage.getTranslations(language, category);
@@ -251,26 +230,18 @@ class TranslationContentManager {
    */
   async syncFromRemote(
     category: TranslationCategory,
-    remoteTranslations: {[language in LanguageCode]?: TranslationContent},
+    remoteTranslations: { [language in LanguageCode]?: TranslationContent },
     version: string
   ): Promise<void> {
     // Check versions and update if needed
     for (const [language, content] of Object.entries(remoteTranslations)) {
       if (!content) continue;
 
-      const localVersion = await this.storage.getVersion(
-        language as LanguageCode,
-        category
-      );
+      const localVersion = await this.storage.getVersion(language as LanguageCode, category);
 
       // Update if version is different or doesn't exist
       if (!localVersion || localVersion !== version) {
-        await this.storage.storeTranslations(
-          language as LanguageCode,
-          category,
-          content,
-          version
-        );
+        await this.storage.storeTranslations(language as LanguageCode, category, content, version);
       }
     }
   }
@@ -278,10 +249,12 @@ class TranslationContentManager {
   /**
    * Get missing translations report
    */
-  async getMissingTranslationsReport(): Promise<{
-    category: TranslationCategory;
-    missingLanguages: LanguageCode[];
-  }[]> {
+  async getMissingTranslationsReport(): Promise<
+    {
+      category: TranslationCategory;
+      missingLanguages: LanguageCode[];
+    }[]
+  > {
     const report: {
       category: TranslationCategory;
       missingLanguages: LanguageCode[];
@@ -300,7 +273,7 @@ class TranslationContentManager {
       }
 
       if (missingLanguages.length > 0) {
-        report.push({category, missingLanguages});
+        report.push({ category, missingLanguages });
       }
     }
 

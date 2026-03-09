@@ -53,11 +53,7 @@ describe('DownloadManager', () => {
       mockContentManager.isAvailableOffline.mockResolvedValue(false);
 
       // Start download but don't await yet
-      const downloadPromise = downloadManager.downloadLesson(
-        'lesson1',
-        'video.mp4',
-        'audio.mp3'
-      );
+      const downloadPromise = downloadManager.downloadLesson('lesson1', 'video.mp4', 'audio.mp3');
 
       // Wait a bit for download to start
       await new Promise<void>((resolve) => setTimeout(resolve, 10));
@@ -75,9 +71,7 @@ describe('DownloadManager', () => {
 
     it('should handle download errors', async () => {
       mockContentManager.isAvailableOffline.mockResolvedValue(false);
-      mockContentManager.updateContentMetadata.mockRejectedValue(
-        new Error('Storage full')
-      );
+      mockContentManager.updateContentMetadata.mockRejectedValue(new Error('Storage full'));
 
       await expect(
         downloadManager.downloadLesson('lesson1', 'video.mp4', 'audio.mp3')
@@ -116,7 +110,7 @@ describe('DownloadManager', () => {
   describe('cancelDownload', () => {
     it('should cancel active download', async () => {
       mockContentManager.isAvailableOffline.mockResolvedValue(false);
-      
+
       // Make the download take longer by delaying the metadata update
       mockContentManager.updateContentMetadata.mockImplementation(
         () => new Promise<void>((resolve) => setTimeout(resolve, 100))

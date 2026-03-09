@@ -3,10 +3,10 @@
  * Voice-enabled navigation bar for major features
  */
 
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {useVoice} from '../../hooks/useVoice';
-import {SupportedLanguage} from '../../types/voice.types';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useVoice } from '../../hooks/useVoice';
+import { SupportedLanguage } from '../../types/voice.types';
 
 interface VoiceNavigationBarProps {
   language?: SupportedLanguage;
@@ -20,7 +20,7 @@ const VoiceNavigationBar: React.FC<VoiceNavigationBarProps> = ({
   language = 'hi-IN',
   onNavigate,
 }) => {
-  const {isListening, speak, listenAndProcess} = useVoice(language);
+  const { isListening, speak, listenAndProcess } = useVoice(language);
   const [activeScreen, setActiveScreen] = useState('Dashboard');
 
   const handleVoiceNavigation = async () => {
@@ -39,17 +39,17 @@ const VoiceNavigationBar: React.FC<VoiceNavigationBarProps> = ({
   };
 
   const navigationItems = [
-    {name: 'Dashboard', icon: '🏠'},
-    {name: 'Weather', icon: '🌤️'},
-    {name: 'Market', icon: '💰'},
-    {name: 'Schemes', icon: '📋'},
-    {name: 'Training', icon: '📚'},
+    { name: 'Dashboard', icon: '🏠' },
+    { name: 'Weather', icon: '🌤️' },
+    { name: 'Market', icon: '💰' },
+    { name: 'Schemes', icon: '📋' },
+    { name: 'Training', icon: '📚' },
   ];
 
   return (
     <View style={styles.container}>
       <View style={styles.navItems}>
-        {navigationItems.map(item => (
+        {navigationItems.map((item) => (
           <TouchableOpacity
             key={item.name}
             style={[styles.navItem, activeScreen === item.name && styles.activeNavItem]}
@@ -58,7 +58,8 @@ const VoiceNavigationBar: React.FC<VoiceNavigationBarProps> = ({
               if (onNavigate) {
                 onNavigate(item.name);
               }
-            }}>
+            }}
+          >
             <Text style={styles.icon}>{item.icon}</Text>
             <Text style={styles.navText}>{item.name}</Text>
           </TouchableOpacity>
@@ -68,7 +69,8 @@ const VoiceNavigationBar: React.FC<VoiceNavigationBarProps> = ({
       <TouchableOpacity
         style={styles.voiceButton}
         onPress={handleVoiceNavigation}
-        disabled={isListening}>
+        disabled={isListening}
+      >
         <Text style={styles.voiceIcon}>{isListening ? '⏺️' : '🎤'}</Text>
       </TouchableOpacity>
     </View>

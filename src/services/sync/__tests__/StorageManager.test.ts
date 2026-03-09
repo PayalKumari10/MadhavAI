@@ -108,7 +108,7 @@ describe('StorageManager', () => {
   describe('cleanupOldData', () => {
     it('should clean up old non-essential data', async () => {
       await storageManager.initialize({ maxStorageSize: 1000 });
-      
+
       // Register items that exceed storage
       await storageManager.registerItem('essential_1', 300, 'profile', true);
       await storageManager.registerItem('non_essential_1', 400, 'weather', false);
@@ -124,10 +124,10 @@ describe('StorageManager', () => {
     it('should return storage usage percentage', async () => {
       // Initialize with fresh state
       await storageManager.initialize({ maxStorageSize: 10000 });
-      
+
       // Clear any existing items first
       await storageManager.clearNonEssentialData();
-      
+
       await storageManager.registerItem('test_key', 1000, 'profile');
 
       const percentage = await storageManager.getStorageUsagePercentage();

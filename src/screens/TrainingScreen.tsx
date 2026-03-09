@@ -63,11 +63,7 @@ export default function TrainingScreen() {
   if (selectedLesson) {
     return (
       <View style={styles.container}>
-        <LessonPlayer
-          lesson={selectedLesson}
-          onComplete={handleLessonComplete}
-          isOffline={false}
-        />
+        <LessonPlayer lesson={selectedLesson} onComplete={handleLessonComplete} isOffline={false} />
       </View>
     );
   }
@@ -86,10 +82,7 @@ export default function TrainingScreen() {
 
   return (
     <View style={styles.container}>
-      <CategorySelector
-        categories={mockCategories}
-        onCategorySelect={handleCategorySelect}
-      />
+      <CategorySelector categories={mockCategories} onCategorySelect={handleCategorySelect} />
     </View>
   );
 }

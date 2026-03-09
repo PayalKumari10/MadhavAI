@@ -30,7 +30,7 @@ This directory contains automated CI/CD workflows for the Farmer Decision Suppor
   - Slack notifications
 
 **Technologies**:
-- Node.js 20.x
+- Node.js 22.x
 - Terraform 1.6.0
 - AWS Lambda, API Gateway, DynamoDB, S3, CloudFront
 - AWS regions: ap-south-1 (Mumbai), ap-southeast-1 (Singapore)

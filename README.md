@@ -42,17 +42,36 @@ git clone <repository-url>
 cd MadhavAI
 ```
 
-2. Install dependencies:
+2. Set up environment variables:
+
+```bash
+# Copy example file
+cp .env.example .env
+
+# Edit .env and add your values (see docs/secrets/SECRETS_SETUP_GUIDE.md)
+```
+
+3. Install dependencies:
 
 ```bash
 npm install
 ```
 
-3. Install iOS dependencies (macOS only):
+4. Generate Android keystore (for release builds):
+
+```bash
+cd android
+./generate-keystore.sh
+cd ..
+```
+
+5. Install iOS dependencies (macOS only):
 
 ```bash
 cd ios && pod install && cd ..
 ```
+
+**For detailed setup instructions, see [Quick Start Guide](docs/deployment/01-quick-start.md)**
 
 ## 🏃 Running the Application
 
@@ -154,6 +173,22 @@ MadhavAI/
 
 Comprehensive documentation is available in the `docs/` folder:
 
+### 🚀 Getting Started
+- **[Quick Start Guide](docs/deployment/01-quick-start.md)** - Get up and running in 10 minutes
+- **[What to Do Next](docs/deployment/02-what-to-do-next.md)** - Post-MVP deployment guide
+- **[Deployment Checklist](docs/deployment/03-deployment-checklist.md)** - Complete deployment guide
+
+### 🔐 Secrets & Environment
+- **[Secrets Setup Guide](docs/secrets/01-secrets-setup-guide.md)** - Quick secrets setup
+- **[Environment Setup](docs/secrets/02-env-setup.md)** - Complete environment variables guide
+- **[Secret Variables Reference](docs/secrets/03-secret-variables-reference.md)** - All variables explained
+
+### 📱 Mobile Build & Deployment
+- **[Build Optimization](android/BUILD_OPTIMIZATION.md)** - APK optimization guide
+- **[Rollout Strategy](android/ROLLOUT_STRATEGY.md)** - Staged deployment strategy
+- **[Direct Distribution](android/DIRECT_DISTRIBUTION.md)** - Distribute without Play Store
+
+### 📖 Feature Documentation
 - [Checkpoint 5 Validation](docs/01-checkpoint-5-validation.md)
 - [Dashboard Implementation](docs/02-dashboard-implementation.md)
 - [Document Picker Setup](docs/03-document-picker-setup.md)
@@ -164,8 +199,9 @@ Comprehensive documentation is available in the `docs/` folder:
 - [Test Results](docs/08-test-results.md) - 718 tests, 100% passing ✅
 - [Voice Interface Guide](docs/09-voice-interface-guide.md)
 - [Translation Service Guide](docs/10-translation-service-guide.md)
+- [Update Mechanisms](docs/11-update-mechanisms.md) - OTA updates & A/B testing
 
-For a complete documentation index, see [docs/README.md](docs/README.md).
+**For complete documentation index, see [docs/README.md](docs/README.md)**
 
 ## 🎯 Development Workflow
 

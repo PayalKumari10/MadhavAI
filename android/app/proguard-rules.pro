@@ -8,3 +8,39 @@
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
 # Add any project specific keep options here:
+
+# React Native
+-keep class com.facebook.react.** { *; }
+-keep class com.facebook.hermes.** { *; }
+-keep class com.facebook.jni.** { *; }
+
+# AWS Amplify
+-keep class com.amazonaws.** { *; }
+-keep class com.amplifyframework.** { *; }
+-dontwarn com.amazonaws.**
+-dontwarn com.amplifyframework.**
+
+# React Native Encrypted Storage
+-keep class com.emeraldsanto.encryptedstorage.** { *; }
+
+# React Native Image Picker
+-keep class com.imagepicker.** { *; }
+
+# Preserve line numbers for debugging
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
+
+# Keep native methods
+-keepclassmembers class * {
+    native <methods>;
+}
+
+# Keep serializable classes
+-keepclassmembers class * implements java.io.Serializable {
+    static final long serialVersionUID;
+    private static final java.io.ObjectStreamField[] serialPersistentFields;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+}

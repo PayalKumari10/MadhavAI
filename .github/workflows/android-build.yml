@@ -68,7 +68,7 @@ jobs:
             ${{ runner.os }}-gradle-
       
       - name: Decode keystore
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && secrets.ANDROID_KEYSTORE_BASE64 != ''
         env:
           KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
         run: |
@@ -80,8 +80,15 @@ jobs:
           cd android
           ./gradlew assembleDebug
       
+      - name: Build debug APK (missing secrets)
+        if: github.event_name != 'pull_request' && secrets.ANDROID_KEYSTORE_BASE64 == ''
+        run: |
+          echo "⚠️  Keystore secrets not configured. Building debug APK instead."
+          cd android
+          ./gradlew assembleDebug
+      
       - name: Build release AAB and APK
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && secrets.ANDROID_KEYSTORE_BASE64 != ''
         env:
           MADHAVAI_UPLOAD_STORE_FILE: release.keystore
           MADHAVAI_UPLOAD_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
@@ -92,7 +99,7 @@ jobs:
           ./gradlew bundleRelease assembleRelease
       
       - name: Upload debug APK artifact
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' || secrets.ANDROID_KEYSTORE_BASE64 == ''
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
@@ -100,7 +107,7 @@ jobs:
           retention-days: 7
       
       - name: Upload release artifacts
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && secrets.ANDROID_KEYSTORE_BASE64 != ''
         uses: actions/upload-artifact@v4
         with:
           name: app-release
@@ -110,7 +117,7 @@ jobs:
           retention-days: 30
       
       - name: Check APK size
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && secrets.ANDROID_KEYSTORE_BASE64 != ''
         run: |
           echo "📊 Build sizes:"
           ls -lh android/app/build/outputs/bundle/release/app-release.aab

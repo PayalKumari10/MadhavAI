@@ -116,7 +116,11 @@ describe('TrendAnalyzer', () => {
 
       expect(trend).toBeDefined();
       expect(trend!.period).toBe(15);
-      expect(trend!.prices.length).toBeLessThanOrEqual(15);
+      // Prices should be from the last 15 days (may have multiple prices per day)
+      const oldestDate = new Date(trend!.prices[trend!.prices.length - 1].date);
+      const newestDate = new Date(trend!.prices[0].date);
+      const daysDiff = Math.ceil((newestDate.getTime() - oldestDate.getTime()) / (1000 * 60 * 60 * 24));
+      expect(daysDiff).toBeLessThanOrEqual(15);
     });
   });
 

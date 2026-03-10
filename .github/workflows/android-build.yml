@@ -67,6 +67,46 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       
+      - name: Create .env file for Android build
+        run: |
+          # Create .env file with build-time configuration from GitHub Secrets
+          cat > android/.env << EOF
+          # API Configuration
+          API_BASE_URL=${{ secrets.API_BASE_URL || 'https://api.madhavai.com/api' }}
+          API_TIMEOUT=${{ secrets.API_TIMEOUT || '30000' }}
+          ENABLE_API=${{ secrets.ENABLE_API || 'true' }}
+          ENABLE_LOGGING=${{ secrets.ENABLE_LOGGING || 'false' }}
+          STORAGE_LIMIT_MB=${{ secrets.STORAGE_LIMIT_MB || '500' }}
+          SYNC_INTERVAL_MS=${{ secrets.SYNC_INTERVAL_MS || '360000' }}
+          MAX_RETRY_ATTEMPTS=${{ secrets.MAX_RETRY_ATTEMPTS || '5' }}
+          
+          # OTA Updates
+          OTA_API_BASE_URL=${{ secrets.OTA_API_BASE_URL || 'https://api.madhavai.app' }}
+          
+          # AWS Configuration
+          AWS_REGION=${{ secrets.AWS_REGION || 'ap-south-1' }}
+          AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID || '' }}
+          AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY || '' }}
+          AWS_APPSYNC_GRAPHQL_ENDPOINT=${{ secrets.AWS_APPSYNC_GRAPHQL_ENDPOINT || '' }}
+          AWS_APPSYNC_API_KEY=${{ secrets.AWS_APPSYNC_API_KEY || '' }}
+          AWS_APPSYNC_REGION=${{ secrets.AWS_APPSYNC_REGION || 'ap-south-1' }}
+          AWS_COGNITO_REGION=${{ secrets.AWS_COGNITO_REGION || 'ap-south-1' }}
+          AWS_COGNITO_USER_POOL_ID=${{ secrets.AWS_COGNITO_USER_POOL_ID || '' }}
+          AWS_COGNITO_USER_POOL_WEB_CLIENT_ID=${{ secrets.AWS_COGNITO_USER_POOL_WEB_CLIENT_ID || '' }}
+          AWS_COGNITO_IDENTITY_POOL_ID=${{ secrets.AWS_COGNITO_IDENTITY_POOL_ID || '' }}
+          
+          # Lambda Configuration
+          PRIMARY_REGION=${{ secrets.PRIMARY_REGION || 'ap-south-1' }}
+          BACKUP_REGION=${{ secrets.BACKUP_REGION || 'ap-southeast-1' }}
+          PROJECT_NAME=${{ secrets.PROJECT_NAME || 'madhavai' }}
+          ENVIRONMENT=${{ secrets.ENVIRONMENT || 'production' }}
+          SNS_TOPIC_ARN=${{ secrets.SNS_TOPIC_ARN || '' }}
+          LESSONS_TABLE=${{ secrets.LESSONS_TABLE || 'farmer-platform-lessons' }}
+          PROGRESS_TABLE=${{ secrets.PROGRESS_TABLE || 'farmer-platform-learning-progress' }}
+          CONTENT_BUCKET=${{ secrets.CONTENT_BUCKET || 'farmer-platform-training-content' }}
+          EOF
+          echo "✅ Created android/.env file from GitHub Secrets"
+      
       - name: Decode keystore
         if: github.event_name != 'pull_request'
         continue-on-error: true
@@ -100,7 +140,17 @@ jobs:
           else
             echo "⚠️  No keystore found. Building with debug signing."
           fi
-          ./gradlew bundleRelease assembleRelease
+          
+          # Build AAB first (for Play Store)
+          echo "📦 Building Android App Bundle (AAB)..."
+          ./gradlew bundleRelease
+          
+          # Clean intermediate files before building APK
+          ./gradlew clean
+          
+          # Build APK (for direct distribution)
+          echo "📦 Building APK..."
+          ./gradlew assembleRelease
       
       - name: Upload debug APK artifact
         if: github.event_name == 'pull_request'

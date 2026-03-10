@@ -9,7 +9,6 @@ on:
       - 'infrastructure/**'
       - 'backend/**'
       - 'lambda/**'
-      - 'amplify/backend/**'
   pull_request:
     branches:
       - main
@@ -18,7 +17,6 @@ on:
       - 'infrastructure/**'
       - 'backend/**'
       - 'lambda/**'
-      - 'amplify/backend/**'
 
 env:
   NODE_VERSION: '22.11.0'

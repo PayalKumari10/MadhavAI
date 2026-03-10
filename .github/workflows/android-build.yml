@@ -126,7 +126,7 @@ jobs:
           cd android
           ./gradlew assembleDebug
       
-      - name: Build release AAB and APK
+      - name: Build release AAB
         if: github.event_name != 'pull_request'
         env:
           MADHAVAI_UPLOAD_STORE_FILE: release.keystore
@@ -141,16 +141,39 @@ jobs:
             echo "⚠️  No keystore found. Building with debug signing."
           fi
           
-          # Build AAB first (for Play Store)
+          # Build AAB (for Play Store)
           echo "📦 Building Android App Bundle (AAB)..."
           ./gradlew bundleRelease
           
-          # Clean intermediate files before building APK
+          # Save AAB before cleaning
+          mkdir -p ../build-artifacts
+          cp app/build/outputs/bundle/release/app-release.aab ../build-artifacts/
+          echo "✅ AAB saved to build-artifacts/"
+      
+      - name: Clean build for APK
+        if: github.event_name != 'pull_request'
+        run: |
+          cd android
+          echo "🧹 Cleaning build directory..."
           ./gradlew clean
-          
-          # Build APK (for direct distribution)
-          echo "📦 Building APK..."
+      
+      - name: Build release APK
+        if: github.event_name != 'pull_request'
+        env:
+          MADHAVAI_UPLOAD_STORE_FILE: release.keystore
+          MADHAVAI_UPLOAD_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          MADHAVAI_UPLOAD_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          MADHAVAI_UPLOAD_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          cd android
+          # Build APK with splits (for direct distribution)
+          echo "📦 Building APK with splits..."
           ./gradlew assembleRelease
+          
+          # Restore AAB to build outputs
+          mkdir -p app/build/outputs/bundle/release
+          cp ../build-artifacts/app-release.aab app/build/outputs/bundle/release/
+          echo "✅ AAB restored to build outputs"
       
       - name: Upload debug APK artifact
         if: github.event_name == 'pull_request'
@@ -170,23 +193,42 @@ jobs:
             android/app/build/outputs/apk/release/*.apk
           retention-days: 30
       
-      - name: Check APK size
+      - name: Check build sizes
         if: github.event_name != 'pull_request'
         continue-on-error: true
         run: |
           echo "📊 Build sizes:"
-          ls -lh android/app/build/outputs/bundle/release/app-release.aab
-          ls -lh android/app/build/outputs/apk/release/*.apk
           
-          # Check if universal APK is under 50 MB
-          APK_SIZE=$(stat -f%z android/app/build/outputs/apk/release/app-universal-release.apk 2>/dev/null || stat -c%s android/app/build/outputs/apk/release/app-universal-release.apk)
-          APK_SIZE_MB=$((APK_SIZE / 1024 / 1024))
-          echo "Universal APK size: ${APK_SIZE_MB} MB"
-          
-          if [ $APK_SIZE_MB -gt 50 ]; then
-            echo "⚠️  Warning: APK size exceeds 50 MB target"
+          # Check AAB size
+          if [ -f "android/app/build/outputs/bundle/release/app-release.aab" ]; then
+            AAB_SIZE=$(stat -c%s android/app/build/outputs/bundle/release/app-release.aab 2>/dev/null || stat -f%z android/app/build/outputs/bundle/release/app-release.aab)
+            AAB_SIZE_MB=$((AAB_SIZE / 1024 / 1024))
+            echo "AAB: ${AAB_SIZE_MB} MB"
           else
-            echo "✅ APK size is within 50 MB target"
+            echo "⚠️  AAB not found"
+          fi
+          
+          # Check APK sizes
+          if [ -d "android/app/build/outputs/apk/release" ]; then
+            echo ""
+            echo "APKs:"
+            ls -lh android/app/build/outputs/apk/release/*.apk
+            
+            # Check if universal APK is under 50 MB
+            if [ -f "android/app/build/outputs/apk/release/app-universal-release.apk" ]; then
+              APK_SIZE=$(stat -c%s android/app/build/outputs/apk/release/app-universal-release.apk 2>/dev/null || stat -f%z android/app/build/outputs/apk/release/app-universal-release.apk)
+              APK_SIZE_MB=$((APK_SIZE / 1024 / 1024))
+              echo ""
+              echo "Universal APK size: ${APK_SIZE_MB} MB"
+              
+              if [ $APK_SIZE_MB -gt 50 ]; then
+                echo "⚠️  Warning: APK size exceeds 50 MB target"
+              else
+                echo "✅ APK size is within 50 MB target"
+              fi
+            fi
+          else
+            echo "⚠️  APK directory not found"
           fi
 
   deploy:
